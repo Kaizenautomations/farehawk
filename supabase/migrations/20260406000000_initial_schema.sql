@@ -1,5 +1,4 @@
--- Enable required extensions
-create extension if not exists "uuid-ossp";
+-- No extensions needed — gen_random_uuid() is built-in
 
 -- ============================================================
 -- PROFILES (extends Supabase auth.users)
@@ -23,7 +22,7 @@ create table public.profiles (
 create type public.plan_tier as enum ('free', 'pro', 'premium');
 
 create table public.subscriptions (
-  id uuid primary key default uuid_generate_v4(),
+  id uuid primary key default gen_random_uuid(),
   user_id uuid not null references public.profiles(id) on delete cascade,
   tier public.plan_tier default 'free',
   stripe_subscription_id text unique,
@@ -41,7 +40,7 @@ create table public.subscriptions (
 -- USAGE TRACKING
 -- ============================================================
 create table public.daily_usage (
-  id uuid primary key default uuid_generate_v4(),
+  id uuid primary key default gen_random_uuid(),
   user_id uuid not null references public.profiles(id) on delete cascade,
   date date not null default current_date,
   search_count integer default 0,
@@ -53,7 +52,7 @@ create table public.daily_usage (
 -- PRICE WATCHES
 -- ============================================================
 create table public.watches (
-  id uuid primary key default uuid_generate_v4(),
+  id uuid primary key default gen_random_uuid(),
   user_id uuid not null references public.profiles(id) on delete cascade,
   origin text not null,
   destination text not null,
@@ -74,7 +73,7 @@ create table public.watches (
 -- PRICE SNAPSHOTS
 -- ============================================================
 create table public.price_snapshots (
-  id uuid primary key default uuid_generate_v4(),
+  id uuid primary key default gen_random_uuid(),
   watch_id uuid not null references public.watches(id) on delete cascade,
   price numeric(10,2) not null,
   currency text default 'USD',
@@ -87,7 +86,7 @@ create index idx_price_snapshots_watch_time on public.price_snapshots(watch_id, 
 -- SEARCH CACHE
 -- ============================================================
 create table public.search_cache (
-  id uuid primary key default uuid_generate_v4(),
+  id uuid primary key default gen_random_uuid(),
   cache_key text unique not null,
   results jsonb not null,
   created_at timestamptz default now()
@@ -99,7 +98,7 @@ create index idx_search_cache_key on public.search_cache(cache_key);
 -- NOTIFICATIONS LOG
 -- ============================================================
 create table public.notifications (
-  id uuid primary key default uuid_generate_v4(),
+  id uuid primary key default gen_random_uuid(),
   user_id uuid not null references public.profiles(id) on delete cascade,
   watch_id uuid references public.watches(id) on delete set null,
   type text not null,
