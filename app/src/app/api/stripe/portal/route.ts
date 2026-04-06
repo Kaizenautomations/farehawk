@@ -2,6 +2,13 @@ import { createClient } from "@/lib/supabase/server";
 import { stripe } from "@/lib/stripe";
 import { NextResponse } from "next/server";
 
+const ALLOWED_ORIGINS = [
+  process.env.NEXT_PUBLIC_APP_URL,
+  "https://app-kaizenshift.vercel.app",
+  "http://localhost:3000",
+  "http://localhost:3888",
+].filter(Boolean);
+
 export async function POST(request: Request) {
   const supabase = await createClient();
   const {
@@ -25,11 +32,12 @@ export async function POST(request: Request) {
     );
   }
 
-  const origin = request.headers.get("origin") || "http://localhost:3000";
+  const origin = request.headers.get("origin") || "";
+  const safeOrigin = ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0] || "http://localhost:3000";
 
   const session = await stripe.billingPortal.sessions.create({
     customer: profile.stripe_customer_id,
-    return_url: `${origin}/settings`,
+    return_url: `${safeOrigin}/settings`,
   });
 
   return NextResponse.json({ url: session.url });

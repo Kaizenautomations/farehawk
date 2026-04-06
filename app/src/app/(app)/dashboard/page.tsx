@@ -6,15 +6,30 @@ import { useSubscription } from "@/hooks/useSubscription";
 import type { Watch } from "@/types/database";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { createClient } from "@/lib/supabase/client";
 
 export default function DashboardPage() {
   const [watches, setWatches] = useState<Watch[]>([]);
+  const [userName, setUserName] = useState<string>("");
   const sub = useSubscription();
 
   useEffect(() => {
     fetch("/api/watches")
       .then((r) => r.json())
       .then(setWatches);
+
+    // Fetch user's name from Supabase auth metadata
+    const supabase = createClient();
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      if (user) {
+        const name =
+          user.user_metadata?.full_name ||
+          user.user_metadata?.name ||
+          user.email?.split("@")[0] ||
+          "";
+        setUserName(name);
+      }
+    });
   }, []);
 
   const activeWatches = watches.filter((w) => w.is_active);
@@ -39,7 +54,7 @@ export default function DashboardPage() {
     <div className="space-y-8">
       {/* Header */}
       <div>
-        <h1 className="text-2xl sm:text-3xl font-bold text-white">Welcome back, Scott</h1>
+        <h1 className="text-2xl sm:text-3xl font-bold text-white">Welcome back{userName ? `, ${userName}` : ""}</h1>
         <p className="mt-1 text-zinc-400">Here is what is happening with your flight watches.</p>
       </div>
 

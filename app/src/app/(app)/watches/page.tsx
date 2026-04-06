@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useCallback, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -33,6 +33,12 @@ export default function WatchesPage() {
   const [returnDate, setReturnDate] = useState("");
   const [targetPrice, setTargetPrice] = useState("");
   const [creating, setCreating] = useState(false);
+  const [toast, setToast] = useState<{type: "success"|"error", message: string} | null>(null);
+
+  const showToast = useCallback((type: "success"|"error", message: string) => {
+    setToast({ type, message });
+    setTimeout(() => setToast(null), 3000);
+  }, []);
 
   async function fetchWatches() {
     const res = await fetch("/api/watches");
@@ -71,7 +77,7 @@ export default function WatchesPage() {
       sub.refresh();
     } else {
       const data = await res.json();
-      alert(data.error || "Failed to create watch");
+      showToast("error", data.error || "Failed to create watch");
     }
     setCreating(false);
   }
@@ -81,13 +87,13 @@ export default function WatchesPage() {
       const res = await fetch(`/api/watches/${id}`, { method: "DELETE" });
       if (!res.ok) {
         const data = await res.json();
-        alert(data.error || "Failed to delete watch");
+        showToast("error", data.error || "Failed to delete watch");
         return;
       }
       fetchWatches();
       sub.refresh();
     } catch {
-      alert("Something went wrong. Please try again.");
+      showToast("error", "Something went wrong. Please try again.");
     }
   }
 
@@ -100,13 +106,24 @@ export default function WatchesPage() {
       });
       if (!res.ok) {
         const data = await res.json();
-        alert(data.error || "Failed to update watch");
+        showToast("error", data.error || "Failed to update watch");
         return;
       }
       fetchWatches();
     } catch {
-      alert("Something went wrong. Please try again.");
+      showToast("error", "Something went wrong. Please try again.");
     }
+  }
+
+  function timeAgo(dateStr: string): string {
+    const seconds = Math.floor((Date.now() - new Date(dateStr).getTime()) / 1000);
+    if (seconds < 60) return "just now";
+    const minutes = Math.floor(seconds / 60);
+    if (minutes < 60) return `${minutes}m ago`;
+    const hours = Math.floor(minutes / 60);
+    if (hours < 24) return `${hours}h ago`;
+    const days = Math.floor(hours / 24);
+    return `${days}d ago`;
   }
 
   function getPriceProgress(current: number | null, target: number | null) {
@@ -120,6 +137,13 @@ export default function WatchesPage() {
 
   return (
     <div className="space-y-8">
+      {toast && (
+        <div className={`fixed top-16 left-1/2 -translate-x-1/2 z-50 px-4 py-2 rounded-lg shadow-lg text-sm font-medium ${
+          toast.type === "success" ? "bg-emerald-500/90 text-white" : "bg-red-500/90 text-white"
+        }`}>
+          {toast.message}
+        </div>
+      )}
       {/* Header */}
       <div className="flex items-center justify-between gap-3">
         <div className="flex items-center gap-3 min-w-0">
@@ -324,7 +348,7 @@ export default function WatchesPage() {
                       {/* Last checked */}
                       {watch.last_checked_at && (
                         <p className="text-xs text-zinc-600">
-                          Last checked: {new Date(watch.last_checked_at).toLocaleString()}
+                          Last checked: {timeAgo(watch.last_checked_at)}
                         </p>
                       )}
                     </div>

@@ -27,9 +27,14 @@ if PROXY_URL:
 else:
     print("[FareHawk] No proxy configured (set PROXY_URL env var to enable)")
 
+ALLOWED_ORIGINS = os.environ.get(
+    "ALLOWED_ORIGINS",
+    "https://app-kaizenshift.vercel.app,http://localhost:3000"
+).split(",")
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=ALLOWED_ORIGINS,
     allow_methods=["*"],
     allow_headers=["*"],
 )

@@ -64,7 +64,17 @@ export async function POST(request: Request) {
 
     case "customer.subscription.updated": {
       const priceId = obj.items?.data?.[0]?.price?.id;
-      const tier = PRICE_TO_TIER[priceId] || "free";
+
+      // Look up correct tier from price; if unknown, preserve current tier in DB rather than defaulting to "free"
+      let tier = PRICE_TO_TIER[priceId];
+      if (!tier) {
+        const { data: existingSub } = await admin
+          .from("subscriptions")
+          .select("tier")
+          .eq("stripe_subscription_id", obj.id)
+          .single();
+        tier = existingSub?.tier || "free";
+      }
 
       await admin
         .from("subscriptions")

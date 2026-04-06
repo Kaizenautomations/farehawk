@@ -102,9 +102,35 @@ export function FlightCard({ flight, onWatch, style }: Props) {
                 Nonstop
               </Badge>
             ) : (
-              <Badge className="bg-amber-500/15 text-amber-400 border-amber-500/30 hover:bg-amber-500/20 text-[11px] font-medium">
-                {flight.stops} stop{flight.stops > 1 ? "s" : ""}
-              </Badge>
+              <>
+                <Badge className="bg-amber-500/15 text-amber-400 border-amber-500/30 hover:bg-amber-500/20 text-[11px] font-medium">
+                  {flight.stops} stop{flight.stops > 1 ? "s" : ""}
+                </Badge>
+                {flight.legs.length > 1 && (
+                  <span className="text-[11px] text-slate-500">
+                    via{" "}
+                    {flight.legs.slice(0, -1).map((leg, i) => {
+                      const nextLeg = flight.legs[i + 1];
+                      const layoverMs = nextLeg
+                        ? new Date(nextLeg.departure_time).getTime() - new Date(leg.arrival_time).getTime()
+                        : 0;
+                      const layoverH = Math.floor(layoverMs / 3600000);
+                      const layoverM = Math.floor((layoverMs % 3600000) / 60000);
+                      return (
+                        <span key={i}>
+                          {i > 0 && ", "}
+                          {leg.arrival_airport}
+                          {layoverMs > 0 && (
+                            <span className="text-slate-600">
+                              {" "}({layoverH}h {layoverM}m)
+                            </span>
+                          )}
+                        </span>
+                      );
+                    })}
+                  </span>
+                )}
+              </>
             )}
           </div>
 

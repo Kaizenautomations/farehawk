@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useCallback, Suspense } from "react";
+import { useState, useMemo, useCallback, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { SearchForm } from "@/components/search/SearchForm";
 import { FlightResultsList } from "@/components/search/FlightResultsList";
@@ -35,7 +35,15 @@ function SearchPageInner() {
   const [searched, setSearched] = useState(false);
   const [retryable, setRetryable] = useState(false);
   const [lastParams, setLastParams] = useState<Record<string, unknown> | null>(null);
+  const [toast, setToast] = useState<{type: "success"|"error", message: string} | null>(null);
   const sub = useSubscription();
+
+  useEffect(() => {
+    if (toast) {
+      const timer = setTimeout(() => setToast(null), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [toast]);
 
   const handleSearch = useCallback(async (params: {
     origin: string;
@@ -113,15 +121,22 @@ function SearchPageInner() {
     });
 
     if (res.ok) {
-      alert("Watch created! You'll be notified when the price drops.");
+      setToast({ type: "success", message: "Watch created! You'll be notified when the price drops." });
     } else {
       const data = await res.json();
-      alert(data.error || "Failed to create watch");
+      setToast({ type: "error", message: data.error || "Failed to create watch" });
     }
   }
 
   return (
     <div className="space-y-6">
+      {toast && (
+        <div className={`fixed top-16 left-1/2 -translate-x-1/2 z-50 px-4 py-2 rounded-lg shadow-lg text-sm font-medium ${
+          toast.type === "success" ? "bg-emerald-500/90 text-white" : "bg-red-500/90 text-white"
+        }`}>
+          {toast.message}
+        </div>
+      )}
       <LoadingBar visible={loading} />
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
@@ -154,6 +169,7 @@ function SearchPageInner() {
             </div>
             <span className="text-slate-500">|</span>
             <span className="text-slate-400 capitalize">{sub.tier}</span>
+            <span className="text-slate-600 text-xs ml-1">(resets daily)</span>
           </div>
         )}
       </div>

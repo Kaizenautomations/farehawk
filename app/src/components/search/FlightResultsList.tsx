@@ -5,8 +5,10 @@ import type { FlightResult } from "@/types/flight";
 import { FlightCard } from "./FlightCard";
 import { Skeleton } from "@/components/ui/skeleton";
 import { getDealScore } from "@/components/search/DealScoreBadge";
+import { getAirlineName } from "@/lib/airlines";
 
 type SortOption = "price-asc" | "price-desc" | "duration" | "stops" | "deal-score";
+type StopsFilter = "nonstop" | "1stop" | "2plus";
 
 const SORT_OPTIONS: { value: SortOption; label: string }[] = [
   { value: "price-asc", label: "Price: Low \u2192 High" },
@@ -43,7 +45,65 @@ interface Props {
 
 export function FlightResultsList({ results, loading, onWatch }: Props) {
   const [sortBy, setSortBy] = useState<SortOption>("price-asc");
-  const sortedResults = useMemo(() => sortFlights(results, sortBy), [results, sortBy]);
+  const [filtersOpen, setFiltersOpen] = useState(false);
+  const [activeAirlines, setActiveAirlines] = useState<Set<string>>(new Set());
+  const [activeStops, setActiveStops] = useState<Set<StopsFilter>>(new Set());
+
+  // Extract unique airlines from results
+  const uniqueAirlines = useMemo(() => {
+    const codes = new Set<string>();
+    results.forEach((f) => {
+      const code = f.legs[0]?.airline_code || f.legs[0]?.airline || "";
+      if (code) codes.add(code);
+    });
+    return Array.from(codes).sort((a, b) => getAirlineName(a).localeCompare(getAirlineName(b)));
+  }, [results]);
+
+  function toggleAirline(code: string) {
+    setActiveAirlines((prev) => {
+      const next = new Set(prev);
+      if (next.has(code)) next.delete(code);
+      else next.add(code);
+      return next;
+    });
+  }
+
+  function toggleStops(filter: StopsFilter) {
+    setActiveStops((prev) => {
+      const next = new Set(prev);
+      if (next.has(filter)) next.delete(filter);
+      else next.add(filter);
+      return next;
+    });
+  }
+
+  // Apply filters then sort
+  const filteredResults = useMemo(() => {
+    let filtered = results;
+
+    // Airline filter
+    if (activeAirlines.size > 0) {
+      filtered = filtered.filter((f) => {
+        const code = f.legs[0]?.airline_code || f.legs[0]?.airline || "";
+        return activeAirlines.has(code);
+      });
+    }
+
+    // Stops filter
+    if (activeStops.size > 0) {
+      filtered = filtered.filter((f) => {
+        if (f.stops === 0 && activeStops.has("nonstop")) return true;
+        if (f.stops === 1 && activeStops.has("1stop")) return true;
+        if (f.stops >= 2 && activeStops.has("2plus")) return true;
+        return false;
+      });
+    }
+
+    return filtered;
+  }, [results, activeAirlines, activeStops]);
+
+  const sortedResults = useMemo(() => sortFlights(filteredResults, sortBy), [filteredResults, sortBy]);
+
   if (loading) {
     return (
       <div className="space-y-3">
@@ -125,10 +185,115 @@ export function FlightResultsList({ results, loading, onWatch }: Props) {
 
   return (
     <div className="space-y-4">
+      {/* Filters */}
+      {results.length > 0 && (
+        <div className="rounded-xl border border-slate-800 bg-slate-900/60 overflow-hidden">
+          <button
+            type="button"
+            onClick={() => setFiltersOpen(!filtersOpen)}
+            className="flex w-full items-center justify-between px-4 py-3 text-sm font-medium text-slate-300 hover:text-white transition-colors"
+          >
+            <div className="flex items-center gap-2">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-slate-400">
+                <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
+              </svg>
+              <span>Filters</span>
+              {(activeAirlines.size > 0 || activeStops.size > 0) && (
+                <span className="inline-flex items-center justify-center h-5 min-w-[20px] rounded-full bg-blue-500/20 px-1.5 text-xs font-medium text-blue-400">
+                  {activeAirlines.size + activeStops.size}
+                </span>
+              )}
+            </div>
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className={`text-slate-500 transition-transform ${filtersOpen ? "rotate-180" : ""}`}
+            >
+              <polyline points="6 9 12 15 18 9" />
+            </svg>
+          </button>
+
+          {filtersOpen && (
+            <div className="border-t border-slate-800 px-4 py-4 space-y-4">
+              {/* Stops filter */}
+              <div>
+                <p className="text-xs font-medium uppercase tracking-wider text-slate-500 mb-2">Stops</p>
+                <div className="flex flex-wrap gap-2">
+                  {([
+                    { key: "nonstop" as StopsFilter, label: "Nonstop" },
+                    { key: "1stop" as StopsFilter, label: "1 stop" },
+                    { key: "2plus" as StopsFilter, label: "2+ stops" },
+                  ]).map(({ key, label }) => (
+                    <button
+                      key={key}
+                      type="button"
+                      onClick={() => toggleStops(key)}
+                      className={`rounded-full px-3 py-1.5 text-xs font-medium border transition-colors ${
+                        activeStops.has(key)
+                          ? "bg-blue-500/20 text-blue-400 border-blue-500/40"
+                          : "bg-slate-800/60 text-slate-400 border-slate-700 hover:border-slate-600 hover:text-slate-300"
+                      }`}
+                    >
+                      {label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Airline filter */}
+              {uniqueAirlines.length > 1 && (
+                <div>
+                  <p className="text-xs font-medium uppercase tracking-wider text-slate-500 mb-2">Airlines</p>
+                  <div className="flex flex-wrap gap-2">
+                    {uniqueAirlines.map((code) => (
+                      <button
+                        key={code}
+                        type="button"
+                        onClick={() => toggleAirline(code)}
+                        className={`rounded-full px-3 py-1.5 text-xs font-medium border transition-colors ${
+                          activeAirlines.has(code)
+                            ? "bg-blue-500/20 text-blue-400 border-blue-500/40"
+                            : "bg-slate-800/60 text-slate-400 border-slate-700 hover:border-slate-600 hover:text-slate-300"
+                        }`}
+                      >
+                        {getAirlineName(code)}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Clear filters */}
+              {(activeAirlines.size > 0 || activeStops.size > 0) && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setActiveAirlines(new Set());
+                    setActiveStops(new Set());
+                  }}
+                  className="text-xs text-slate-500 hover:text-slate-300 transition-colors underline"
+                >
+                  Clear all filters
+                </button>
+              )}
+            </div>
+          )}
+        </div>
+      )}
+
       <div className="flex items-center justify-between">
         <p className="text-sm text-slate-400">
-          <span className="text-white font-semibold">{results.length}</span>{" "}
-          flight{results.length !== 1 ? "s" : ""} found
+          <span className="text-white font-semibold">{filteredResults.length}</span>
+          {filteredResults.length !== results.length && (
+            <span className="text-slate-500"> of {results.length}</span>
+          )}{" "}
+          flight{filteredResults.length !== 1 ? "s" : ""} found
         </p>
         <select
           value={sortBy}

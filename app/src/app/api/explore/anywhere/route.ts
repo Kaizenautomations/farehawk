@@ -2,6 +2,7 @@ import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { exploreAnywhere } from "@/lib/sidecar";
 import { TIER_LIMITS, type PlanTier } from "@/lib/constants";
+import { isAdmin, ADMIN_LIMITS } from "@/lib/admin";
 import { NextResponse } from "next/server";
 import crypto from "crypto";
 
@@ -17,6 +18,9 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
+  // Check admin status
+  const userIsAdmin = await isAdmin(user.id);
+
   // Get user tier
   const { data: sub } = await supabase
     .from("subscriptions")
@@ -24,22 +28,24 @@ export async function POST(request: Request) {
     .eq("user_id", user.id)
     .single();
   const tier: PlanTier = (sub?.tier as PlanTier) || "free";
-  const limits = TIER_LIMITS[tier];
+  const limits = userIsAdmin ? ADMIN_LIMITS : TIER_LIMITS[tier];
 
-  // Check rate limit (counts as 1 search)
+  // Check rate limit (counts as 1 search, skip for admins)
   const admin = createAdminClient();
-  const { data: countData } = await admin.rpc("increment_search_count", {
-    p_user_id: user.id,
-  });
-  if (countData && countData > limits.searches_per_day) {
-    return NextResponse.json(
-      {
-        error: "Daily search limit reached",
-        limit: limits.searches_per_day,
-        tier,
-      },
-      { status: 429 }
-    );
+  if (!userIsAdmin) {
+    const { data: countData } = await admin.rpc("increment_search_count", {
+      p_user_id: user.id,
+    });
+    if (countData && countData > limits.searches_per_day) {
+      return NextResponse.json(
+        {
+          error: "Daily search limit reached",
+          limit: limits.searches_per_day,
+          tier,
+        },
+        { status: 429 }
+      );
+    }
   }
 
   const body = await request.json();

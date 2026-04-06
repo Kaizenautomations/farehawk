@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { TIER_LIMITS, type PlanTier } from "@/lib/constants";
+import { isAdmin, ADMIN_LIMITS } from "@/lib/admin";
 import { NextResponse } from "next/server";
 
 export async function GET() {
@@ -35,6 +36,9 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
+  // Check admin status
+  const userIsAdmin = await isAdmin(user.id);
+
   // Check tier limits
   const { data: sub } = await supabase
     .from("subscriptions")
@@ -42,23 +46,25 @@ export async function POST(request: Request) {
     .eq("user_id", user.id)
     .single();
   const tier: PlanTier = (sub?.tier as PlanTier) || "free";
-  const limits = TIER_LIMITS[tier];
+  const limits = userIsAdmin ? ADMIN_LIMITS : TIER_LIMITS[tier];
 
-  const { count } = await supabase
-    .from("watches")
-    .select("*", { count: "exact", head: true })
-    .eq("user_id", user.id)
-    .eq("is_active", true);
+  if (!userIsAdmin) {
+    const { count } = await supabase
+      .from("watches")
+      .select("*", { count: "exact", head: true })
+      .eq("user_id", user.id)
+      .eq("is_active", true);
 
-  if ((count ?? 0) >= limits.max_watches) {
-    return NextResponse.json(
-      {
-        error: `Watch limit reached (${limits.max_watches} for ${tier} plan)`,
-        limit: limits.max_watches,
-        tier,
-      },
-      { status: 403 }
-    );
+    if ((count ?? 0) >= limits.max_watches) {
+      return NextResponse.json(
+        {
+          error: `Watch limit reached (${limits.max_watches} for ${tier} plan)`,
+          limit: limits.max_watches,
+          tier,
+        },
+        { status: 403 }
+      );
+    }
   }
 
   const body = await request.json();
