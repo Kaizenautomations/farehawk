@@ -1,0 +1,15 @@
+[project]
+name = "farehawk-api"
+version = "0.1.0"
+description = "FareHawk flight search sidecar API"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.115.0",
+    "uvicorn>=0.34.0",
+    "flights>=0.8.2",
+    "pydantic>=2.0.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

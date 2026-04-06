@@ -1,0 +1,5 @@
+{
+  "name": "farehawk",
+  "private": true,
+  "workspaces": ["app"]
+}
