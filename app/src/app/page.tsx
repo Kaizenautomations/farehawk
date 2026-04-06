@@ -16,33 +16,36 @@ export default function LandingPage() {
       <Navbar />
 
       {/* Hero */}
-      <section className="relative overflow-hidden bg-gradient-hero">
+      <section className="relative overflow-hidden bg-gradient-hero noise-overlay">
+        {/* Dot grid background */}
+        <div className="pointer-events-none absolute inset-0 dot-grid opacity-40" />
+
         {/* Animated floating elements */}
         <div className="pointer-events-none absolute inset-0">
           <div className="absolute left-1/4 top-20 h-72 w-72 rounded-full bg-primary/10 blur-[120px]" />
           <div className="absolute right-1/4 top-40 h-96 w-96 rounded-full bg-[oklch(0.55_0.2_280)]/10 blur-[120px]" />
         </div>
 
-        <div className="relative mx-auto max-w-6xl px-4 pb-24 pt-32 text-center sm:pt-40 sm:pb-32">
+        <div className="relative z-10 mx-auto max-w-6xl px-4 pb-24 pt-32 text-center sm:pt-40 sm:pb-32">
           <Badge
             variant="secondary"
-            className="mb-6 border-primary/20 bg-primary/10 px-4 py-1.5 text-sm text-primary"
+            className="animate-fade-up mb-6 border-primary/20 bg-primary/10 px-4 py-1.5 text-sm text-primary"
           >
             Launching Soon -- Join the Waitlist
           </Badge>
 
-          <h1 className="mx-auto max-w-4xl text-5xl font-bold leading-[1.1] tracking-tight sm:text-7xl">
+          <h1 className="animate-fade-up-delay-1 mx-auto max-w-4xl text-5xl font-bold leading-[1.1] tracking-tight sm:text-7xl">
             Never Overpay for a{" "}
             <span className="text-gradient-brand">Flight Again</span>
           </h1>
 
-          <p className="mx-auto mt-8 max-w-2xl text-lg leading-relaxed text-muted-foreground sm:text-xl">
+          <p className="animate-fade-up-delay-2 mx-auto mt-8 max-w-2xl text-lg leading-relaxed text-muted-foreground sm:text-xl">
             FareHawk tracks thousands of flight prices in real time so you
             don&apos;t have to. Search routes, visualize the cheapest dates, and
             get instant alerts when prices drop.
           </p>
 
-          <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
+          <div className="animate-fade-up-delay-3 mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
             <Link href="/signup">
               <Button
                 size="lg"
@@ -63,57 +66,24 @@ export default function LandingPage() {
           </div>
 
           {/* Animated plane */}
-          <div className="relative mx-auto mt-16 flex items-center justify-center">
-            <div className="animate-[fly_6s_ease-in-out_infinite] text-5xl opacity-80">
+          <div className="animate-fade-up-delay-4 relative mx-auto mt-16 flex items-center justify-center">
+            <div className="animate-[fly_8s_ease-in-out_infinite] text-5xl opacity-60">
               <svg
-                width="64"
-                height="64"
+                width="48"
+                height="48"
                 viewBox="0 0 24 24"
-                fill="none"
-                className="text-primary"
+                fill="currentColor"
+                className="text-primary/80"
               >
-                <path
-                  d="M21.71 10.29l-9-9a1 1 0 00-1.42 0l-9 9a1 1 0 000 1.42l9 9a1 1 0 001.42 0l9-9a1 1 0 000-1.42z"
-                  fill="none"
-                />
-                <path
-                  d="M22 16.21V11.2a1 1 0 00-.55-.89l-9-4.5a1 1 0 00-.9 0l-9 4.5A1 1 0 002 11.2v5.01a1 1 0 00.55.89l9 4.5a1 1 0 00.9 0l9-4.5a1 1 0 00.55-.89z"
-                  fill="none"
-                />
-                <path
-                  d="M2.5 2l8 4.5L19 2m-8.5 6.5v12"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  fill="none"
-                />
-                <path
-                  d="M21 16l-6-3.5v-7L21 2v14z"
-                  fill="currentColor"
-                  opacity="0.3"
-                />
-                <path
-                  d="M3 7l9 5 9-5"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  fill="none"
-                />
-                <path
-                  d="M22 2L2 12l7 2 4 8 3-6 6-2z"
-                  fill="currentColor"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinejoin="round"
-                />
+                <path d="M22 2L2 12l7 2 4 8 3-6 6-2z" stroke="currentColor" strokeWidth="1" strokeLinejoin="round" />
               </svg>
             </div>
             <style
               dangerouslySetInnerHTML={{
                 __html: `
               @keyframes fly {
-                0%, 100% { transform: translateX(-40px) translateY(6px) rotate(-2deg); }
-                50% { transform: translateX(40px) translateY(-6px) rotate(2deg); }
+                0%, 100% { transform: translateX(-30px) translateY(4px) rotate(-1deg); opacity: 0.6; }
+                50% { transform: translateX(30px) translateY(-4px) rotate(1deg); opacity: 0.4; }
               }
             `,
               }}
@@ -124,24 +94,24 @@ export default function LandingPage() {
 
       {/* Stats Bar */}
       <section className="border-y border-border/50 bg-card/50 backdrop-blur-sm">
-        <div className="mx-auto flex max-w-5xl flex-col items-center justify-center gap-8 px-4 py-8 sm:flex-row sm:gap-16">
+        <div className="mx-auto flex max-w-5xl flex-col items-center justify-center gap-8 px-4 py-10 sm:flex-row sm:gap-16">
           {[
             { value: "50,000+", label: "Prices Tracked" },
             { value: "3,200+", label: "Users" },
             { value: "$147", label: "Avg Savings" },
           ].map((stat, i) => (
-            <div key={stat.label} className="flex items-center gap-6">
+            <div key={stat.label} className={`flex items-center gap-6 animate-fade-up-delay-${i + 3}`}>
               {i > 0 && (
                 <Separator
                   orientation="vertical"
-                  className="hidden h-10 sm:block"
+                  className="hidden h-12 sm:block"
                 />
               )}
               <div className="text-center">
-                <div className="text-3xl font-bold text-gradient-brand">
+                <div className="text-4xl font-bold tracking-tight text-gradient-brand sm:text-5xl">
                   {stat.value}
                 </div>
-                <div className="mt-1 text-sm text-muted-foreground">
+                <div className="mt-2 text-sm font-medium uppercase tracking-wider text-muted-foreground">
                   {stat.label}
                 </div>
               </div>
@@ -227,9 +197,9 @@ export default function LandingPage() {
             ].map((feature) => (
               <Card
                 key={feature.title}
-                className="group border-border/50 bg-card/50 backdrop-blur-sm transition-all duration-300 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5"
+                className="group relative border-border/50 bg-card/50 backdrop-blur-sm transition-all duration-300 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5 glow-hover gradient-border-hover"
               >
-                <CardHeader className="space-y-4">
+                <CardHeader className="relative z-10 space-y-4">
                   <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 text-primary transition-colors group-hover:bg-primary/20">
                     {feature.icon}
                   </div>
@@ -245,8 +215,8 @@ export default function LandingPage() {
       </section>
 
       {/* How it Works */}
-      <section className="border-y border-border/50 bg-muted/30 py-24 sm:py-32">
-        <div className="mx-auto max-w-6xl px-4">
+      <section className="border-y border-border/50 bg-muted/30 py-24 sm:py-32 noise-overlay">
+        <div className="relative z-10 mx-auto max-w-6xl px-4">
           <div className="text-center">
             <Badge
               variant="secondary"
@@ -335,9 +305,9 @@ export default function LandingPage() {
             ].map((testimonial) => (
               <Card
                 key={testimonial.name}
-                className="border-border/50 bg-card/50 backdrop-blur-sm"
+                className="border-border/50 bg-card/50 backdrop-blur-sm transition-all duration-300 hover:border-primary/20 gradient-border-hover"
               >
-                <CardHeader className="space-y-4">
+                <CardHeader className="relative z-10 space-y-4">
                   <div className="flex gap-1 text-primary">
                     {[...Array(5)].map((_, i) => (
                       <svg
@@ -385,58 +355,62 @@ export default function LandingPage() {
           </p>
 
           <div className="mt-12 grid gap-6 sm:grid-cols-2">
-            <Card className="border-border/50 bg-card/50 p-8 backdrop-blur-sm">
-              <div className="text-sm font-medium text-muted-foreground">
-                Free
+            <Card className="border-border/50 bg-card/50 p-8 backdrop-blur-sm transition-all duration-300 hover:border-primary/20 gradient-border-hover">
+              <div className="relative z-10">
+                <div className="text-sm font-medium text-muted-foreground">
+                  Free
+                </div>
+                <div className="mt-2 text-4xl font-bold">$0</div>
+                <div className="mt-1 text-sm text-muted-foreground">
+                  forever
+                </div>
+                <Separator className="my-6" />
+                <ul className="space-y-3 text-left text-sm text-muted-foreground">
+                  <li className="flex items-center gap-2">
+                    <span className="text-primary">&#10003;</span> 3 price alerts
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="text-primary">&#10003;</span> Basic search
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="text-primary">&#10003;</span> Price calendar
+                  </li>
+                </ul>
               </div>
-              <div className="mt-2 text-4xl font-bold">$0</div>
-              <div className="mt-1 text-sm text-muted-foreground">
-                forever
-              </div>
-              <Separator className="my-6" />
-              <ul className="space-y-3 text-left text-sm text-muted-foreground">
-                <li className="flex items-center gap-2">
-                  <span className="text-primary">&#10003;</span> 3 price alerts
-                </li>
-                <li className="flex items-center gap-2">
-                  <span className="text-primary">&#10003;</span> Basic search
-                </li>
-                <li className="flex items-center gap-2">
-                  <span className="text-primary">&#10003;</span> Price calendar
-                </li>
-              </ul>
             </Card>
 
-            <Card className="relative border-primary/40 bg-card/50 p-8 shadow-lg shadow-primary/10 backdrop-blur-sm">
+            <Card className="relative border-primary/40 bg-card/50 p-8 shadow-lg shadow-primary/10 backdrop-blur-sm transition-all duration-300 glow-hover gradient-border-hover">
               <Badge className="absolute -top-3 right-6 bg-gradient-brand text-white">
                 Popular
               </Badge>
-              <div className="text-sm font-medium text-muted-foreground">
-                Pro
+              <div className="relative z-10">
+                <div className="text-sm font-medium text-muted-foreground">
+                  Pro
+                </div>
+                <div className="mt-2 text-4xl font-bold">$5</div>
+                <div className="mt-1 text-sm text-muted-foreground">
+                  / month
+                </div>
+                <Separator className="my-6" />
+                <ul className="space-y-3 text-left text-sm text-muted-foreground">
+                  <li className="flex items-center gap-2">
+                    <span className="text-primary">&#10003;</span> Unlimited
+                    alerts
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="text-primary">&#10003;</span> Advanced
+                    filters
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="text-primary">&#10003;</span> Price history
+                    charts
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="text-primary">&#10003;</span> Priority
+                    notifications
+                  </li>
+                </ul>
               </div>
-              <div className="mt-2 text-4xl font-bold">$5</div>
-              <div className="mt-1 text-sm text-muted-foreground">
-                / month
-              </div>
-              <Separator className="my-6" />
-              <ul className="space-y-3 text-left text-sm text-muted-foreground">
-                <li className="flex items-center gap-2">
-                  <span className="text-primary">&#10003;</span> Unlimited
-                  alerts
-                </li>
-                <li className="flex items-center gap-2">
-                  <span className="text-primary">&#10003;</span> Advanced
-                  filters
-                </li>
-                <li className="flex items-center gap-2">
-                  <span className="text-primary">&#10003;</span> Price history
-                  charts
-                </li>
-                <li className="flex items-center gap-2">
-                  <span className="text-primary">&#10003;</span> Priority
-                  notifications
-                </li>
-              </ul>
             </Card>
           </div>
 
@@ -451,32 +425,35 @@ export default function LandingPage() {
       {/* CTA */}
       <section className="py-24 sm:py-32">
         <div className="mx-auto max-w-4xl px-4">
-          <div className="overflow-hidden rounded-3xl bg-gradient-cta p-12 text-center shadow-2xl shadow-primary/10 sm:p-16">
-            <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
-              Start saving on flights today
-            </h2>
-            <p className="mx-auto mt-4 max-w-xl text-lg text-muted-foreground">
-              Join thousands of travelers who never overpay. Free to start, no
-              credit card required.
-            </p>
-            <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
-              <Link href="/signup">
-                <Button
-                  size="lg"
-                  className="bg-gradient-brand px-8 text-base font-semibold text-white shadow-lg shadow-primary/25 transition-all hover:shadow-xl hover:shadow-primary/30 hover:brightness-110"
-                >
-                  Create Free Account
-                </Button>
-              </Link>
-              <Link href="/search">
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="border-white/20 bg-white/5 px-8 text-base hover:bg-white/10"
-                >
-                  Try a Search
-                </Button>
-              </Link>
+          <div className="relative overflow-hidden rounded-3xl bg-gradient-cta p-12 text-center shadow-2xl shadow-primary/10 sm:p-16 noise-overlay">
+            <div className="pointer-events-none absolute inset-0 dot-grid opacity-30" />
+            <div className="relative z-10">
+              <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
+                Start saving on flights today
+              </h2>
+              <p className="mx-auto mt-4 max-w-xl text-lg text-muted-foreground">
+                Join thousands of travelers who never overpay. Free to start, no
+                credit card required.
+              </p>
+              <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
+                <Link href="/signup">
+                  <Button
+                    size="lg"
+                    className="bg-gradient-brand px-8 text-base font-semibold text-white shadow-lg shadow-primary/25 transition-all hover:shadow-xl hover:shadow-primary/30 hover:brightness-110"
+                  >
+                    Create Free Account
+                  </Button>
+                </Link>
+                <Link href="/search">
+                  <Button
+                    size="lg"
+                    variant="outline"
+                    className="border-white/20 bg-white/5 px-8 text-base hover:bg-white/10"
+                  >
+                    Try a Search
+                  </Button>
+                </Link>
+              </div>
             </div>
           </div>
         </div>
@@ -487,7 +464,7 @@ export default function LandingPage() {
         <div className="mx-auto max-w-6xl px-4 py-12">
           <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
             <div>
-              <div className="text-lg font-bold text-gradient-brand">
+              <div className="font-heading text-lg font-bold text-gradient-brand">
                 FareHawk
               </div>
               <p className="mt-3 text-sm leading-relaxed text-muted-foreground">

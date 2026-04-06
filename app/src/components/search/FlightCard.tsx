@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 interface Props {
   flight: FlightResult;
   onWatch?: () => void;
+  style?: React.CSSProperties;
 }
 
 function formatDuration(minutes: number): string {
@@ -26,13 +27,16 @@ function formatTime(iso: string): string {
   });
 }
 
-export function FlightCard({ flight, onWatch }: Props) {
+export function FlightCard({ flight, onWatch, style }: Props) {
   const firstLeg = flight.legs[0];
   const lastLeg = flight.legs[flight.legs.length - 1];
 
   return (
-    <Card className="group border-slate-800 bg-slate-900/60 backdrop-blur-sm hover:border-slate-700 hover:bg-slate-900/80 transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/5 hover:-translate-y-0.5">
-      <CardContent className="p-4 md:p-5">
+    <Card
+      className="group border-slate-800 bg-slate-900/60 backdrop-blur-sm hover:border-slate-700 hover:bg-slate-900/80 transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/5 hover:-translate-y-0.5 gradient-border-hover"
+      style={style}
+    >
+      <CardContent className="relative z-10 p-4 md:p-5">
         <div className="flex flex-col md:flex-row md:items-center gap-4">
           {/* Left: Times & airports */}
           <div className="flex-1 min-w-0">

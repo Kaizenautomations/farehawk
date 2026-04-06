@@ -18,6 +18,9 @@ export function FlightResultsList({ results, loading, onWatch }: Props) {
           <div
             key={i}
             className="rounded-xl border border-slate-800 bg-slate-900/60 p-4 md:p-5"
+            style={{
+              animation: `fadeUp 0.5s ease-out ${i * 0.08}s both`,
+            }}
           >
             <div className="flex flex-col md:flex-row md:items-center gap-4">
               {/* Left skeleton */}
@@ -101,6 +104,9 @@ export function FlightResultsList({ results, loading, onWatch }: Props) {
             key={i}
             flight={flight}
             onWatch={onWatch ? () => onWatch(flight) : undefined}
+            style={{
+              animation: `fadeUp 0.5s ease-out ${i * 0.06}s both`,
+            }}
           />
         ))}
       </div>

@@ -40,6 +40,7 @@ const navLinks = [
 export function Navbar() {
   const [user, setUser] = useState<User | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
   const supabase = createClient();
@@ -47,6 +48,14 @@ export function Navbar() {
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => setUser(data.user));
   }, [supabase.auth]);
+
+  useEffect(() => {
+    function handleScroll() {
+      setScrolled(window.scrollY > 10);
+    }
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   async function handleLogout() {
     await supabase.auth.signOut();
@@ -57,7 +66,13 @@ export function Navbar() {
   const initial = user?.email?.[0]?.toUpperCase() ?? "U";
 
   return (
-    <nav className="sticky top-0 z-50 bg-background/80 backdrop-blur-lg border-b border-white/10">
+    <nav
+      className={`sticky top-0 z-50 bg-background/80 backdrop-blur-lg border-b transition-all duration-300 ${
+        scrolled
+          ? "border-primary/20 shadow-[0_1px_12px_0_oklch(0.67_0.22_262_/_0.12)]"
+          : "border-white/10"
+      }`}
+    >
       <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4 lg:px-6">
         {/* Logo */}
         <Link
@@ -65,7 +80,10 @@ export function Navbar() {
           className="flex items-center gap-2 text-lg font-bold tracking-tight"
         >
           <Plane className="size-5 text-blue-400 -rotate-45" />
-          <span className="bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">
+          <span
+            className="bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent"
+            style={{ fontFamily: "var(--font-heading), ui-sans-serif, system-ui, sans-serif" }}
+          >
             FareHawk
           </span>
         </Link>
@@ -97,7 +115,7 @@ export function Navbar() {
         <div className="flex items-center gap-2">
           {user ? (
             <>
-              {/* User dropdown — desktop */}
+              {/* User dropdown -- desktop */}
               <div className="hidden md:block">
                 <DropdownMenu>
                   <DropdownMenuTrigger>
@@ -148,7 +166,10 @@ export function Navbar() {
                     <SheetHeader>
                       <SheetTitle className="flex items-center gap-2">
                         <Plane className="size-4 text-blue-400 -rotate-45" />
-                        <span className="bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">
+                        <span
+                          className="bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent"
+                          style={{ fontFamily: "var(--font-heading), ui-sans-serif, system-ui, sans-serif" }}
+                        >
                           FareHawk
                         </span>
                       </SheetTitle>
