@@ -8,6 +8,12 @@ import { NearbyAirportComparison } from "@/components/search/NearbyAirportCompar
 import { LoadingBar } from "@/components/ui/loading-bar";
 import { useSubscription } from "@/hooks/useSubscription";
 import type { FlightResult } from "@/types/flight";
+import {
+  getSearchHistory,
+  addSearchHistory,
+  clearSearchHistory,
+  type SearchHistoryEntry,
+} from "@/lib/search-history";
 
 export default function SearchPage() {
   return (
@@ -36,7 +42,13 @@ function SearchPageInner() {
   const [retryable, setRetryable] = useState(false);
   const [lastParams, setLastParams] = useState<Record<string, unknown> | null>(null);
   const [toast, setToast] = useState<{type: "success"|"error", message: string} | null>(null);
+  const [searchHistory, setSearchHistory] = useState<SearchHistoryEntry[]>([]);
   const sub = useSubscription();
+
+  // Load search history on mount
+  useEffect(() => {
+    setSearchHistory(getSearchHistory());
+  }, []);
 
   useEffect(() => {
     if (toast) {
@@ -93,6 +105,15 @@ function SearchPageInner() {
       }
 
       setResults(data);
+      // Save to search history
+      addSearchHistory({
+        origin: params.origin,
+        destination: params.destination,
+        departure_date: params.departure_date,
+        return_date: params.return_date,
+        cabin_class: params.cabin_class,
+      });
+      setSearchHistory(getSearchHistory());
     } catch {
       setError("Something went wrong. Please try again.");
       setRetryable(true);
@@ -176,6 +197,82 @@ function SearchPageInner() {
 
       {/* Search Form */}
       <SearchForm onSearch={handleSearch} loading={loading} initialValues={initialValues} />
+
+      {/* Recent Searches */}
+      {!searched && !loading && searchHistory.length > 0 && (
+        <div className="space-y-3">
+          <div className="flex items-center justify-between">
+            <h2 className="text-sm font-medium text-slate-400">Recent Searches</h2>
+            <button
+              type="button"
+              onClick={() => {
+                clearSearchHistory();
+                setSearchHistory([]);
+              }}
+              className="text-xs text-slate-500 hover:text-slate-300 transition-colors min-h-[44px] px-2"
+            >
+              Clear history
+            </button>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+            {searchHistory.slice(0, 5).map((entry, i) => (
+              <button
+                key={`${entry.origin}-${entry.destination}-${entry.departure_date}-${i}`}
+                type="button"
+                onClick={() =>
+                  handleSearch({
+                    origin: entry.origin,
+                    destination: entry.destination,
+                    departure_date: entry.departure_date,
+                    return_date: entry.return_date,
+                    cabin_class: entry.cabin_class,
+                    max_stops: null,
+                  })
+                }
+                className="flex items-center gap-3 rounded-xl border border-slate-800 bg-slate-900/60 px-4 py-3 min-h-[44px] text-left hover:border-slate-700 hover:bg-slate-900/80 transition-all group"
+              >
+                <svg
+                  className="h-4 w-4 text-slate-500 group-hover:text-blue-400 transition-colors shrink-0"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={2}
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5"
+                  />
+                </svg>
+                <div className="min-w-0">
+                  <p className="text-sm font-medium text-slate-200 truncate">
+                    {entry.origin}{" "}
+                    <span className="text-slate-500">&rarr;</span>{" "}
+                    {entry.destination}
+                  </p>
+                  <p className="text-xs text-slate-500 truncate">
+                    {new Date(entry.departure_date + "T12:00:00").toLocaleDateString("en-US", {
+                      month: "short",
+                      day: "numeric",
+                    })}
+                    {entry.return_date && (
+                      <>
+                        {" "}&mdash;{" "}
+                        {new Date(entry.return_date + "T12:00:00").toLocaleDateString("en-US", {
+                          month: "short",
+                          day: "numeric",
+                        })}
+                      </>
+                    )}
+                    {"  "}
+                    <span className="capitalize">{entry.cabin_class.replace("_", " ")}</span>
+                  </p>
+                </div>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Pre-search guidance */}
       {!searched && !loading && (

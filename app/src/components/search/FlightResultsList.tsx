@@ -191,7 +191,8 @@ export function FlightResultsList({ results, loading, onWatch }: Props) {
           <button
             type="button"
             onClick={() => setFiltersOpen(!filtersOpen)}
-            className="flex w-full items-center justify-between px-4 py-3 text-sm font-medium text-slate-300 hover:text-white transition-colors"
+            className="flex w-full items-center justify-between px-4 py-3 min-h-[44px] text-sm font-medium text-slate-300 hover:text-white transition-colors"
+            aria-label="Toggle filters"
           >
             <div className="flex items-center gap-2">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-slate-400">

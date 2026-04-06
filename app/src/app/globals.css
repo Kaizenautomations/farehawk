@@ -131,6 +131,12 @@
     font-family: var(--font-heading), ui-sans-serif, system-ui, sans-serif;
   }
 
+  /* Ensure focus indicators on custom buttons */
+  button:focus-visible, a:focus-visible, [role="button"]:focus-visible {
+    outline: 2px solid oklch(0.67 0.22 262);
+    outline-offset: 2px;
+  }
+
   /* Dark mode scrollbar */
   .dark ::-webkit-scrollbar {
     width: 8px;

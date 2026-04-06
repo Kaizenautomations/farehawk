@@ -227,7 +227,8 @@ export default function CalendarPage() {
               type="button"
               onClick={() => handleMonthChange(-1)}
               disabled={!canGoPrev}
-              className="h-9 w-9 rounded-lg border border-slate-700 bg-slate-800 flex items-center justify-center text-slate-400 hover:text-white hover:border-slate-600 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+              className="h-9 w-9 min-h-[44px] min-w-[44px] rounded-lg border border-slate-700 bg-slate-800 flex items-center justify-center text-slate-400 hover:text-white hover:border-slate-600 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+              aria-label="Previous month"
             >
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6" /></svg>
             </button>
@@ -237,7 +238,8 @@ export default function CalendarPage() {
             <button
               type="button"
               onClick={() => handleMonthChange(1)}
-              className="h-9 w-9 rounded-lg border border-slate-700 bg-slate-800 flex items-center justify-center text-slate-400 hover:text-white hover:border-slate-600 transition-colors"
+              className="h-9 w-9 min-h-[44px] min-w-[44px] rounded-lg border border-slate-700 bg-slate-800 flex items-center justify-center text-slate-400 hover:text-white hover:border-slate-600 transition-colors"
+              aria-label="Next month"
             >
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6" /></svg>
             </button>

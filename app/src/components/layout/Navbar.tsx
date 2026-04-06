@@ -132,6 +132,7 @@ export function Navbar() {
                     <button
                       type="button"
                       className="flex items-center justify-center size-8 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 text-xs font-semibold text-white ring-2 ring-white/10 hover:ring-white/20 transition-all"
+                      aria-label="User menu"
                     >
                       {initial}
                     </button>
@@ -171,6 +172,7 @@ export function Navbar() {
                     <button
                       type="button"
                       className="flex items-center justify-center size-10 min-h-[44px] rounded-lg text-muted-foreground hover:text-foreground hover:bg-white/5 transition-colors"
+                      aria-label="Open menu"
                     >
                       <Menu className="size-5" />
                     </button>
@@ -285,6 +287,7 @@ export function Navbar() {
                     <button
                       type="button"
                       className="flex items-center justify-center size-10 min-h-[44px] rounded-lg text-muted-foreground hover:text-foreground hover:bg-white/5 transition-colors"
+                      aria-label="Open menu"
                     >
                       <Menu className="size-5" />
                     </button>

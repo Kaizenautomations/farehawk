@@ -143,7 +143,7 @@ export function SearchForm({ onSearch, loading, initialValues }: Props) {
             type="button"
             onClick={swapAirports}
             className="h-11 w-11 min-h-[44px] min-w-[44px] rounded-full border border-slate-700 bg-slate-800 hover:bg-slate-700 hover:border-blue-500/50 transition-all duration-200 flex items-center justify-center text-slate-400 hover:text-blue-400 shrink-0"
-            aria-label="Swap airports"
+            aria-label="Swap origin and destination"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"

@@ -8,15 +8,25 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/client";
 
+const ONBOARDING_DISMISSED_KEY = "farehawk_onboarding_dismissed";
+
 export default function DashboardPage() {
   const [watches, setWatches] = useState<Watch[]>([]);
   const [userName, setUserName] = useState<string>("");
+  const [showOnboarding, setShowOnboarding] = useState(false);
   const sub = useSubscription();
 
   useEffect(() => {
     fetch("/api/watches")
       .then((r) => r.json())
-      .then(setWatches);
+      .then((data: Watch[]) => {
+        setWatches(data);
+        // Show onboarding only if user has no watches and hasn't dismissed
+        const dismissed = localStorage.getItem(ONBOARDING_DISMISSED_KEY);
+        if (!dismissed && data.length === 0) {
+          setShowOnboarding(true);
+        }
+      });
 
     // Fetch user's name from Supabase auth metadata
     const supabase = createClient();
@@ -57,6 +67,85 @@ export default function DashboardPage() {
         <h1 className="text-2xl sm:text-3xl font-bold text-white">Welcome back{userName ? `, ${userName}` : ""}</h1>
         <p className="mt-1 text-zinc-400">Here is what is happening with your flight watches.</p>
       </div>
+
+      {/* Onboarding Banner */}
+      {showOnboarding && (
+        <div className="relative overflow-hidden rounded-2xl border border-blue-500/20 bg-gradient-to-br from-blue-600/10 via-indigo-600/10 to-violet-600/10 p-6 sm:p-8">
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-violet-500/5" />
+          <div className="relative space-y-5">
+            <div>
+              <h2 className="text-xl sm:text-2xl font-bold text-white">
+                Welcome to FareHawk{userName ? `, ${userName}` : ""}!
+              </h2>
+              <p className="mt-2 text-sm text-slate-400 max-w-lg">
+                Start by setting your home airports in{" "}
+                <Link href="/settings" className="text-blue-400 hover:text-blue-300 underline underline-offset-2">
+                  Settings
+                </Link>{" "}
+                so we can find the best deals near you.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <Link
+                href="/search"
+                className="flex items-center gap-3 rounded-xl border border-slate-700/60 bg-slate-900/60 p-4 min-h-[44px] hover:border-blue-500/40 hover:bg-slate-900/80 transition-all group"
+              >
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-blue-500/15">
+                  <svg className="h-5 w-5 text-blue-400" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
+                  </svg>
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-white group-hover:text-blue-400 transition-colors">Search Flights</p>
+                  <p className="text-xs text-slate-500">Find the best deals</p>
+                </div>
+              </Link>
+
+              <Link
+                href="/explore"
+                className="flex items-center gap-3 rounded-xl border border-slate-700/60 bg-slate-900/60 p-4 min-h-[44px] hover:border-blue-500/40 hover:bg-slate-900/80 transition-all group"
+              >
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-indigo-500/15">
+                  <svg className="h-5 w-5 text-indigo-400" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+                    <circle cx="12" cy="12" r="10" /><line x1="2" y1="12" x2="22" y2="12" /><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z" />
+                  </svg>
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-white group-hover:text-indigo-400 transition-colors">Explore Destinations</p>
+                  <p className="text-xs text-slate-500">Discover where to go</p>
+                </div>
+              </Link>
+
+              <Link
+                href="/watches"
+                className="flex items-center gap-3 rounded-xl border border-slate-700/60 bg-slate-900/60 p-4 min-h-[44px] hover:border-blue-500/40 hover:bg-slate-900/80 transition-all group"
+              >
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-amber-500/15">
+                  <svg className="h-5 w-5 text-amber-400" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
+                  </svg>
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-white group-hover:text-amber-400 transition-colors">Set Up Price Alerts</p>
+                  <p className="text-xs text-slate-500">Track price drops</p>
+                </div>
+              </Link>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => {
+                localStorage.setItem(ONBOARDING_DISMISSED_KEY, "true");
+                setShowOnboarding(false);
+              }}
+              className="inline-flex items-center gap-1.5 rounded-lg border border-slate-700 bg-slate-800/60 px-4 py-2 min-h-[44px] text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800 transition-all"
+            >
+              Got it
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Stat Cards */}
       <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
