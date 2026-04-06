@@ -29,6 +29,9 @@ import {
   Menu,
   Plane,
   Globe,
+  DollarSign,
+  LogIn,
+  UserPlus,
 } from "lucide-react";
 import type { User } from "@supabase/supabase-js";
 
@@ -79,12 +82,15 @@ export function Navbar() {
         {/* Logo */}
         <Link
           href={user ? "/dashboard" : "/"}
-          className="flex items-center gap-2 text-lg font-bold tracking-tight"
+          className="flex items-center gap-2 text-lg font-bold tracking-tight shrink-0"
         >
           <Plane className="size-5 text-blue-400 -rotate-45" />
           <span
             className="bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent"
-            style={{ fontFamily: "var(--font-heading), ui-sans-serif, system-ui, sans-serif" }}
+            style={{
+              fontFamily:
+                "var(--font-heading), ui-sans-serif, system-ui, sans-serif",
+            }}
           >
             FareHawk
           </span>
@@ -117,7 +123,7 @@ export function Navbar() {
         <div className="flex items-center gap-2">
           {user ? (
             <>
-              {/* User dropdown -- desktop */}
+              {/* Desktop user dropdown */}
               <div className="hidden md:block">
                 <DropdownMenu>
                   <DropdownMenuTrigger>
@@ -156,21 +162,30 @@ export function Navbar() {
                 </DropdownMenu>
               </div>
 
-              {/* Mobile hamburger */}
+              {/* Mobile hamburger (authenticated) */}
               <div className="md:hidden">
                 <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
                   <SheetTrigger>
-                    <Button variant="ghost" size="icon">
+                    <button
+                      type="button"
+                      className="flex items-center justify-center size-10 min-h-[44px] rounded-lg text-muted-foreground hover:text-foreground hover:bg-white/5 transition-colors"
+                    >
                       <Menu className="size-5" />
-                    </Button>
+                    </button>
                   </SheetTrigger>
-                  <SheetContent side="right" className="w-72 bg-background border-white/10">
+                  <SheetContent
+                    side="right"
+                    className="w-72 bg-background border-white/10"
+                  >
                     <SheetHeader>
                       <SheetTitle className="flex items-center gap-2">
                         <Plane className="size-4 text-blue-400 -rotate-45" />
                         <span
                           className="bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent"
-                          style={{ fontFamily: "var(--font-heading), ui-sans-serif, system-ui, sans-serif" }}
+                          style={{
+                            fontFamily:
+                              "var(--font-heading), ui-sans-serif, system-ui, sans-serif",
+                          }}
                         >
                           FareHawk
                         </span>
@@ -231,32 +246,95 @@ export function Navbar() {
             </>
           ) : (
             <>
-              <Link href="/pricing">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="text-muted-foreground hover:text-foreground"
-                >
-                  Pricing
-                </Button>
-              </Link>
-              <Link href="/login">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="text-muted-foreground hover:text-foreground"
-                >
-                  Log in
-                </Button>
-              </Link>
-              <Link href="/signup">
-                <button
-                  type="button"
-                  className="inline-flex items-center justify-center rounded-lg bg-gradient-to-r from-blue-500 to-indigo-600 px-3.5 py-1.5 text-sm font-medium text-white shadow-md shadow-blue-500/20 hover:shadow-blue-500/30 hover:brightness-110 transition-all"
-                >
-                  Get Started
-                </button>
-              </Link>
+              {/* Desktop: show all buttons */}
+              <div className="hidden sm:flex items-center gap-2">
+                <Link href="/pricing">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="text-muted-foreground hover:text-foreground"
+                  >
+                    Pricing
+                  </Button>
+                </Link>
+                <Link href="/login">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="text-muted-foreground hover:text-foreground"
+                  >
+                    Log in
+                  </Button>
+                </Link>
+                <Link href="/signup">
+                  <button
+                    type="button"
+                    className="inline-flex items-center justify-center rounded-lg bg-gradient-to-r from-blue-500 to-indigo-600 px-3.5 py-1.5 text-sm font-medium text-white shadow-md shadow-blue-500/20 hover:shadow-blue-500/30 hover:brightness-110 transition-all"
+                  >
+                    Get Started
+                  </button>
+                </Link>
+              </div>
+
+              {/* Mobile: hamburger for unauthenticated */}
+              <div className="sm:hidden">
+                <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
+                  <SheetTrigger>
+                    <button
+                      type="button"
+                      className="flex items-center justify-center size-10 min-h-[44px] rounded-lg text-muted-foreground hover:text-foreground hover:bg-white/5 transition-colors"
+                    >
+                      <Menu className="size-5" />
+                    </button>
+                  </SheetTrigger>
+                  <SheetContent
+                    side="right"
+                    className="w-72 bg-background border-white/10"
+                  >
+                    <SheetHeader>
+                      <SheetTitle className="flex items-center gap-2">
+                        <Plane className="size-4 text-blue-400 -rotate-45" />
+                        <span
+                          className="bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent"
+                          style={{
+                            fontFamily:
+                              "var(--font-heading), ui-sans-serif, system-ui, sans-serif",
+                          }}
+                        >
+                          FareHawk
+                        </span>
+                      </SheetTitle>
+                    </SheetHeader>
+                    <div className="flex flex-col gap-1 px-2">
+                      <Link
+                        href="/pricing"
+                        onClick={() => setMobileOpen(false)}
+                        className="flex items-center gap-2.5 rounded-lg px-3 py-3 min-h-[44px] text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-white/5 transition-colors"
+                      >
+                        <DollarSign className="size-4" />
+                        Pricing
+                      </Link>
+                      <div className="my-2 h-px bg-white/10" />
+                      <Link
+                        href="/login"
+                        onClick={() => setMobileOpen(false)}
+                        className="flex items-center gap-2.5 rounded-lg px-3 py-3 min-h-[44px] text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-white/5 transition-colors"
+                      >
+                        <LogIn className="size-4" />
+                        Log in
+                      </Link>
+                      <Link
+                        href="/signup"
+                        onClick={() => setMobileOpen(false)}
+                        className="flex items-center gap-2.5 rounded-lg px-3 py-3 min-h-[44px] text-sm font-semibold bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-lg transition-all"
+                      >
+                        <UserPlus className="size-4" />
+                        Get Started Free
+                      </Link>
+                    </div>
+                  </SheetContent>
+                </Sheet>
+              </div>
             </>
           )}
         </div>
