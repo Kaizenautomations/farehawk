@@ -195,18 +195,32 @@ export default function DashboardPage() {
             <CardContent className="flex flex-col items-center justify-center py-12 text-center">
               <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-zinc-800">
                 <svg className="h-7 w-7 text-zinc-500" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                 </svg>
               </div>
-              <p className="text-sm font-medium text-zinc-400">No active watches yet</p>
-              <p className="mt-1 text-xs text-zinc-500">
-                Start tracking flight prices to get notified about drops.
+              <p className="text-base font-medium text-zinc-300">You haven't set up any price watches yet</p>
+              <p className="mt-2 text-sm text-zinc-500 max-w-sm">
+                Search for a flight and click &quot;Watch&quot; to track its price. We'll notify you when it drops.
               </p>
-              <Link href="/search" className="mt-4">
-                <Button size="sm" className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:from-blue-500 hover:to-indigo-500">
-                  Search Flights
-                </Button>
-              </Link>
+              <div className="mt-6 flex flex-col sm:flex-row items-center gap-3">
+                <Link href="/search">
+                  <Button className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:from-blue-500 hover:to-indigo-500 min-h-[44px]">
+                    <svg className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+                      <circle cx="11" cy="11" r="8" /><path d="M21 21l-4.35-4.35" strokeLinecap="round" />
+                    </svg>
+                    Search Flights
+                  </Button>
+                </Link>
+                <Link href="/explore">
+                  <Button variant="outline" className="border-zinc-700 text-zinc-300 hover:bg-zinc-800 hover:text-white min-h-[44px]">
+                    <svg className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+                      <circle cx="12" cy="12" r="10" /><line x1="2" y1="12" x2="22" y2="12" /><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z" />
+                    </svg>
+                    Explore Destinations
+                  </Button>
+                </Link>
+              </div>
             </CardContent>
           </Card>
         ) : (

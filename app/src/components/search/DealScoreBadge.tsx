@@ -45,12 +45,14 @@ export function DealScoreBadge({ price, score: externalScore, label: externalLab
   const emoji = getEmoji(score);
 
   return (
-    <div className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium ${colors.bg} ${colors.text} border ${colors.border}`}>
-      <span className={`inline-flex items-center justify-center size-4 rounded-full text-[10px] font-bold ${colors.circleBg}`}>
-        {score}
-      </span>
-      <span>{label}</span>
-      {emoji && <span>{emoji}</span>}
-    </div>
+    <span title={`Score ${score}/10 \u2014 ${label} based on typical prices for this route type`}>
+      <div className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium ${colors.bg} ${colors.text} border ${colors.border}`}>
+        <span className={`inline-flex items-center justify-center size-4 rounded-full text-[10px] font-bold ${colors.circleBg}`}>
+          {score}
+        </span>
+        <span>{label}</span>
+        {emoji && <span>{emoji}</span>}
+      </div>
+    </span>
   );
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -12,6 +13,12 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { useSubscription } from "@/hooks/useSubscription";
 import type { Profile } from "@/types/database";
 
@@ -21,8 +28,13 @@ export default function SettingsPage() {
   const [notifyEmail, setNotifyEmail] = useState(true);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [deleteConfirmText, setDeleteConfirmText] = useState("");
+  const [deleting, setDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState("");
   const sub = useSubscription();
   const supabase = createClient();
+  const router = useRouter();
 
   useEffect(() => {
     async function load() {
@@ -259,9 +271,9 @@ export default function SettingsPage() {
               variant="outline"
               className="border-red-800 text-red-400 hover:bg-red-950 hover:text-red-300 min-h-[44px] w-full sm:w-auto shrink-0"
               onClick={() => {
-                if (confirm("Are you sure you want to delete your account? This cannot be undone.")) {
-                  // TODO: implement account deletion
-                }
+                setDeleteDialogOpen(true);
+                setDeleteConfirmText("");
+                setDeleteError("");
               }}
             >
               Delete Account
@@ -269,6 +281,78 @@ export default function SettingsPage() {
           </div>
         </CardContent>
       </Card>
+
+      {/* Delete Account Confirmation Dialog */}
+      <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <DialogContent className="border-zinc-800 bg-zinc-900 text-white sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-lg font-semibold text-red-400">Delete Account</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 pt-2">
+            <div className="rounded-lg border border-red-500/20 bg-red-500/10 p-4">
+              <p className="text-sm text-red-300">
+                Are you sure? This will permanently delete your account and all
+                data including watches, price history, and settings. This action
+                cannot be undone.
+              </p>
+            </div>
+            <div className="space-y-2">
+              <Label className="text-sm text-zinc-400">
+                Type <span className="font-mono font-bold text-white">DELETE</span> to confirm
+              </Label>
+              <Input
+                value={deleteConfirmText}
+                onChange={(e) => setDeleteConfirmText(e.target.value)}
+                placeholder="Type DELETE"
+                className="border-zinc-700 bg-zinc-800 text-white placeholder:text-zinc-600 font-mono"
+              />
+            </div>
+            {deleteError && (
+              <p className="text-sm text-red-400">{deleteError}</p>
+            )}
+            <div className="flex gap-3 pt-2">
+              <Button
+                variant="outline"
+                className="flex-1 border-zinc-700 text-zinc-300 hover:bg-zinc-800 min-h-[44px]"
+                onClick={() => setDeleteDialogOpen(false)}
+              >
+                Cancel
+              </Button>
+              <Button
+                className="flex-1 bg-red-600 text-white hover:bg-red-700 min-h-[44px]"
+                disabled={deleteConfirmText !== "DELETE" || deleting}
+                onClick={async () => {
+                  setDeleting(true);
+                  setDeleteError("");
+                  try {
+                    const res = await fetch("/api/user/delete", {
+                      method: "DELETE",
+                    });
+                    if (res.ok) {
+                      await supabase.auth.signOut();
+                      router.push("/");
+                      router.refresh();
+                    } else {
+                      const data = await res.json();
+                      setDeleteError(
+                        data.error || "Failed to delete account. Please try again."
+                      );
+                    }
+                  } catch {
+                    setDeleteError(
+                      "Something went wrong. Please try again."
+                    );
+                  } finally {
+                    setDeleting(false);
+                  }
+                }}
+              >
+                {deleting ? "Deleting..." : "Delete My Account"}
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

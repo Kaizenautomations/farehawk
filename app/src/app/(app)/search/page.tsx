@@ -177,6 +177,34 @@ function SearchPageInner() {
       {/* Search Form */}
       <SearchForm onSearch={handleSearch} loading={loading} initialValues={initialValues} />
 
+      {/* Pre-search guidance */}
+      {!searched && !loading && (
+        <div className="rounded-2xl border border-slate-800 bg-slate-900/40 p-8 sm:p-12 text-center">
+          <div className="flex justify-center mb-4">
+            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-500/20 to-indigo-600/20">
+              <svg className="h-7 w-7 text-blue-400" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
+              </svg>
+            </div>
+          </div>
+          <h2 className="text-lg font-semibold text-white mb-2">Search for flights between any two airports</h2>
+          <p className="text-sm text-slate-400 max-w-md mx-auto mb-6">
+            Try: YEG to Cancun, or use Explore to find cheap destinations within your budget.
+          </p>
+          <a
+            href="/explore"
+            className="inline-flex items-center gap-2 rounded-lg border border-slate-700 bg-slate-800/60 px-4 py-2.5 min-h-[44px] text-sm font-medium text-slate-300 hover:text-white hover:border-blue-500/40 hover:bg-slate-800 transition-all"
+          >
+            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+              <circle cx="12" cy="12" r="10" />
+              <line x1="2" y1="12" x2="22" y2="12" />
+              <path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z" />
+            </svg>
+            Explore Destinations
+          </a>
+        </div>
+      )}
+
       {/* Error */}
       {error && (
         <div className={`rounded-xl border backdrop-blur-sm p-4 flex items-start gap-3 ${retryable ? "border-amber-500/30 bg-amber-500/10" : "border-red-500/30 bg-red-500/10"}`}>

@@ -654,16 +654,30 @@ export default function LandingPage() {
 
           <div className="flex flex-col items-center justify-between gap-4 text-sm text-muted-foreground sm:flex-row">
             <p>&copy; 2026 FareHawk. All rights reserved.</p>
-            <div className="flex items-center gap-1.5">
-              <span>Powered by</span>
-              <a
-                href="https://kaizenautomations.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="font-semibold text-foreground hover:text-primary transition-colors"
+            <div className="flex items-center gap-4">
+              <Link
+                href="/privacy"
+                className="transition-colors hover:text-foreground"
               >
-                Kaizen Shift
-              </a>
+                Privacy Policy
+              </Link>
+              <Link
+                href="/terms"
+                className="transition-colors hover:text-foreground"
+              >
+                Terms of Service
+              </Link>
+              <div className="flex items-center gap-1.5">
+                <span>Powered by</span>
+                <a
+                  href="https://kaizenautomations.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-semibold text-foreground hover:text-primary transition-colors"
+                >
+                  Kaizen Shift
+                </a>
+              </div>
             </div>
           </div>
         </div>

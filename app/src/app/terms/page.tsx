@@ -1,0 +1,203 @@
+import { Navbar } from "@/components/layout/Navbar";
+
+export default function TermsPage() {
+  return (
+    <div className="min-h-screen bg-background">
+      <Navbar />
+      <div className="mx-auto max-w-3xl px-4 py-12 sm:py-16">
+        <h1 className="text-3xl font-bold text-white mb-2">Terms of Service</h1>
+        <p className="text-sm text-muted-foreground mb-10">
+          Last updated: April 6, 2026
+        </p>
+
+        <div className="space-y-8 text-sm leading-relaxed text-slate-300">
+          <section>
+            <h2 className="text-lg font-semibold text-white mb-3">
+              1. Service Description
+            </h2>
+            <p className="text-slate-400">
+              FareHawk is a flight price tracking and discovery platform. We
+              aggregate publicly available flight pricing data to help you find
+              deals, set price alerts, and explore destinations. FareHawk is{" "}
+              <strong className="text-slate-300">not a travel agency</strong>{" "}
+              and does not sell, book, or guarantee any flights. All bookings are
+              made directly with the airline or a third-party booking provider.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="text-lg font-semibold text-white mb-3">
+              2. Account Responsibilities
+            </h2>
+            <ul className="list-disc pl-5 space-y-1.5 text-slate-400">
+              <li>
+                You must provide a valid email address to create an account.
+              </li>
+              <li>
+                You are responsible for maintaining the security of your account
+                credentials.
+              </li>
+              <li>
+                One account per person. Do not share your account with others.
+              </li>
+              <li>
+                You must be at least 13 years of age to use the service.
+              </li>
+            </ul>
+          </section>
+
+          <section>
+            <h2 className="text-lg font-semibold text-white mb-3">
+              3. Acceptable Use
+            </h2>
+            <p className="text-slate-400 mb-3">
+              You agree not to:
+            </p>
+            <ul className="list-disc pl-5 space-y-1.5 text-slate-400">
+              <li>
+                Use automated tools, bots, or scrapers to access FareHawk.
+              </li>
+              <li>
+                Resell, redistribute, or commercially exploit data obtained from
+                FareHawk.
+              </li>
+              <li>
+                Attempt to circumvent usage limits or subscription restrictions.
+              </li>
+              <li>
+                Use the service for any illegal or unauthorized purpose.
+              </li>
+              <li>
+                Interfere with or disrupt the service or its infrastructure.
+              </li>
+            </ul>
+          </section>
+
+          <section>
+            <h2 className="text-lg font-semibold text-white mb-3">
+              4. Payment Terms
+            </h2>
+            <ul className="list-disc pl-5 space-y-1.5 text-slate-400">
+              <li>
+                Subscriptions are billed monthly or annually via{" "}
+                <strong className="text-slate-300">Stripe</strong>.
+              </li>
+              <li>
+                You can cancel your subscription at any time from the Settings
+                page or Stripe billing portal.
+              </li>
+              <li>
+                Cancellation takes effect at the end of your current billing
+                period. No partial refunds.
+              </li>
+              <li>
+                We reserve the right to change pricing with 30 days notice to
+                existing subscribers.
+              </li>
+              <li>
+                Free tier features may change at any time without notice.
+              </li>
+            </ul>
+          </section>
+
+          <section>
+            <h2 className="text-lg font-semibold text-white mb-3">
+              5. Disclaimers
+            </h2>
+            <ul className="list-disc pl-5 space-y-1.5 text-slate-400">
+              <li>
+                Flight prices are sourced from Google Flights and other
+                third-party providers.{" "}
+                <strong className="text-slate-300">
+                  Prices are not guaranteed
+                </strong>{" "}
+                and may change at any time.
+              </li>
+              <li>
+                Price alerts are sent on a best-effort basis. We cannot guarantee
+                delivery timing or accuracy.
+              </li>
+              <li>
+                FareHawk is not a travel agent, airline, or booking platform. We
+                do not guarantee availability, pricing, or booking outcomes.
+              </li>
+              <li>
+                AI Travel Advisor responses are generated by AI and may contain
+                inaccuracies. Always verify flight details before booking.
+              </li>
+              <li>
+                The service is provided &quot;as is&quot; without warranties of
+                any kind, express or implied.
+              </li>
+            </ul>
+          </section>
+
+          <section>
+            <h2 className="text-lg font-semibold text-white mb-3">
+              6. Limitation of Liability
+            </h2>
+            <p className="text-slate-400">
+              To the maximum extent permitted by law, FareHawk and its operators
+              shall not be liable for any indirect, incidental, special, or
+              consequential damages arising from your use of the service,
+              including but not limited to missed flights, incorrect pricing, or
+              losses incurred from reliance on the information provided.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="text-lg font-semibold text-white mb-3">
+              7. Termination
+            </h2>
+            <p className="text-slate-400">
+              We may suspend or terminate your account at any time for violation
+              of these terms. You may delete your account at any time from the
+              Settings page, which will permanently remove all your data.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="text-lg font-semibold text-white mb-3">
+              8. Changes to These Terms
+            </h2>
+            <p className="text-slate-400">
+              We may update these terms from time to time. Continued use of
+              FareHawk after changes constitutes acceptance. We will notify you
+              of significant changes via email.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="text-lg font-semibold text-white mb-3">
+              9. Contact
+            </h2>
+            <p className="text-slate-400">
+              For questions about these terms, contact us at{" "}
+              <a
+                href="mailto:scott@kaizenshift.com"
+                className="text-blue-400 hover:text-blue-300 underline underline-offset-2"
+              >
+                scott@kaizenshift.com
+              </a>
+              .
+            </p>
+          </section>
+        </div>
+
+        <div className="mt-12 border-t border-slate-800 pt-6 text-center">
+          <p className="text-xs text-slate-600">
+            Powered by{" "}
+            <a
+              href="https://kaizenautomations.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-semibold text-slate-500 hover:text-slate-400 transition-colors"
+            >
+              Kaizen Shift
+            </a>
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}

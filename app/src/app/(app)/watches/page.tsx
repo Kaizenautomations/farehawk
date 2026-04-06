@@ -244,9 +244,29 @@ export default function WatchesPage() {
               </svg>
             </div>
             <p className="text-base font-medium text-zinc-300">No watches yet</p>
-            <p className="mt-1 text-sm text-zinc-500">
-              Create one to start tracking flight prices.
+            <p className="mt-2 text-sm text-zinc-500 max-w-sm">
+              Search for a flight and click &quot;Watch&quot; to track its price, or create one manually above.
             </p>
+            <div className="mt-6 flex flex-col sm:flex-row items-center gap-3">
+              <a
+                href="/search"
+                className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-blue-600 to-indigo-600 px-4 py-2.5 min-h-[44px] text-sm font-medium text-white shadow-lg shadow-blue-600/20 transition-all hover:from-blue-500 hover:to-indigo-500"
+              >
+                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+                  <circle cx="11" cy="11" r="8" /><path d="M21 21l-4.35-4.35" strokeLinecap="round" />
+                </svg>
+                Search Flights
+              </a>
+              <a
+                href="/explore"
+                className="inline-flex items-center gap-2 rounded-lg border border-zinc-700 bg-zinc-800/60 px-4 py-2.5 min-h-[44px] text-sm font-medium text-zinc-300 hover:text-white hover:bg-zinc-800 transition-all"
+              >
+                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+                  <circle cx="12" cy="12" r="10" /><line x1="2" y1="12" x2="22" y2="12" /><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z" />
+                </svg>
+                Explore Destinations
+              </a>
+            </div>
           </CardContent>
         </Card>
       ) : (

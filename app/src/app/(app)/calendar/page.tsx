@@ -273,6 +273,31 @@ export default function CalendarPage() {
         </div>
       )}
 
+      {/* Pre-search guidance */}
+      {results.length === 0 && !loading && !error && (
+        <div className="rounded-2xl border border-slate-800 bg-slate-900/40 p-8 sm:p-12 text-center">
+          <div className="flex justify-center mb-4">
+            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-500/20 to-indigo-600/20">
+              <svg className="h-7 w-7 text-blue-400" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                <line x1="16" y1="2" x2="16" y2="6" />
+                <line x1="8" y1="2" x2="8" y2="6" />
+                <line x1="3" y1="10" x2="21" y2="10" />
+              </svg>
+            </div>
+          </div>
+          <h2 className="text-lg font-semibold text-white mb-2">Select your route and month to see price trends</h2>
+          <p className="text-sm text-slate-400 max-w-md mx-auto">
+            The calendar will show daily prices color-coded by cost.
+          </p>
+          <div className="mt-4 flex items-center justify-center gap-5 text-xs text-slate-500">
+            <span className="flex items-center gap-1.5"><span className="h-2.5 w-2.5 rounded-full bg-emerald-500" /> Cheap</span>
+            <span className="flex items-center gap-1.5"><span className="h-2.5 w-2.5 rounded-full bg-amber-500" /> Mid-range</span>
+            <span className="flex items-center gap-1.5"><span className="h-2.5 w-2.5 rounded-full bg-red-500" /> Expensive</span>
+          </div>
+        </div>
+      )}
+
       {/* Calendar */}
       {results.length > 0 && (
         <div className="space-y-4">

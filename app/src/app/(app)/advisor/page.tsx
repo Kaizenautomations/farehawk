@@ -32,6 +32,26 @@ export default function AdvisorPage() {
   const inputRef = useRef<HTMLInputElement>(null);
   const sub = useSubscription();
 
+  // Fetch AI usage on mount so the badge shows from the start
+  useEffect(() => {
+    async function fetchUsage() {
+      try {
+        const res = await fetch("/api/user/usage");
+        if (res.ok) {
+          const data = await res.json();
+          setAiUsage({
+            messages_used: data.ai_messages_used ?? 0,
+            messages_limit: data.ai_messages_limit ?? 0,
+            model: data.tier === "premium" ? "gpt-4o" : "gpt-4o-mini",
+          });
+        }
+      } catch {
+        // Silently fail — badge will populate after first message
+      }
+    }
+    fetchUsage();
+  }, []);
+
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;

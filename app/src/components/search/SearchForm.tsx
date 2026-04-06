@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/select";
 import { AirportAutocomplete } from "./AirportAutocomplete";
 import { CABIN_OPTIONS, STOPS_OPTIONS } from "@/lib/constants";
+import { useSubscription } from "@/hooks/useSubscription";
 
 interface SearchParams {
   origin: string;
@@ -47,6 +48,23 @@ export function SearchForm({ onSearch, loading, initialValues }: Props) {
   const [maxStops, setMaxStops] = useState("");
   const [filtersOpen, setFiltersOpen] = useState(false);
   const autoSubmitRef = useRef(false);
+  const sub = useSubscription();
+
+  // Filter cabin options based on subscription tier
+  const allowedCabinOptions = useMemo(() => {
+    const tier = sub.tier || "free";
+    if (tier === "premium" || tier === "admin") return CABIN_OPTIONS;
+    if (tier === "pro") return CABIN_OPTIONS.filter((o) => o.value === "economy" || o.value === "premium_economy");
+    return CABIN_OPTIONS.filter((o) => o.value === "economy");
+  }, [sub.tier]);
+
+  // Reset cabin class if current selection is not allowed
+  useEffect(() => {
+    const allowed = allowedCabinOptions.map((o) => o.value as string);
+    if (!allowed.includes(cabinClass)) {
+      setCabinClass("economy");
+    }
+  }, [allowedCabinOptions, cabinClass]);
 
   // Populate form from initialValues (e.g. URL params from explore page)
   useEffect(() => {
@@ -280,11 +298,19 @@ export function SearchForm({ onSearch, loading, initialValues }: Props) {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent className="bg-slate-900 border-slate-700">
-                  {CABIN_OPTIONS.map((opt) => (
+                  {allowedCabinOptions.map((opt) => (
                     <SelectItem key={opt.value} value={opt.value}>
                       {opt.label}
                     </SelectItem>
                   ))}
+                  {allowedCabinOptions.length < CABIN_OPTIONS.length && (
+                    <div className="px-3 py-2 text-xs text-slate-500 border-t border-slate-800 mt-1">
+                      <svg className="inline-block mr-1 h-3 w-3 align-middle" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+                      </svg>
+                      Upgrade for more cabin classes
+                    </div>
+                  )}
                 </SelectContent>
               </Select>
             </div>
