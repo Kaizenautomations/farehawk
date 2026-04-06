@@ -42,3 +42,14 @@ class NearbyCompareRequest(BaseModel):
     return_date: str | None = None
     cabin_class: str = "economy"
     max_stops: int | None = None
+
+
+class DealScoreRequest(BaseModel):
+    flights: list[dict]  # each dict: { price, origin, destination, departure_date }
+
+
+class WeekendGetawayRequest(BaseModel):
+    origin: str
+    max_budget: float | None = None
+    weeks_ahead: int = 8
+    cabin_class: str = "economy"

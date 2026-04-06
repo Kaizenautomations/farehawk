@@ -10,12 +10,16 @@ import {
   LayoutDashboard,
   Settings,
   Globe,
+  Sparkles,
+  Sun,
 } from "lucide-react";
 
 const sidebarLinks = [
   { href: "/search", label: "Search", icon: Search },
   { href: "/explore", label: "Explore", icon: Globe },
   { href: "/calendar", label: "Calendar", icon: CalendarDays },
+  { href: "/advisor", label: "AI Advisor", icon: Sparkles },
+  { href: "/weekends", label: "Weekends", icon: Sun },
   { href: "/watches", label: "Watches", icon: Eye },
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/settings", label: "Settings", icon: Settings },

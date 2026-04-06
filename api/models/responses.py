@@ -59,3 +59,27 @@ class NearbyCompareResponse(BaseModel):
     departure_date: str
     return_date: str | None = None
     comparisons: list[NearbyComparison]
+
+
+class FlightDealScore(BaseModel):
+    score: int  # 1-10
+    label: str  # "Amazing Deal", "Great Price", etc.
+    insight: str  # human-readable insight
+
+
+class WeekendGetaway(BaseModel):
+    destination_code: str
+    destination_city: str
+    destination_country: str
+    departure_date: str  # Friday
+    return_date: str  # Sunday
+    price: float
+    currency: str
+    deal_score: int
+    deal_label: str
+
+
+class WeekendGetawayResponse(BaseModel):
+    origin: str
+    getaways: list[WeekendGetaway]
+    weeks_searched: int

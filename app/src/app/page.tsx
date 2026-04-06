@@ -191,6 +191,65 @@ export default function LandingPage() {
                 title: "Price Alerts",
                 desc: "Set a target price and we'll notify you instantly when your flight drops. Never miss a deal again.",
               },
+              {
+                icon: (
+                  <svg
+                    className="h-6 w-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                  >
+                    <path d="M9.663 17h4.674M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                  </svg>
+                ),
+                title: "AI Travel Advisor",
+                desc: "Chat with AI to find the perfect trip. Describe what you want and get personalized flight recommendations.",
+              },
+              {
+                icon: (
+                  <svg
+                    className="h-6 w-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <circle cx="12" cy="12" r="10" />
+                    <line x1="2" y1="12" x2="22" y2="12" />
+                    <path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z" />
+                  </svg>
+                ),
+                title: "Fly Anywhere Explorer",
+                desc: "Enter your budget and see every destination you can reach, ranked by price. Discover places you didn't know you could afford.",
+              },
+              {
+                icon: (
+                  <svg
+                    className="h-6 w-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <circle cx="12" cy="12" r="5" />
+                    <line x1="12" y1="1" x2="12" y2="3" />
+                    <line x1="12" y1="21" x2="12" y2="23" />
+                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                    <line x1="1" y1="12" x2="3" y2="12" />
+                    <line x1="21" y1="12" x2="23" y2="12" />
+                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+                  </svg>
+                ),
+                title: "Weekend Getaways",
+                desc: "Find cheap Friday-to-Sunday trips from your airport. Perfect for spontaneous weekend adventures.",
+              },
             ].map((feature) => (
               <Card
                 key={feature.title}
@@ -208,6 +267,68 @@ export default function LandingPage() {
               </Card>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Smarter Than Google Flights */}
+      <section className="border-y border-border/50 bg-card/30 py-24 sm:py-32">
+        <div className="mx-auto max-w-4xl px-4">
+          <div className="text-center mb-12">
+            <Badge
+              variant="secondary"
+              className="mb-4 border-primary/20 bg-primary/10 text-primary"
+            >
+              Why FareHawk?
+            </Badge>
+            <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
+              Smarter Than Google Flights
+            </h2>
+            <p className="mx-auto mt-4 max-w-2xl text-muted-foreground">
+              Google Flights is great, but FareHawk adds the intelligence layer you&apos;ve been missing.
+            </p>
+          </div>
+
+          <Card className="border-border/50 bg-slate-900/60 backdrop-blur-sm overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b border-slate-800">
+                    <th className="text-left px-6 py-4 text-muted-foreground font-medium">Feature</th>
+                    <th className="text-center px-6 py-4">
+                      <span className="font-bold text-gradient-brand text-base">FareHawk</span>
+                    </th>
+                    <th className="text-center px-6 py-4">
+                      <span className="font-medium text-slate-500">Google Flights</span>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {[
+                    { feature: "AI-Powered Recommendations", farehawk: true, google: false },
+                    { feature: "Explore Any Destination on a Budget", farehawk: true, google: false },
+                    { feature: "Nearby Airport Price Comparison", farehawk: true, google: false },
+                    { feature: "Weekend Getaway Finder", farehawk: true, google: false },
+                    { feature: "Deal Score on Every Flight", farehawk: true, google: false },
+                    { feature: "Price Drop Alerts", farehawk: true, google: "limited" as const },
+                  ].map((row, i) => (
+                    <tr key={row.feature} className={i < 5 ? "border-b border-slate-800/50" : ""}>
+                      <td className="px-6 py-3.5 text-slate-300 font-medium">{row.feature}</td>
+                      <td className="px-6 py-3.5 text-center">
+                        <span className="inline-flex items-center justify-center size-6 rounded-full bg-blue-500/15 text-blue-400 text-sm font-bold">&#10003;</span>
+                      </td>
+                      <td className="px-6 py-3.5 text-center">
+                        {row.google === "limited" ? (
+                          <span className="text-xs text-slate-500 font-medium">Limited</span>
+                        ) : (
+                          <span className="inline-flex items-center justify-center size-6 rounded-full bg-slate-800 text-slate-600 text-sm">&#10005;</span>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </Card>
         </div>
       </section>
 
@@ -406,7 +527,7 @@ export default function LandingPage() {
                     href="/search"
                     className="transition-colors hover:text-foreground"
                   >
-                    Search Flights
+                    Search
                   </Link>
                 </li>
                 <li>
@@ -414,7 +535,31 @@ export default function LandingPage() {
                     href="/calendar"
                     className="transition-colors hover:text-foreground"
                   >
-                    Price Calendar
+                    Calendar
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/explore"
+                    className="transition-colors hover:text-foreground"
+                  >
+                    Explore
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/advisor"
+                    className="transition-colors hover:text-foreground"
+                  >
+                    AI Advisor
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/weekends"
+                    className="transition-colors hover:text-foreground"
+                  >
+                    Weekends
                   </Link>
                 </li>
                 <li>
@@ -454,7 +599,17 @@ export default function LandingPage() {
 
           <div className="flex flex-col items-center justify-between gap-4 text-sm text-muted-foreground sm:flex-row">
             <p>&copy; 2026 FareHawk. All rights reserved.</p>
-            <p>Flight prices from Google Flights.</p>
+            <div className="flex items-center gap-1.5">
+              <span>Powered by</span>
+              <a
+                href="https://kaizenautomations.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-semibold text-foreground hover:text-primary transition-colors"
+              >
+                Kaizen Shift
+              </a>
+            </div>
           </div>
         </div>
       </footer>

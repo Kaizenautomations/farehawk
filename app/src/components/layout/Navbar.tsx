@@ -32,6 +32,7 @@ import {
   DollarSign,
   LogIn,
   UserPlus,
+  Sparkles,
 } from "lucide-react";
 import type { User } from "@supabase/supabase-js";
 
@@ -39,6 +40,7 @@ const navLinks = [
   { href: "/search", label: "Search", icon: Search },
   { href: "/explore", label: "Explore", icon: Globe },
   { href: "/calendar", label: "Calendar", icon: CalendarDays },
+  { href: "/advisor", label: "AI Advisor", icon: Sparkles },
   { href: "/watches", label: "Watches", icon: Eye },
 ];
 

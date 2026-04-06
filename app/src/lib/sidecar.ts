@@ -136,3 +136,31 @@ export function compareNearby(params: {
 }) {
   return sidecarFetch<NearbyCompareResponse>("/compare/nearby", params);
 }
+
+// Weekend Getaways
+export interface WeekendGetaway {
+  destination_code: string;
+  destination_city: string;
+  destination_country: string;
+  departure_date: string;
+  return_date: string;
+  price: number;
+  currency: string;
+  deal_score: number;
+  deal_label: string;
+}
+
+export interface WeekendGetawayResponse {
+  origin: string;
+  getaways: WeekendGetaway[];
+  weeks_searched: number;
+}
+
+export function searchWeekends(params: {
+  origin: string;
+  max_budget?: number | null;
+  weeks_ahead?: number;
+  cabin_class?: string;
+}) {
+  return sidecarFetch<WeekendGetawayResponse>("/insights/weekends", params);
+}

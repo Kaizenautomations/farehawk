@@ -4,6 +4,7 @@ import type { FlightResult } from "@/types/flight";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { DealScoreBadge } from "@/components/search/DealScoreBadge";
 
 interface Props {
   flight: FlightResult;
@@ -104,14 +105,17 @@ export function FlightCard({ flight, onWatch, style }: Props) {
           </div>
 
           {/* Right: Price & actions */}
-          <div className="flex md:flex-col items-center justify-between md:items-end gap-3 md:gap-2 md:min-w-[130px] w-full md:w-auto border-t md:border-t-0 border-slate-800/50 pt-3 md:pt-0">
-            <div className="flex items-baseline gap-1">
-              <span className="text-2xl font-bold text-white">
-                ${flight.price.toFixed(0)}
-              </span>
-              <span className="text-xs text-slate-500 uppercase">
-                {flight.currency}
-              </span>
+          <div className="flex md:flex-col items-center justify-between md:items-end gap-3 md:gap-2 md:min-w-[150px] w-full md:w-auto border-t md:border-t-0 border-slate-800/50 pt-3 md:pt-0">
+            <div className="flex flex-col items-end gap-1.5">
+              <div className="flex items-baseline gap-1">
+                <span className="text-2xl font-bold text-white">
+                  ${flight.price.toFixed(0)}
+                </span>
+                <span className="text-xs text-slate-500 uppercase">
+                  {flight.currency}
+                </span>
+              </div>
+              <DealScoreBadge price={flight.price} />
             </div>
             <div className="flex gap-2">
               {onWatch && (
