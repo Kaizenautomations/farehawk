@@ -9,55 +9,14 @@ interface Props {
   placeholder?: string;
 }
 
-const COUNTRY_FLAGS: Record<string, string> = {
-  CA: "\u{1F1E8}\u{1F1E6}",
-  US: "\u{1F1FA}\u{1F1F8}",
-  GB: "\u{1F1EC}\u{1F1E7}",
-  MX: "\u{1F1F2}\u{1F1FD}",
-  FR: "\u{1F1EB}\u{1F1F7}",
-  DE: "\u{1F1E9}\u{1F1EA}",
-  JP: "\u{1F1EF}\u{1F1F5}",
-  AU: "\u{1F1E6}\u{1F1FA}",
-  AE: "\u{1F1E6}\u{1F1EA}",
-  NL: "\u{1F1F3}\u{1F1F1}",
-  ES: "\u{1F1EA}\u{1F1F8}",
-  IT: "\u{1F1EE}\u{1F1F9}",
-  BR: "\u{1F1E7}\u{1F1F7}",
-  KR: "\u{1F1F0}\u{1F1F7}",
-  SG: "\u{1F1F8}\u{1F1EC}",
-  HK: "\u{1F1ED}\u{1F1F0}",
-  TH: "\u{1F1F9}\u{1F1ED}",
-  PT: "\u{1F1F5}\u{1F1F9}",
-  IE: "\u{1F1EE}\u{1F1EA}",
-  TR: "\u{1F1F9}\u{1F1F7}",
-  CH: "\u{1F1E8}\u{1F1ED}",
-  AT: "\u{1F1E6}\u{1F1F9}",
-  SE: "\u{1F1F8}\u{1F1EA}",
-  NO: "\u{1F1F3}\u{1F1F4}",
-  DK: "\u{1F1E9}\u{1F1F0}",
-  NZ: "\u{1F1F3}\u{1F1FF}",
-  IN: "\u{1F1EE}\u{1F1F3}",
-  CN: "\u{1F1E8}\u{1F1F3}",
-  CU: "\u{1F1E8}\u{1F1FA}",
-  DO: "\u{1F1E9}\u{1F1F4}",
-  JM: "\u{1F1EF}\u{1F1F2}",
-  CO: "\u{1F1E8}\u{1F1F4}",
-  AR: "\u{1F1E6}\u{1F1F7}",
-  CL: "\u{1F1E8}\u{1F1F1}",
-  PE: "\u{1F1F5}\u{1F1EA}",
-  PH: "\u{1F1F5}\u{1F1ED}",
-  GR: "\u{1F1EC}\u{1F1F7}",
-  IL: "\u{1F1EE}\u{1F1F1}",
-  EG: "\u{1F1EA}\u{1F1EC}",
-  ZA: "\u{1F1FF}\u{1F1E6}",
-  FI: "\u{1F1EB}\u{1F1EE}",
-  PL: "\u{1F1F5}\u{1F1F1}",
-  HR: "\u{1F1ED}\u{1F1F7}",
-  TW: "\u{1F1F9}\u{1F1FC}",
-};
-
-function getFlag(country: string): string {
-  return COUNTRY_FLAGS[country] ?? "\u{2708}\u{FE0F}";
+// Generate flag emoji from 2-letter country code programmatically
+function getFlag(countryCode: string): string {
+  if (!countryCode || countryCode.length !== 2) return "\u{2708}\u{FE0F}";
+  const codePoints = countryCode
+    .toUpperCase()
+    .split("")
+    .map((c) => 0x1f1e6 + c.charCodeAt(0) - 65);
+  return String.fromCodePoint(...codePoints);
 }
 
 export function AirportAutocomplete({

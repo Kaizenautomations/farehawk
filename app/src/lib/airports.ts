@@ -6,7 +6,9 @@ export interface Airport {
 }
 
 export const POPULAR_AIRPORTS: Airport[] = [
-  // Canada
+  // ============================================================
+  // CANADA
+  // ============================================================
   { code: "YEG", city: "Edmonton", name: "Edmonton Intl", country: "CA" },
   { code: "YYC", city: "Calgary", name: "Calgary Intl", country: "CA" },
   { code: "YVR", city: "Vancouver", name: "Vancouver Intl", country: "CA" },
@@ -26,8 +28,13 @@ export const POPULAR_AIRPORTS: Airport[] = [
   { code: "YYT", city: "St. John's", name: "St. John's Intl", country: "CA" },
   { code: "YZF", city: "Yellowknife", name: "Yellowknife Airport", country: "CA" },
   { code: "YXY", city: "Whitehorse", name: "Erik Nielsen Intl", country: "CA" },
+  { code: "YQG", city: "Windsor", name: "Windsor Intl", country: "CA" },
+  { code: "YHM", city: "Hamilton", name: "John C. Munro", country: "CA" },
+  { code: "YXX", city: "Abbotsford", name: "Abbotsford Intl", country: "CA" },
 
-  // United States - Major
+  // ============================================================
+  // UNITED STATES — Major
+  // ============================================================
   { code: "JFK", city: "New York", name: "John F. Kennedy", country: "US" },
   { code: "LGA", city: "New York", name: "LaGuardia", country: "US" },
   { code: "EWR", city: "Newark", name: "Newark Liberty", country: "US" },
@@ -83,20 +90,70 @@ export const POPULAR_AIRPORTS: Airport[] = [
   { code: "ONT", city: "Ontario", name: "Ontario Intl", country: "US" },
   { code: "BUR", city: "Burbank", name: "Hollywood Burbank", country: "US" },
   { code: "SNA", city: "Santa Ana", name: "John Wayne", country: "US" },
+  { code: "MSY", city: "New Orleans", name: "Louis Armstrong", country: "US" },
+  { code: "CVG", city: "Cincinnati", name: "Cincinnati/Northern KY", country: "US" },
+  { code: "SDF", city: "Louisville", name: "Louisville Intl", country: "US" },
+  { code: "OMA", city: "Omaha", name: "Eppley Airfield", country: "US" },
+  { code: "RSW", city: "Fort Myers", name: "Southwest Florida", country: "US" },
+  { code: "PBI", city: "West Palm Beach", name: "Palm Beach Intl", country: "US" },
+  { code: "SRQ", city: "Sarasota", name: "Sarasota-Bradenton", country: "US" },
+  { code: "BOI", city: "Boise", name: "Boise Airport", country: "US" },
+  { code: "TUS", city: "Tucson", name: "Tucson Intl", country: "US" },
+  { code: "CHS", city: "Charleston", name: "Charleston Intl", country: "US" },
+  { code: "SAV", city: "Savannah", name: "Savannah/Hilton Head", country: "US" },
+  { code: "BDL", city: "Hartford", name: "Bradley Intl", country: "US" },
+  { code: "PVD", city: "Providence", name: "T.F. Green", country: "US" },
+  { code: "MHT", city: "Manchester", name: "Manchester-Boston", country: "US" },
+  { code: "KOA", city: "Kona", name: "Ellison Onizuka Kona", country: "US" },
+  { code: "LIH", city: "Kauai", name: "Lihue Airport", country: "US" },
 
-  // Mexico & Caribbean
+  // ============================================================
+  // MEXICO & CENTRAL AMERICA
+  // ============================================================
   { code: "MEX", city: "Mexico City", name: "Benito Juarez", country: "MX" },
   { code: "CUN", city: "Cancun", name: "Cancun Intl", country: "MX" },
   { code: "GDL", city: "Guadalajara", name: "Miguel Hidalgo", country: "MX" },
   { code: "SJD", city: "Los Cabos", name: "San Jose del Cabo", country: "MX" },
   { code: "PVR", city: "Puerto Vallarta", name: "Gustavo Diaz Ordaz", country: "MX" },
+  { code: "MTY", city: "Monterrey", name: "Mariano Escobedo", country: "MX" },
+  { code: "TIJ", city: "Tijuana", name: "Tijuana Intl", country: "MX" },
+  { code: "MID", city: "Merida", name: "Manuel Crescencio", country: "MX" },
+  { code: "ACA", city: "Acapulco", name: "Juan N. Alvarez", country: "MX" },
+  { code: "OAX", city: "Oaxaca", name: "Xoxocotlan Intl", country: "MX" },
+  { code: "PTY", city: "Panama City", name: "Tocumen Intl", country: "PA" },
+  { code: "SJO", city: "San Jose", name: "Juan Santamaria", country: "CR" },
+  { code: "LIR", city: "Liberia", name: "Daniel Oduber", country: "CR" },
+  { code: "SAL", city: "San Salvador", name: "Oscar Romero", country: "SV" },
+  { code: "GUA", city: "Guatemala City", name: "La Aurora Intl", country: "GT" },
+  { code: "BZE", city: "Belize City", name: "Philip Goldson", country: "BZ" },
+
+  // ============================================================
+  // CARIBBEAN
+  // ============================================================
   { code: "MBJ", city: "Montego Bay", name: "Sangster Intl", country: "JM" },
+  { code: "KIN", city: "Kingston", name: "Norman Manley", country: "JM" },
   { code: "PUJ", city: "Punta Cana", name: "Punta Cana Intl", country: "DO" },
+  { code: "SDQ", city: "Santo Domingo", name: "Las Americas", country: "DO" },
   { code: "NAS", city: "Nassau", name: "Lynden Pindling", country: "BS" },
   { code: "SJU", city: "San Juan", name: "Luis Munoz Marin", country: "PR" },
   { code: "HAV", city: "Havana", name: "Jose Marti Intl", country: "CU" },
+  { code: "VRA", city: "Varadero", name: "Juan Gualberto Gomez", country: "CU" },
+  { code: "AUA", city: "Aruba", name: "Queen Beatrix", country: "AW" },
+  { code: "CUR", city: "Curacao", name: "Hato Intl", country: "CW" },
+  { code: "SXM", city: "St. Maarten", name: "Princess Juliana", country: "SX" },
+  { code: "POS", city: "Port of Spain", name: "Piarco Intl", country: "TT" },
+  { code: "BGI", city: "Bridgetown", name: "Grantley Adams", country: "BB" },
+  { code: "GCM", city: "Grand Cayman", name: "Owen Roberts", country: "KY" },
+  { code: "STT", city: "St. Thomas", name: "Cyril E. King", country: "VI" },
+  { code: "PTP", city: "Pointe-a-Pitre", name: "Pole Caraibes", country: "GP" },
+  { code: "FDF", city: "Fort-de-France", name: "Aime Cesaire", country: "MQ" },
+  { code: "UVF", city: "St. Lucia", name: "Hewanorra Intl", country: "LC" },
+  { code: "TAB", city: "Tobago", name: "A.N.R. Robinson", country: "TT" },
+  { code: "SKB", city: "St. Kitts", name: "Robert Bradshaw", country: "KN" },
 
-  // Europe - UK & Ireland
+  // ============================================================
+  // EUROPE — UK & Ireland
+  // ============================================================
   { code: "LHR", city: "London", name: "Heathrow", country: "GB" },
   { code: "LGW", city: "London", name: "Gatwick", country: "GB" },
   { code: "STN", city: "London", name: "Stansted", country: "GB" },
@@ -105,106 +162,399 @@ export const POPULAR_AIRPORTS: Airport[] = [
   { code: "EDI", city: "Edinburgh", name: "Edinburgh", country: "GB" },
   { code: "BHX", city: "Birmingham", name: "Birmingham", country: "GB" },
   { code: "GLA", city: "Glasgow", name: "Glasgow", country: "GB" },
+  { code: "BRS", city: "Bristol", name: "Bristol Airport", country: "GB" },
+  { code: "NCL", city: "Newcastle", name: "Newcastle", country: "GB" },
+  { code: "LPL", city: "Liverpool", name: "John Lennon", country: "GB" },
+  { code: "BFS", city: "Belfast", name: "Belfast Intl", country: "GB" },
+  { code: "ABZ", city: "Aberdeen", name: "Aberdeen", country: "GB" },
   { code: "DUB", city: "Dublin", name: "Dublin Airport", country: "IE" },
+  { code: "SNN", city: "Shannon", name: "Shannon Airport", country: "IE" },
+  { code: "ORK", city: "Cork", name: "Cork Airport", country: "IE" },
 
-  // Europe - Western
+  // ============================================================
+  // EUROPE — France
+  // ============================================================
   { code: "CDG", city: "Paris", name: "Charles de Gaulle", country: "FR" },
   { code: "ORY", city: "Paris", name: "Orly", country: "FR" },
-  { code: "AMS", city: "Amsterdam", name: "Schiphol", country: "NL" },
+  { code: "NCE", city: "Nice", name: "Cote d'Azur", country: "FR" },
+  { code: "LYS", city: "Lyon", name: "Lyon-Saint Exupery", country: "FR" },
+  { code: "MRS", city: "Marseille", name: "Marseille Provence", country: "FR" },
+  { code: "TLS", city: "Toulouse", name: "Toulouse-Blagnac", country: "FR" },
+  { code: "BOD", city: "Bordeaux", name: "Bordeaux-Merignac", country: "FR" },
+  { code: "NTE", city: "Nantes", name: "Nantes Atlantique", country: "FR" },
+  { code: "SXB", city: "Strasbourg", name: "Strasbourg", country: "FR" },
+
+  // ============================================================
+  // EUROPE — Germany & Austria & Switzerland
+  // ============================================================
   { code: "FRA", city: "Frankfurt", name: "Frankfurt Main", country: "DE" },
   { code: "MUC", city: "Munich", name: "Munich Airport", country: "DE" },
   { code: "BER", city: "Berlin", name: "Brandenburg", country: "DE" },
+  { code: "DUS", city: "Dusseldorf", name: "Dusseldorf", country: "DE" },
+  { code: "HAM", city: "Hamburg", name: "Hamburg Airport", country: "DE" },
+  { code: "CGN", city: "Cologne", name: "Cologne/Bonn", country: "DE" },
+  { code: "STR", city: "Stuttgart", name: "Stuttgart Airport", country: "DE" },
+  { code: "HAJ", city: "Hannover", name: "Hannover Airport", country: "DE" },
+  { code: "NUE", city: "Nuremberg", name: "Nuremberg Airport", country: "DE" },
+  { code: "LEJ", city: "Leipzig", name: "Leipzig/Halle", country: "DE" },
+  { code: "VIE", city: "Vienna", name: "Vienna Intl", country: "AT" },
+  { code: "SZG", city: "Salzburg", name: "Salzburg Airport", country: "AT" },
+  { code: "INN", city: "Innsbruck", name: "Innsbruck Airport", country: "AT" },
+  { code: "GRZ", city: "Graz", name: "Graz Airport", country: "AT" },
   { code: "ZRH", city: "Zurich", name: "Zurich Airport", country: "CH" },
   { code: "GVA", city: "Geneva", name: "Geneva Airport", country: "CH" },
-  { code: "VIE", city: "Vienna", name: "Vienna Intl", country: "AT" },
-  { code: "BRU", city: "Brussels", name: "Brussels Airport", country: "BE" },
-  { code: "LIS", city: "Lisbon", name: "Humberto Delgado", country: "PT" },
-  { code: "OPO", city: "Porto", name: "Francisco Sa Carneiro", country: "PT" },
+  { code: "BSL", city: "Basel", name: "EuroAirport", country: "CH" },
 
-  // Europe - Southern
+  // ============================================================
+  // EUROPE — Benelux
+  // ============================================================
+  { code: "AMS", city: "Amsterdam", name: "Schiphol", country: "NL" },
+  { code: "EIN", city: "Eindhoven", name: "Eindhoven Airport", country: "NL" },
+  { code: "BRU", city: "Brussels", name: "Brussels Airport", country: "BE" },
+  { code: "CRL", city: "Charleroi", name: "Brussels South", country: "BE" },
+  { code: "LUX", city: "Luxembourg", name: "Findel Airport", country: "LU" },
+
+  // ============================================================
+  // EUROPE — Iberian Peninsula
+  // ============================================================
   { code: "MAD", city: "Madrid", name: "Barajas", country: "ES" },
   { code: "BCN", city: "Barcelona", name: "El Prat", country: "ES" },
   { code: "AGP", city: "Malaga", name: "Costa del Sol", country: "ES" },
   { code: "PMI", city: "Palma", name: "Palma de Mallorca", country: "ES" },
+  { code: "ALC", city: "Alicante", name: "Alicante-Elche", country: "ES" },
+  { code: "SVQ", city: "Seville", name: "San Pablo", country: "ES" },
+  { code: "VLC", city: "Valencia", name: "Valencia Airport", country: "ES" },
+  { code: "BIO", city: "Bilbao", name: "Bilbao Airport", country: "ES" },
+  { code: "TFS", city: "Tenerife", name: "Tenerife South", country: "ES" },
+  { code: "LPA", city: "Gran Canaria", name: "Gran Canaria", country: "ES" },
+  { code: "IBZ", city: "Ibiza", name: "Ibiza Airport", country: "ES" },
+  { code: "FUE", city: "Fuerteventura", name: "Fuerteventura", country: "ES" },
+  { code: "ACE", city: "Lanzarote", name: "Lanzarote Airport", country: "ES" },
+  { code: "LIS", city: "Lisbon", name: "Humberto Delgado", country: "PT" },
+  { code: "OPO", city: "Porto", name: "Francisco Sa Carneiro", country: "PT" },
+  { code: "FAO", city: "Faro", name: "Faro Airport", country: "PT" },
+  { code: "FNC", city: "Funchal", name: "Madeira Airport", country: "PT" },
+  { code: "PDL", city: "Ponta Delgada", name: "Joao Paulo II", country: "PT" },
+
+  // ============================================================
+  // EUROPE — Italy
+  // ============================================================
   { code: "FCO", city: "Rome", name: "Fiumicino", country: "IT" },
   { code: "MXP", city: "Milan", name: "Malpensa", country: "IT" },
+  { code: "LIN", city: "Milan", name: "Linate", country: "IT" },
   { code: "VCE", city: "Venice", name: "Marco Polo", country: "IT" },
   { code: "NAP", city: "Naples", name: "Capodichino", country: "IT" },
+  { code: "BLQ", city: "Bologna", name: "Guglielmo Marconi", country: "IT" },
+  { code: "FLR", city: "Florence", name: "Amerigo Vespucci", country: "IT" },
+  { code: "PSA", city: "Pisa", name: "Galileo Galilei", country: "IT" },
+  { code: "CTA", city: "Catania", name: "Fontanarossa", country: "IT" },
+  { code: "PMO", city: "Palermo", name: "Falcone Borsellino", country: "IT" },
+  { code: "BRI", city: "Bari", name: "Karol Wojtyla", country: "IT" },
+  { code: "TRN", city: "Turin", name: "Turin Airport", country: "IT" },
+  { code: "CAG", city: "Cagliari", name: "Cagliari Elmas", country: "IT" },
+  { code: "OLB", city: "Olbia", name: "Costa Smeralda", country: "IT" },
+
+  // ============================================================
+  // EUROPE — Greece & Cyprus
+  // ============================================================
   { code: "ATH", city: "Athens", name: "Eleftherios Venizelos", country: "GR" },
+  { code: "SKG", city: "Thessaloniki", name: "Makedonia", country: "GR" },
+  { code: "HER", city: "Heraklion", name: "Nikos Kazantzakis", country: "GR" },
+  { code: "CHQ", city: "Chania", name: "Daskalogiannis", country: "GR" },
+  { code: "RHO", city: "Rhodes", name: "Diagoras", country: "GR" },
+  { code: "CFU", city: "Corfu", name: "Ioannis Kapodistrias", country: "GR" },
+  { code: "JMK", city: "Mykonos", name: "Mykonos Airport", country: "GR" },
+  { code: "JTR", city: "Santorini", name: "Santorini Airport", country: "GR" },
+  { code: "KGS", city: "Kos", name: "Kos Airport", country: "GR" },
+  { code: "ZTH", city: "Zakynthos", name: "Zakynthos Intl", country: "GR" },
+  { code: "LCA", city: "Larnaca", name: "Larnaca Intl", country: "CY" },
+  { code: "PFO", city: "Paphos", name: "Paphos Intl", country: "CY" },
+
+  // ============================================================
+  // EUROPE — Turkey
+  // ============================================================
   { code: "IST", city: "Istanbul", name: "Istanbul Airport", country: "TR" },
   { code: "SAW", city: "Istanbul", name: "Sabiha Gokcen", country: "TR" },
+  { code: "AYT", city: "Antalya", name: "Antalya Airport", country: "TR" },
+  { code: "ADB", city: "Izmir", name: "Adnan Menderes", country: "TR" },
+  { code: "ESB", city: "Ankara", name: "Esenboga", country: "TR" },
+  { code: "DLM", city: "Dalaman", name: "Dalaman Airport", country: "TR" },
+  { code: "BJV", city: "Bodrum", name: "Milas-Bodrum", country: "TR" },
+  { code: "TZX", city: "Trabzon", name: "Trabzon Airport", country: "TR" },
 
-  // Europe - Nordic
+  // ============================================================
+  // EUROPE — Nordic & Baltic
+  // ============================================================
   { code: "CPH", city: "Copenhagen", name: "Kastrup", country: "DK" },
+  { code: "BLL", city: "Billund", name: "Billund Airport", country: "DK" },
   { code: "OSL", city: "Oslo", name: "Gardermoen", country: "NO" },
+  { code: "BGO", city: "Bergen", name: "Bergen Flesland", country: "NO" },
+  { code: "TRD", city: "Trondheim", name: "Vaernes", country: "NO" },
+  { code: "TOS", city: "Tromso", name: "Tromso Langnes", country: "NO" },
   { code: "ARN", city: "Stockholm", name: "Arlanda", country: "SE" },
+  { code: "GOT", city: "Gothenburg", name: "Landvetter", country: "SE" },
+  { code: "MMX", city: "Malmo", name: "Sturup Airport", country: "SE" },
   { code: "HEL", city: "Helsinki", name: "Helsinki-Vantaa", country: "FI" },
+  { code: "TMP", city: "Tampere", name: "Tampere-Pirkkala", country: "FI" },
   { code: "KEF", city: "Reykjavik", name: "Keflavik Intl", country: "IS" },
+  { code: "TLL", city: "Tallinn", name: "Lennart Meri", country: "EE" },
+  { code: "RIX", city: "Riga", name: "Riga Intl", country: "LV" },
+  { code: "VNO", city: "Vilnius", name: "Vilnius Intl", country: "LT" },
+  { code: "KUN", city: "Kaunas", name: "Kaunas Airport", country: "LT" },
 
-  // Europe - Eastern
+  // ============================================================
+  // EUROPE — Eastern & Central
+  // ============================================================
   { code: "WAW", city: "Warsaw", name: "Chopin Airport", country: "PL" },
+  { code: "KRK", city: "Krakow", name: "John Paul II", country: "PL" },
+  { code: "GDN", city: "Gdansk", name: "Lech Walesa", country: "PL" },
+  { code: "WRO", city: "Wroclaw", name: "Copernicus", country: "PL" },
+  { code: "KTW", city: "Katowice", name: "Pyrzowice", country: "PL" },
+  { code: "POZ", city: "Poznan", name: "Lawica", country: "PL" },
   { code: "PRG", city: "Prague", name: "Vaclav Havel", country: "CZ" },
+  { code: "BRQ", city: "Brno", name: "Turany Airport", country: "CZ" },
   { code: "BUD", city: "Budapest", name: "Ferenc Liszt", country: "HU" },
   { code: "OTP", city: "Bucharest", name: "Henri Coanda", country: "RO" },
+  { code: "CLJ", city: "Cluj-Napoca", name: "Avram Iancu", country: "RO" },
+  { code: "TSR", city: "Timisoara", name: "Traian Vuia", country: "RO" },
+  { code: "SOF", city: "Sofia", name: "Sofia Airport", country: "BG" },
+  { code: "VAR", city: "Varna", name: "Varna Airport", country: "BG" },
+  { code: "BOJ", city: "Burgas", name: "Burgas Airport", country: "BG" },
+  { code: "BTS", city: "Bratislava", name: "M. R. Stefanik", country: "SK" },
+  { code: "LJU", city: "Ljubljana", name: "Joze Pucnik", country: "SI" },
+
+  // ============================================================
+  // EUROPE — Balkans
+  // ============================================================
   { code: "ZAG", city: "Zagreb", name: "Franjo Tudman", country: "HR" },
   { code: "SPU", city: "Split", name: "Split Airport", country: "HR" },
   { code: "DBV", city: "Dubrovnik", name: "Dubrovnik Airport", country: "HR" },
+  { code: "PUY", city: "Pula", name: "Pula Airport", country: "HR" },
+  { code: "ZAD", city: "Zadar", name: "Zadar Airport", country: "HR" },
+  { code: "BEG", city: "Belgrade", name: "Nikola Tesla", country: "RS" },
+  { code: "SJJ", city: "Sarajevo", name: "Sarajevo Intl", country: "BA" },
+  { code: "TGD", city: "Podgorica", name: "Podgorica Airport", country: "ME" },
+  { code: "TIV", city: "Tivat", name: "Tivat Airport", country: "ME" },
+  { code: "TIA", city: "Tirana", name: "Nene Tereza", country: "AL" },
+  { code: "SKP", city: "Skopje", name: "Alexander the Great", country: "MK" },
 
-  // Middle East
+  // ============================================================
+  // EUROPE — Malta
+  // ============================================================
+  { code: "MLA", city: "Malta", name: "Malta Intl", country: "MT" },
+
+  // ============================================================
+  // MIDDLE EAST
+  // ============================================================
   { code: "DXB", city: "Dubai", name: "Dubai Intl", country: "AE" },
   { code: "AUH", city: "Abu Dhabi", name: "Zayed Intl", country: "AE" },
+  { code: "SHJ", city: "Sharjah", name: "Sharjah Intl", country: "AE" },
   { code: "DOH", city: "Doha", name: "Hamad Intl", country: "QA" },
   { code: "TLV", city: "Tel Aviv", name: "Ben Gurion", country: "IL" },
   { code: "AMM", city: "Amman", name: "Queen Alia", country: "JO" },
   { code: "RUH", city: "Riyadh", name: "King Khalid", country: "SA" },
   { code: "JED", city: "Jeddah", name: "King Abdulaziz", country: "SA" },
+  { code: "DMM", city: "Dammam", name: "King Fahd", country: "SA" },
+  { code: "MCT", city: "Muscat", name: "Muscat Intl", country: "OM" },
+  { code: "BAH", city: "Bahrain", name: "Bahrain Intl", country: "BH" },
+  { code: "KWI", city: "Kuwait City", name: "Kuwait Intl", country: "KW" },
+  { code: "BEY", city: "Beirut", name: "Rafic Hariri", country: "LB" },
+  { code: "IKA", city: "Tehran", name: "Imam Khomeini", country: "IR" },
 
-  // Asia
-  { code: "SIN", city: "Singapore", name: "Changi", country: "SG" },
-  { code: "HKG", city: "Hong Kong", name: "Hong Kong Intl", country: "HK" },
+  // ============================================================
+  // ASIA — East Asia
+  // ============================================================
   { code: "NRT", city: "Tokyo", name: "Narita Intl", country: "JP" },
   { code: "HND", city: "Tokyo", name: "Haneda", country: "JP" },
   { code: "KIX", city: "Osaka", name: "Kansai Intl", country: "JP" },
+  { code: "ITM", city: "Osaka", name: "Itami", country: "JP" },
+  { code: "NGO", city: "Nagoya", name: "Chubu Centrair", country: "JP" },
+  { code: "CTS", city: "Sapporo", name: "New Chitose", country: "JP" },
+  { code: "FUK", city: "Fukuoka", name: "Fukuoka Airport", country: "JP" },
+  { code: "OKA", city: "Okinawa", name: "Naha Airport", country: "JP" },
   { code: "ICN", city: "Seoul", name: "Incheon Intl", country: "KR" },
+  { code: "GMP", city: "Seoul", name: "Gimpo Intl", country: "KR" },
+  { code: "PUS", city: "Busan", name: "Gimhae Intl", country: "KR" },
+  { code: "CJU", city: "Jeju", name: "Jeju Intl", country: "KR" },
+  { code: "PEK", city: "Beijing", name: "Capital Intl", country: "CN" },
+  { code: "PKX", city: "Beijing", name: "Daxing Intl", country: "CN" },
+  { code: "PVG", city: "Shanghai", name: "Pudong Intl", country: "CN" },
+  { code: "SHA", city: "Shanghai", name: "Hongqiao", country: "CN" },
+  { code: "CAN", city: "Guangzhou", name: "Baiyun Intl", country: "CN" },
+  { code: "SZX", city: "Shenzhen", name: "Bao'an Intl", country: "CN" },
+  { code: "CTU", city: "Chengdu", name: "Tianfu Intl", country: "CN" },
+  { code: "CKG", city: "Chongqing", name: "Jiangbei Intl", country: "CN" },
+  { code: "HGH", city: "Hangzhou", name: "Xiaoshan Intl", country: "CN" },
+  { code: "WUH", city: "Wuhan", name: "Tianhe Intl", country: "CN" },
+  { code: "XIY", city: "Xi'an", name: "Xianyang Intl", country: "CN" },
+  { code: "KMG", city: "Kunming", name: "Changshui Intl", country: "CN" },
+  { code: "HKG", city: "Hong Kong", name: "Hong Kong Intl", country: "HK" },
+  { code: "TPE", city: "Taipei", name: "Taoyuan Intl", country: "TW" },
+  { code: "TSA", city: "Taipei", name: "Songshan", country: "TW" },
+  { code: "KHH", city: "Kaohsiung", name: "Kaohsiung Intl", country: "TW" },
+  { code: "MFM", city: "Macau", name: "Macau Intl", country: "MO" },
+  { code: "UBN", city: "Ulaanbaatar", name: "Chinggis Khaan", country: "MN" },
+
+  // ============================================================
+  // ASIA — Southeast Asia
+  // ============================================================
+  { code: "SIN", city: "Singapore", name: "Changi", country: "SG" },
   { code: "BKK", city: "Bangkok", name: "Suvarnabhumi", country: "TH" },
+  { code: "DMK", city: "Bangkok", name: "Don Mueang", country: "TH" },
+  { code: "HKT", city: "Phuket", name: "Phuket Intl", country: "TH" },
+  { code: "CNX", city: "Chiang Mai", name: "Chiang Mai Intl", country: "TH" },
+  { code: "USM", city: "Koh Samui", name: "Samui Airport", country: "TH" },
   { code: "KUL", city: "Kuala Lumpur", name: "KLIA", country: "MY" },
+  { code: "PEN", city: "Penang", name: "Penang Intl", country: "MY" },
+  { code: "BKI", city: "Kota Kinabalu", name: "Kota Kinabalu Intl", country: "MY" },
+  { code: "LGK", city: "Langkawi", name: "Langkawi Intl", country: "MY" },
   { code: "MNL", city: "Manila", name: "Ninoy Aquino", country: "PH" },
+  { code: "CEB", city: "Cebu", name: "Mactan-Cebu", country: "PH" },
   { code: "CGK", city: "Jakarta", name: "Soekarno-Hatta", country: "ID" },
   { code: "DPS", city: "Bali", name: "Ngurah Rai", country: "ID" },
+  { code: "SUB", city: "Surabaya", name: "Juanda Intl", country: "ID" },
+  { code: "YIA", city: "Yogyakarta", name: "Yogyakarta Intl", country: "ID" },
   { code: "SGN", city: "Ho Chi Minh", name: "Tan Son Nhat", country: "VN" },
   { code: "HAN", city: "Hanoi", name: "Noi Bai", country: "VN" },
-  { code: "PEK", city: "Beijing", name: "Capital Intl", country: "CN" },
-  { code: "PVG", city: "Shanghai", name: "Pudong Intl", country: "CN" },
+  { code: "DAD", city: "Da Nang", name: "Da Nang Intl", country: "VN" },
+  { code: "CXR", city: "Nha Trang", name: "Cam Ranh", country: "VN" },
+  { code: "PQC", city: "Phu Quoc", name: "Phu Quoc Intl", country: "VN" },
+  { code: "PNH", city: "Phnom Penh", name: "Phnom Penh Intl", country: "KH" },
+  { code: "REP", city: "Siem Reap", name: "Angkor Intl", country: "KH" },
+  { code: "VTE", city: "Vientiane", name: "Wattay Intl", country: "LA" },
+  { code: "RGN", city: "Yangon", name: "Yangon Intl", country: "MM" },
+  { code: "BWN", city: "Bandar Seri Begawan", name: "Brunei Intl", country: "BN" },
+
+  // ============================================================
+  // ASIA — South Asia
+  // ============================================================
   { code: "DEL", city: "New Delhi", name: "Indira Gandhi", country: "IN" },
   { code: "BOM", city: "Mumbai", name: "Chhatrapati Shivaji", country: "IN" },
   { code: "BLR", city: "Bangalore", name: "Kempegowda", country: "IN" },
-  { code: "TPE", city: "Taipei", name: "Taoyuan Intl", country: "TW" },
+  { code: "MAA", city: "Chennai", name: "Chennai Intl", country: "IN" },
+  { code: "HYD", city: "Hyderabad", name: "Rajiv Gandhi", country: "IN" },
+  { code: "CCU", city: "Kolkata", name: "Netaji Subhas Chandra", country: "IN" },
+  { code: "COK", city: "Kochi", name: "Cochin Intl", country: "IN" },
+  { code: "GOI", city: "Goa", name: "Manohar Intl", country: "IN" },
+  { code: "AMD", city: "Ahmedabad", name: "Sardar Vallabhbhai", country: "IN" },
+  { code: "JAI", city: "Jaipur", name: "Jaipur Intl", country: "IN" },
   { code: "CMB", city: "Colombo", name: "Bandaranaike", country: "LK" },
+  { code: "MLE", city: "Male", name: "Velana Intl", country: "MV" },
+  { code: "KTM", city: "Kathmandu", name: "Tribhuvan Intl", country: "NP" },
+  { code: "DAC", city: "Dhaka", name: "Hazrat Shahjalal", country: "BD" },
+  { code: "ISB", city: "Islamabad", name: "Islamabad Intl", country: "PK" },
+  { code: "KHI", city: "Karachi", name: "Jinnah Intl", country: "PK" },
+  { code: "LHE", city: "Lahore", name: "Allama Iqbal", country: "PK" },
 
-  // Oceania
+  // ============================================================
+  // OCEANIA
+  // ============================================================
   { code: "SYD", city: "Sydney", name: "Kingsford Smith", country: "AU" },
   { code: "MEL", city: "Melbourne", name: "Tullamarine", country: "AU" },
   { code: "BNE", city: "Brisbane", name: "Brisbane Airport", country: "AU" },
   { code: "PER", city: "Perth", name: "Perth Airport", country: "AU" },
+  { code: "ADL", city: "Adelaide", name: "Adelaide Airport", country: "AU" },
+  { code: "OOL", city: "Gold Coast", name: "Gold Coast Airport", country: "AU" },
+  { code: "CNS", city: "Cairns", name: "Cairns Airport", country: "AU" },
+  { code: "CBR", city: "Canberra", name: "Canberra Airport", country: "AU" },
+  { code: "HBA", city: "Hobart", name: "Hobart Airport", country: "AU" },
+  { code: "DRW", city: "Darwin", name: "Darwin Intl", country: "AU" },
   { code: "AKL", city: "Auckland", name: "Auckland Airport", country: "NZ" },
   { code: "CHC", city: "Christchurch", name: "Christchurch Intl", country: "NZ" },
+  { code: "WLG", city: "Wellington", name: "Wellington Airport", country: "NZ" },
+  { code: "ZQN", city: "Queenstown", name: "Queenstown Airport", country: "NZ" },
+  { code: "NAN", city: "Nadi", name: "Nadi Intl", country: "FJ" },
+  { code: "PPT", city: "Papeete", name: "Faaa Intl", country: "PF" },
+  { code: "NOU", city: "Noumea", name: "La Tontouta", country: "NC" },
 
-  // South America
+  // ============================================================
+  // SOUTH AMERICA
+  // ============================================================
   { code: "GRU", city: "Sao Paulo", name: "Guarulhos", country: "BR" },
   { code: "GIG", city: "Rio de Janeiro", name: "Galeao", country: "BR" },
+  { code: "BSB", city: "Brasilia", name: "Presidente Juscelino", country: "BR" },
+  { code: "CNF", city: "Belo Horizonte", name: "Confins", country: "BR" },
+  { code: "SSA", city: "Salvador", name: "Deputado Luis Eduardo", country: "BR" },
+  { code: "REC", city: "Recife", name: "Guararapes", country: "BR" },
+  { code: "FOR", city: "Fortaleza", name: "Pinto Martins", country: "BR" },
+  { code: "POA", city: "Porto Alegre", name: "Salgado Filho", country: "BR" },
+  { code: "CWB", city: "Curitiba", name: "Afonso Pena", country: "BR" },
+  { code: "FLN", city: "Florianopolis", name: "Hercilio Luz", country: "BR" },
   { code: "EZE", city: "Buenos Aires", name: "Ministro Pistarini", country: "AR" },
+  { code: "AEP", city: "Buenos Aires", name: "Aeroparque", country: "AR" },
+  { code: "COR", city: "Cordoba", name: "Ambrosio Taravella", country: "AR" },
+  { code: "MDZ", city: "Mendoza", name: "El Plumerillo", country: "AR" },
+  { code: "BRC", city: "Bariloche", name: "San Carlos de Bariloche", country: "AR" },
+  { code: "USH", city: "Ushuaia", name: "Malvinas Argentinas", country: "AR" },
+  { code: "IGR", city: "Iguazu", name: "Cataratas del Iguazu", country: "AR" },
   { code: "SCL", city: "Santiago", name: "Arturo Merino", country: "CL" },
   { code: "BOG", city: "Bogota", name: "El Dorado", country: "CO" },
+  { code: "MDE", city: "Medellin", name: "Jose Maria Cordova", country: "CO" },
+  { code: "CTG", city: "Cartagena", name: "Rafael Nunez", country: "CO" },
   { code: "LIM", city: "Lima", name: "Jorge Chavez", country: "PE" },
+  { code: "CUZ", city: "Cusco", name: "Alejandro Velasco", country: "PE" },
   { code: "UIO", city: "Quito", name: "Mariscal Sucre", country: "EC" },
+  { code: "GYE", city: "Guayaquil", name: "Jose Joaquin de Olmedo", country: "EC" },
+  { code: "GPS", city: "Galapagos", name: "Seymour Airport", country: "EC" },
+  { code: "MVD", city: "Montevideo", name: "Carrasco Intl", country: "UY" },
+  { code: "ASU", city: "Asuncion", name: "Silvio Pettirossi", country: "PY" },
+  { code: "VVI", city: "Santa Cruz", name: "Viru Viru", country: "BO" },
+  { code: "LPB", city: "La Paz", name: "El Alto Intl", country: "BO" },
+  { code: "CCS", city: "Caracas", name: "Simon Bolivar", country: "VE" },
 
-  // Africa
+  // ============================================================
+  // AFRICA — North
+  // ============================================================
+  { code: "CAI", city: "Cairo", name: "Cairo Intl", country: "EG" },
+  { code: "HRG", city: "Hurghada", name: "Hurghada Intl", country: "EG" },
+  { code: "SSH", city: "Sharm el-Sheikh", name: "Sharm el-Sheikh", country: "EG" },
+  { code: "LXR", city: "Luxor", name: "Luxor Intl", country: "EG" },
+  { code: "CMN", city: "Casablanca", name: "Mohammed V", country: "MA" },
+  { code: "RAK", city: "Marrakech", name: "Menara Airport", country: "MA" },
+  { code: "FEZ", city: "Fez", name: "Fes-Saiss", country: "MA" },
+  { code: "AGA", city: "Agadir", name: "Al Massira", country: "MA" },
+  { code: "TNG", city: "Tangier", name: "Ibn Battouta", country: "MA" },
+  { code: "TUN", city: "Tunis", name: "Tunis-Carthage", country: "TN" },
+  { code: "ALG", city: "Algiers", name: "Houari Boumediene", country: "DZ" },
+
+  // ============================================================
+  // AFRICA — East
+  // ============================================================
+  { code: "NBO", city: "Nairobi", name: "Jomo Kenyatta", country: "KE" },
+  { code: "MBA", city: "Mombasa", name: "Moi Intl", country: "KE" },
+  { code: "ADD", city: "Addis Ababa", name: "Bole Intl", country: "ET" },
+  { code: "DAR", city: "Dar es Salaam", name: "Julius Nyerere", country: "TZ" },
+  { code: "ZNZ", city: "Zanzibar", name: "Abeid Amani Karume", country: "TZ" },
+  { code: "JRO", city: "Kilimanjaro", name: "Kilimanjaro Intl", country: "TZ" },
+  { code: "EBB", city: "Entebbe", name: "Entebbe Intl", country: "UG" },
+  { code: "KGL", city: "Kigali", name: "Kigali Intl", country: "RW" },
+  { code: "SEZ", city: "Mahe", name: "Seychelles Intl", country: "SC" },
+  { code: "MRU", city: "Mauritius", name: "Sir Seewoosagur", country: "MU" },
+  { code: "TNR", city: "Antananarivo", name: "Ivato Intl", country: "MG" },
+
+  // ============================================================
+  // AFRICA — West
+  // ============================================================
+  { code: "LOS", city: "Lagos", name: "Murtala Muhammed", country: "NG" },
+  { code: "ABV", city: "Abuja", name: "Nnamdi Azikiwe", country: "NG" },
+  { code: "ACC", city: "Accra", name: "Kotoka Intl", country: "GH" },
+  { code: "DSS", city: "Dakar", name: "Blaise Diagne", country: "SN" },
+  { code: "ABJ", city: "Abidjan", name: "Felix Houphouet", country: "CI" },
+  { code: "RAI", city: "Praia", name: "Nelson Mandela", country: "CV" },
+  { code: "SID", city: "Sal", name: "Amilcar Cabral", country: "CV" },
+
+  // ============================================================
+  // AFRICA — South
+  // ============================================================
   { code: "JNB", city: "Johannesburg", name: "O.R. Tambo", country: "ZA" },
   { code: "CPT", city: "Cape Town", name: "Cape Town Intl", country: "ZA" },
-  { code: "CAI", city: "Cairo", name: "Cairo Intl", country: "EG" },
-  { code: "CMN", city: "Casablanca", name: "Mohammed V", country: "MA" },
-  { code: "NBO", city: "Nairobi", name: "Jomo Kenyatta", country: "KE" },
-  { code: "ADD", city: "Addis Ababa", name: "Bole Intl", country: "ET" },
-  { code: "LOS", city: "Lagos", name: "Murtala Muhammed", country: "NG" },
-  { code: "ACC", city: "Accra", name: "Kotoka Intl", country: "GH" },
+  { code: "DUR", city: "Durban", name: "King Shaka", country: "ZA" },
+  { code: "PLZ", city: "Port Elizabeth", name: "Chief Dawid Stuurman", country: "ZA" },
+  { code: "WDH", city: "Windhoek", name: "Hosea Kutako", country: "NA" },
+  { code: "GBE", city: "Gaborone", name: "Sir Seretse Khama", country: "BW" },
+  { code: "VFA", city: "Victoria Falls", name: "Victoria Falls", country: "ZW" },
+  { code: "HRE", city: "Harare", name: "Robert Mugabe", country: "ZW" },
+  { code: "LLW", city: "Lilongwe", name: "Kamuzu Intl", country: "MW" },
+  { code: "MPM", city: "Maputo", name: "Maputo Intl", country: "MZ" },
+  { code: "LUN", city: "Lusaka", name: "Kenneth Kaunda", country: "ZM" },
 ];
