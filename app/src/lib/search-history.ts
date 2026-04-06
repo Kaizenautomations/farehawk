@@ -5,6 +5,7 @@ export interface SearchHistoryEntry {
   return_date?: string;
   cabin_class: string;
   timestamp: number;
+  saved?: boolean;
 }
 
 const STORAGE_KEY = "farehawk_search_history";
@@ -39,5 +40,30 @@ export function addSearchHistory(entry: Omit<SearchHistoryEntry, "timestamp">) {
 }
 
 export function clearSearchHistory() {
-  localStorage.removeItem(STORAGE_KEY);
+  // Preserve saved entries when clearing history
+  const saved = getSearchHistory().filter((h) => h.saved);
+  if (saved.length > 0) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(saved));
+  } else {
+    localStorage.removeItem(STORAGE_KEY);
+  }
+}
+
+export function getSavedSearches(): SearchHistoryEntry[] {
+  return getSearchHistory().filter((h) => h.saved === true);
+}
+
+export function toggleSaveSearch(entry: SearchHistoryEntry): boolean {
+  const history = getSearchHistory();
+  const idx = history.findIndex(
+    (h) =>
+      h.origin === entry.origin &&
+      h.destination === entry.destination &&
+      h.departure_date === entry.departure_date
+  );
+  if (idx === -1) return false;
+  const newSaved = !history[idx].saved;
+  history[idx].saved = newSaved;
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(history));
+  return newSaved;
 }

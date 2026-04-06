@@ -135,6 +135,14 @@ export default function WatchesPage() {
     return Math.round(((max - current) / (max - target)) * 100);
   }
 
+  function getPriceTrend(current: number | null, lowest: number | null): { label: string; color: string; icon: "up" | "down" | "check" | "dash" } {
+    if (current == null || lowest == null) return { label: "No data", color: "text-slate-500", icon: "dash" };
+    if (current <= lowest) return { label: "At lowest!", color: "text-emerald-400", icon: "check" };
+    if (current < lowest * 1.05) return { label: "Near lowest", color: "text-emerald-400", icon: "down" };
+    if (current > lowest * 1.1) return { label: "Price rising", color: "text-red-400", icon: "up" };
+    return { label: "Stable", color: "text-slate-400", icon: "dash" };
+  }
+
   return (
     <div className="space-y-8">
       {toast && (
@@ -365,12 +373,42 @@ export default function WatchesPage() {
                         </div>
                       )}
 
-                      {/* Last checked */}
-                      {watch.last_checked_at && (
-                        <p className="text-xs text-zinc-600">
-                          Last checked: {timeAgo(watch.last_checked_at)}
-                        </p>
-                      )}
+                      {/* Price trend + Last checked */}
+                      <div className="flex items-center gap-3 flex-wrap">
+                        {watch.current_price != null && watch.lowest_price != null && (() => {
+                          const trend = getPriceTrend(watch.current_price, watch.lowest_price);
+                          return (
+                            <span className={`inline-flex items-center gap-1 text-xs font-medium ${trend.color}`}>
+                              {trend.icon === "up" && (
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                  <line x1="12" y1="19" x2="12" y2="5" /><polyline points="5 12 12 5 19 12" />
+                                </svg>
+                              )}
+                              {trend.icon === "down" && (
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                  <line x1="12" y1="5" x2="12" y2="19" /><polyline points="19 12 12 19 5 12" />
+                                </svg>
+                              )}
+                              {trend.icon === "check" && (
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                  <polyline points="20 6 9 17 4 12" />
+                                </svg>
+                              )}
+                              {trend.icon === "dash" && (
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                  <line x1="5" y1="12" x2="19" y2="12" />
+                                </svg>
+                              )}
+                              {trend.label}
+                            </span>
+                          );
+                        })()}
+                        {watch.last_checked_at && (
+                          <p className="text-xs text-zinc-600">
+                            Last checked: {timeAgo(watch.last_checked_at)}
+                          </p>
+                        )}
+                      </div>
                     </div>
 
                     {/* Right: Action buttons */}

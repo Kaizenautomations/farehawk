@@ -13,6 +13,7 @@ const ONBOARDING_DISMISSED_KEY = "farehawk_onboarding_dismissed";
 export default function DashboardPage() {
   const [watches, setWatches] = useState<Watch[]>([]);
   const [userName, setUserName] = useState<string>("");
+  const [homeAirports, setHomeAirports] = useState<string[]>([]);
   const [showOnboarding, setShowOnboarding] = useState(false);
   const sub = useSubscription();
 
@@ -28,7 +29,7 @@ export default function DashboardPage() {
         }
       });
 
-    // Fetch user's name from Supabase auth metadata
+    // Fetch user's name and profile from Supabase
     const supabase = createClient();
     supabase.auth.getUser().then(({ data: { user } }) => {
       if (user) {
@@ -38,6 +39,18 @@ export default function DashboardPage() {
           user.email?.split("@")[0] ||
           "";
         setUserName(name);
+
+        // Fetch home airports from profile
+        supabase
+          .from("profiles")
+          .select("home_airports")
+          .eq("id", user.id)
+          .single()
+          .then(({ data }) => {
+            if (data?.home_airports && data.home_airports.length > 0) {
+              setHomeAirports(data.home_airports);
+            }
+          });
       }
     });
   }, []);
@@ -240,6 +253,87 @@ export default function DashboardPage() {
             </div>
           </CardContent>
         </Card>
+      </div>
+
+      {/* Quick Search */}
+      <div className="space-y-4">
+        <h2 className="text-lg font-semibold text-white">Quick Search</h2>
+        {homeAirports.length > 0 ? (() => {
+          const origin = homeAirports[0];
+          // Determine if Canadian airport
+          const canadianPrefixes = ["YEG", "YYC", "YVR", "YOW", "YUL", "YYZ", "YWG", "YHZ", "YQR", "YXE"];
+          const isCanadian = canadianPrefixes.some((p) => origin.startsWith(p));
+
+          // Calculate next Friday
+          const now = new Date();
+          const daysUntilFri = (5 - now.getDay() + 7) % 7 || 7;
+          const nextFri = new Date(now);
+          nextFri.setDate(now.getDate() + daysUntilFri);
+          const dateStr = nextFri.toISOString().split("T")[0];
+
+          const destinations = isCanadian
+            ? [
+                { label: "Weekend in Vegas", code: "LAS", icon: "dice" },
+                { label: "Beach in Cancun", code: "CUN", icon: "sun" },
+                { label: "Explore London", code: "LHR", icon: "globe" },
+                { label: "Fun in LA", code: "LAX", icon: "palm" },
+              ]
+            : [
+                { label: "Weekend in Vegas", code: "LAS", icon: "dice" },
+                { label: "Beach in Cancun", code: "CUN", icon: "sun" },
+                { label: "Explore London", code: "LHR", icon: "globe" },
+                { label: "Aloha Hawaii", code: "HNL", icon: "palm" },
+              ];
+
+          return (
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+              {destinations.map((dest) => (
+                <Link
+                  key={dest.code}
+                  href={`/search?origin=${origin}&destination=${dest.code}&date=${dateStr}`}
+                  className="group flex flex-col items-center gap-2 rounded-xl border border-zinc-800 bg-zinc-900/80 p-4 min-h-[44px] hover:border-blue-500/40 hover:bg-zinc-900 transition-all text-center"
+                >
+                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500/15 to-indigo-500/15">
+                    {dest.icon === "dice" && (
+                      <svg className="h-5 w-5 text-amber-400" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" />
+                      </svg>
+                    )}
+                    {dest.icon === "sun" && (
+                      <svg className="h-5 w-5 text-yellow-400" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" />
+                      </svg>
+                    )}
+                    {dest.icon === "globe" && (
+                      <svg className="h-5 w-5 text-blue-400" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+                        <circle cx="12" cy="12" r="10" /><line x1="2" y1="12" x2="22" y2="12" /><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z" />
+                      </svg>
+                    )}
+                    {dest.icon === "palm" && (
+                      <svg className="h-5 w-5 text-emerald-400" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
+                      </svg>
+                    )}
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-white group-hover:text-blue-400 transition-colors">{dest.label}</p>
+                    <p className="text-xs text-zinc-500">{origin} &rarr; {dest.code}</p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          );
+        })() : (
+          <div className="rounded-xl border border-zinc-800 bg-zinc-900/60 p-5 text-center">
+            <p className="text-sm text-zinc-400">
+              Set your home airport in{" "}
+              <Link href="/settings" className="text-blue-400 hover:text-blue-300 underline underline-offset-2">
+                Settings
+              </Link>{" "}
+              for personalized quick search suggestions.
+            </p>
+          </div>
+        )}
       </div>
 
       {/* Upgrade Banner */}

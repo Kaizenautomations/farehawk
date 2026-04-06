@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import type { FlightResult } from "@/types/flight";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -30,8 +31,34 @@ function formatTime(iso: string): string {
 }
 
 export function FlightCard({ flight, onWatch, style }: Props) {
+  const [copied, setCopied] = useState(false);
   const firstLeg = flight.legs[0];
   const lastLeg = flight.legs[flight.legs.length - 1];
+
+  async function handleShare() {
+    const depDate = firstLeg?.departure_time
+      ? new Date(firstLeg.departure_time).toLocaleDateString("en-US", { month: "short", day: "numeric" })
+      : "";
+    const shareText = `Found a flight from ${firstLeg?.departure_airport} to ${lastLeg?.arrival_airport} for $${flight.price.toFixed(0)} on ${depDate}! Check it out on FareHawk`;
+    const shareUrl = flight.booking_url;
+
+    if (typeof navigator !== "undefined" && navigator.share) {
+      try {
+        await navigator.share({ text: shareText, url: shareUrl });
+        return;
+      } catch {
+        // User cancelled or share failed, fall through to clipboard
+      }
+    }
+
+    try {
+      await navigator.clipboard.writeText(`${shareText}\n${shareUrl}`);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      // Clipboard failed silently
+    }
+  }
 
   return (
     <Card
@@ -173,6 +200,36 @@ export function FlightCard({ flight, onWatch, style }: Props) {
                   Watch
                 </Button>
               )}
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleShare}
+                className="border-slate-700 text-slate-300 hover:bg-slate-800 hover:text-white hover:border-slate-600 text-xs h-9 min-h-[44px] min-w-[44px] relative"
+                title="Share deal"
+                aria-label="Share deal"
+              >
+                {copied ? (
+                  <span className="text-emerald-400 text-xs font-medium">Copied!</span>
+                ) : (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <circle cx="18" cy="5" r="3" />
+                    <circle cx="6" cy="12" r="3" />
+                    <circle cx="18" cy="19" r="3" />
+                    <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
+                    <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
+                  </svg>
+                )}
+              </Button>
               <a
                 href={flight.booking_url}
                 target="_blank"

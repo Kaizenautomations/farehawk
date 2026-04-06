@@ -12,6 +12,8 @@ import {
   getSearchHistory,
   addSearchHistory,
   clearSearchHistory,
+  getSavedSearches,
+  toggleSaveSearch,
   type SearchHistoryEntry,
 } from "@/lib/search-history";
 
@@ -43,11 +45,15 @@ function SearchPageInner() {
   const [lastParams, setLastParams] = useState<Record<string, unknown> | null>(null);
   const [toast, setToast] = useState<{type: "success"|"error", message: string} | null>(null);
   const [searchHistory, setSearchHistory] = useState<SearchHistoryEntry[]>([]);
+  const [savedSearches, setSavedSearches] = useState<SearchHistoryEntry[]>([]);
+  const [historyTab, setHistoryTab] = useState<"recent" | "saved">("recent");
+  const [flexibleInfo, setFlexibleInfo] = useState<string | null>(null);
   const sub = useSubscription();
 
   // Load search history on mount
   useEffect(() => {
     setSearchHistory(getSearchHistory());
+    setSavedSearches(getSavedSearches());
   }, []);
 
   useEffect(() => {
@@ -64,18 +70,77 @@ function SearchPageInner() {
     return_date?: string;
     cabin_class: string;
     max_stops: number | null;
+    flexible_dates?: boolean;
   }) => {
     setLoading(true);
     setError("");
     setRetryable(false);
     setSearched(true);
-    setLastParams(params);
+    setFlexibleInfo(null);
+
+    let searchDate = params.departure_date;
+
+    // Flexible dates: find cheapest date in +/- 3 day range first
+    if (params.flexible_dates) {
+      try {
+        const depDate = new Date(params.departure_date + "T12:00:00");
+        const fromDate = new Date(depDate);
+        fromDate.setDate(fromDate.getDate() - 3);
+        const toDate = new Date(depDate);
+        toDate.setDate(toDate.getDate() + 3);
+
+        // Ensure from_date is not in the past
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        if (fromDate < today) fromDate.setTime(today.getTime());
+
+        const fromStr = fromDate.toISOString().split("T")[0];
+        const toStr = toDate.toISOString().split("T")[0];
+
+        const datesRes = await fetch("/api/search/dates", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            origin: params.origin,
+            destination: params.destination,
+            from_date: fromStr,
+            to_date: toStr,
+            cabin_class: params.cabin_class,
+            trip_type: "one_way",
+          }),
+        });
+
+        if (datesRes.ok) {
+          const datesData = await datesRes.json();
+          if (Array.isArray(datesData) && datesData.length > 0) {
+            const cheapest = datesData.reduce((min: { price: number; date: string }, d: { price: number; date: string }) =>
+              d.price < min.price ? d : min, datesData[0]);
+            searchDate = cheapest.date;
+
+            const origLabel = new Date(params.departure_date + "T12:00:00").toLocaleDateString("en-US", { month: "short", day: "numeric" });
+            const cheapLabel = new Date(cheapest.date + "T12:00:00").toLocaleDateString("en-US", { month: "short", day: "numeric" });
+
+            if (cheapest.date !== params.departure_date) {
+              setFlexibleInfo(`Flexible dates found ${cheapLabel} as cheapest ($${cheapest.price}) near your date: ${origLabel}. Showing flights for ${cheapLabel}.`);
+            } else {
+              setFlexibleInfo(`Your date (${origLabel}) is already the cheapest in the +/- 3 day range.`);
+            }
+          }
+        }
+      } catch {
+        // If dates endpoint fails, just proceed with original date
+      }
+    }
+
+    const searchParams = { ...params, departure_date: searchDate };
+    delete (searchParams as Record<string, unknown>).flexible_dates;
+    setLastParams(searchParams);
 
     try {
       const res = await fetch("/api/search/flights", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(params),
+        body: JSON.stringify(searchParams),
       });
 
       const data = await res.json();
@@ -109,11 +174,12 @@ function SearchPageInner() {
       addSearchHistory({
         origin: params.origin,
         destination: params.destination,
-        departure_date: params.departure_date,
+        departure_date: searchDate,
         return_date: params.return_date,
         cabin_class: params.cabin_class,
       });
       setSearchHistory(getSearchHistory());
+      setSavedSearches(getSavedSearches());
     } catch {
       setError("Something went wrong. Please try again.");
       setRetryable(true);
@@ -198,79 +264,215 @@ function SearchPageInner() {
       {/* Search Form */}
       <SearchForm onSearch={handleSearch} loading={loading} initialValues={initialValues} />
 
-      {/* Recent Searches */}
-      {!searched && !loading && searchHistory.length > 0 && (
+      {/* Recent / Saved Searches */}
+      {!searched && !loading && (searchHistory.length > 0 || savedSearches.length > 0) && (
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <h2 className="text-sm font-medium text-slate-400">Recent Searches</h2>
-            <button
-              type="button"
-              onClick={() => {
-                clearSearchHistory();
-                setSearchHistory([]);
-              }}
-              className="text-xs text-slate-500 hover:text-slate-300 transition-colors min-h-[44px] px-2"
-            >
-              Clear history
-            </button>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
-            {searchHistory.slice(0, 5).map((entry, i) => (
+            <div className="flex items-center gap-1 rounded-lg bg-slate-800/60 p-0.5">
               <button
-                key={`${entry.origin}-${entry.destination}-${entry.departure_date}-${i}`}
                 type="button"
-                onClick={() =>
-                  handleSearch({
-                    origin: entry.origin,
-                    destination: entry.destination,
-                    departure_date: entry.departure_date,
-                    return_date: entry.return_date,
-                    cabin_class: entry.cabin_class,
-                    max_stops: null,
-                  })
-                }
-                className="flex items-center gap-3 rounded-xl border border-slate-800 bg-slate-900/60 px-4 py-3 min-h-[44px] text-left hover:border-slate-700 hover:bg-slate-900/80 transition-all group"
+                onClick={() => setHistoryTab("recent")}
+                className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors min-h-[44px] ${
+                  historyTab === "recent"
+                    ? "bg-slate-700 text-white"
+                    : "text-slate-400 hover:text-slate-300"
+                }`}
               >
-                <svg
-                  className="h-4 w-4 text-slate-500 group-hover:text-blue-400 transition-colors shrink-0"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={2}
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5"
-                  />
+                Recent
+              </button>
+              <button
+                type="button"
+                onClick={() => setHistoryTab("saved")}
+                className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors min-h-[44px] flex items-center gap-1.5 ${
+                  historyTab === "saved"
+                    ? "bg-slate-700 text-white"
+                    : "text-slate-400 hover:text-slate-300"
+                }`}
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill={historyTab === "saved" ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z" />
                 </svg>
-                <div className="min-w-0">
-                  <p className="text-sm font-medium text-slate-200 truncate">
-                    {entry.origin}{" "}
-                    <span className="text-slate-500">&rarr;</span>{" "}
-                    {entry.destination}
-                  </p>
-                  <p className="text-xs text-slate-500 truncate">
-                    {new Date(entry.departure_date + "T12:00:00").toLocaleDateString("en-US", {
-                      month: "short",
-                      day: "numeric",
-                    })}
-                    {entry.return_date && (
-                      <>
-                        {" "}&mdash;{" "}
-                        {new Date(entry.return_date + "T12:00:00").toLocaleDateString("en-US", {
+                Saved
+                {savedSearches.length > 0 && (
+                  <span className="inline-flex items-center justify-center h-5 min-w-[20px] rounded-full bg-blue-500/20 px-1.5 text-xs font-medium text-blue-400">
+                    {savedSearches.length}
+                  </span>
+                )}
+              </button>
+            </div>
+            {historyTab === "recent" && (
+              <button
+                type="button"
+                onClick={() => {
+                  clearSearchHistory();
+                  setSearchHistory([]);
+                  setSavedSearches(getSavedSearches());
+                }}
+                className="text-xs text-slate-500 hover:text-slate-300 transition-colors min-h-[44px] px-2"
+              >
+                Clear history
+              </button>
+            )}
+          </div>
+
+          {historyTab === "recent" && searchHistory.length > 0 && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+              {searchHistory.slice(0, 6).map((entry, i) => (
+                <div
+                  key={`${entry.origin}-${entry.destination}-${entry.departure_date}-${i}`}
+                  className="flex items-center gap-2 rounded-xl border border-slate-800 bg-slate-900/60 min-h-[44px] text-left hover:border-slate-700 hover:bg-slate-900/80 transition-all group"
+                >
+                  <button
+                    type="button"
+                    onClick={() =>
+                      handleSearch({
+                        origin: entry.origin,
+                        destination: entry.destination,
+                        departure_date: entry.departure_date,
+                        return_date: entry.return_date,
+                        cabin_class: entry.cabin_class,
+                        max_stops: null,
+                      })
+                    }
+                    className="flex-1 flex items-center gap-3 px-4 py-3 min-h-[44px]"
+                  >
+                    <svg
+                      className="h-4 w-4 text-slate-500 group-hover:text-blue-400 transition-colors shrink-0"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={2}
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5"
+                      />
+                    </svg>
+                    <div className="min-w-0">
+                      <p className="text-sm font-medium text-slate-200 truncate">
+                        {entry.origin}{" "}
+                        <span className="text-slate-500">&rarr;</span>{" "}
+                        {entry.destination}
+                      </p>
+                      <p className="text-xs text-slate-500 truncate">
+                        {new Date(entry.departure_date + "T12:00:00").toLocaleDateString("en-US", {
                           month: "short",
                           day: "numeric",
                         })}
-                      </>
-                    )}
-                    {"  "}
-                    <span className="capitalize">{entry.cabin_class.replace("_", " ")}</span>
-                  </p>
+                        {entry.return_date && (
+                          <>
+                            {" "}&mdash;{" "}
+                            {new Date(entry.return_date + "T12:00:00").toLocaleDateString("en-US", {
+                              month: "short",
+                              day: "numeric",
+                            })}
+                          </>
+                        )}
+                        {"  "}
+                        <span className="capitalize">{entry.cabin_class.replace("_", " ")}</span>
+                      </p>
+                    </div>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      toggleSaveSearch(entry);
+                      setSearchHistory(getSearchHistory());
+                      setSavedSearches(getSavedSearches());
+                    }}
+                    className="shrink-0 p-2 mr-2 min-h-[44px] min-w-[44px] flex items-center justify-center text-slate-600 hover:text-amber-400 transition-colors"
+                    title={entry.saved ? "Unsave search" : "Save search"}
+                    aria-label={entry.saved ? "Unsave search" : "Save search"}
+                  >
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill={entry.saved ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={entry.saved ? "text-amber-400" : ""}>
+                      <path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z" />
+                    </svg>
+                  </button>
                 </div>
-              </button>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
+
+          {historyTab === "saved" && (
+            <>
+              {savedSearches.length === 0 ? (
+                <div className="rounded-xl border border-slate-800 bg-slate-900/40 p-8 text-center">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="mx-auto text-slate-600 mb-3">
+                    <path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z" />
+                  </svg>
+                  <p className="text-sm text-slate-500">No saved searches yet. Click the bookmark icon on any search to save it.</p>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+                  {savedSearches.map((entry, i) => (
+                    <div
+                      key={`saved-${entry.origin}-${entry.destination}-${entry.departure_date}-${i}`}
+                      className="flex items-center gap-2 rounded-xl border border-slate-800 bg-slate-900/60 min-h-[44px] text-left hover:border-slate-700 hover:bg-slate-900/80 transition-all group"
+                    >
+                      <button
+                        type="button"
+                        onClick={() =>
+                          handleSearch({
+                            origin: entry.origin,
+                            destination: entry.destination,
+                            departure_date: entry.departure_date,
+                            return_date: entry.return_date,
+                            cabin_class: entry.cabin_class,
+                            max_stops: null,
+                          })
+                        }
+                        className="flex-1 flex items-center gap-3 px-4 py-3 min-h-[44px]"
+                      >
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-amber-400 shrink-0">
+                          <path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z" />
+                        </svg>
+                        <div className="min-w-0">
+                          <p className="text-sm font-medium text-slate-200 truncate">
+                            {entry.origin}{" "}
+                            <span className="text-slate-500">&rarr;</span>{" "}
+                            {entry.destination}
+                          </p>
+                          <p className="text-xs text-slate-500 truncate">
+                            {new Date(entry.departure_date + "T12:00:00").toLocaleDateString("en-US", {
+                              month: "short",
+                              day: "numeric",
+                            })}
+                            {entry.return_date && (
+                              <>
+                                {" "}&mdash;{" "}
+                                {new Date(entry.return_date + "T12:00:00").toLocaleDateString("en-US", {
+                                  month: "short",
+                                  day: "numeric",
+                                })}
+                              </>
+                            )}
+                            {"  "}
+                            <span className="capitalize">{entry.cabin_class.replace("_", " ")}</span>
+                          </p>
+                        </div>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          toggleSaveSearch(entry);
+                          setSearchHistory(getSearchHistory());
+                          setSavedSearches(getSavedSearches());
+                        }}
+                        className="shrink-0 p-2 mr-2 min-h-[44px] min-w-[44px] flex items-center justify-center text-amber-400 hover:text-slate-400 transition-colors"
+                        title="Unsave search"
+                        aria-label="Unsave search"
+                      >
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z" />
+                        </svg>
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </>
+          )}
         </div>
       )}
 
@@ -299,6 +501,20 @@ function SearchPageInner() {
             </svg>
             Explore Destinations
           </a>
+        </div>
+      )}
+
+      {/* Flexible dates info */}
+      {flexibleInfo && !error && (
+        <div className="rounded-xl border border-blue-500/30 bg-blue-500/10 backdrop-blur-sm p-4 flex items-start gap-3">
+          <div className="shrink-0 mt-0.5">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-blue-400">
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="16" x2="12" y2="12" />
+              <line x1="12" y1="8" x2="12.01" y2="8" />
+            </svg>
+          </div>
+          <p className="text-sm text-blue-300">{flexibleInfo}</p>
         </div>
       )}
 

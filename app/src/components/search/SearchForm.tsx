@@ -22,6 +22,7 @@ interface SearchParams {
   return_date?: string;
   cabin_class: string;
   max_stops: number | null;
+  flexible_dates?: boolean;
 }
 
 interface InitialValues {
@@ -46,6 +47,7 @@ export function SearchForm({ onSearch, loading, initialValues }: Props) {
   const [returnDate, setReturnDate] = useState("");
   const [cabinClass, setCabinClass] = useState("economy");
   const [maxStops, setMaxStops] = useState("");
+  const [flexibleDates, setFlexibleDates] = useState(false);
   const [filtersOpen, setFiltersOpen] = useState(false);
   const autoSubmitRef = useRef(false);
   const sub = useSubscription();
@@ -94,6 +96,7 @@ export function SearchForm({ onSearch, loading, initialValues }: Props) {
           return_date: initialValues.return_date || undefined,
           cabin_class: initialValues.cabin_class || "economy",
           max_stops: initialValues.max_stops ? parseInt(initialValues.max_stops) : null,
+          flexible_dates: undefined,
         });
       }, 100);
       return () => clearTimeout(timer);
@@ -110,6 +113,7 @@ export function SearchForm({ onSearch, loading, initialValues }: Props) {
       return_date: returnDate || undefined,
       cabin_class: cabinClass,
       max_stops: maxStops ? parseInt(maxStops) : null,
+      flexible_dates: flexibleDates || undefined,
     });
   }
 
@@ -208,6 +212,22 @@ export function SearchForm({ onSearch, loading, initialValues }: Props) {
             min={departureDate || new Date().toISOString().split("T")[0]}
             className="bg-slate-900/50 border-slate-700 text-white h-11 hover:border-slate-600 focus:border-blue-500 focus:ring-blue-500/20"
           />
+        </div>
+        <div className="flex items-end pb-1">
+          <label className="flex items-center gap-2 cursor-pointer min-h-[44px]">
+            <input
+              type="checkbox"
+              checked={flexibleDates}
+              onChange={(e) => setFlexibleDates(e.target.checked)}
+              className="h-4 w-4 rounded border-slate-600 bg-slate-800 text-blue-500 focus:ring-blue-500/20 focus:ring-offset-0 cursor-pointer"
+            />
+            <span className="text-sm text-slate-400 whitespace-nowrap select-none">
+              Flexible
+              {flexibleDates && (
+                <span className="ml-1 text-blue-400 text-xs font-medium">+/- 3 days</span>
+              )}
+            </span>
+          </label>
         </div>
         <Button
           type="submit"
