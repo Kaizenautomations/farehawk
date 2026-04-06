@@ -12,6 +12,8 @@ export default function SearchPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [searched, setSearched] = useState(false);
+  const [retryable, setRetryable] = useState(false);
+  const [lastParams, setLastParams] = useState<Record<string, unknown> | null>(null);
   const sub = useSubscription();
 
   async function handleSearch(params: {
@@ -24,7 +26,9 @@ export default function SearchPage() {
   }) {
     setLoading(true);
     setError("");
+    setRetryable(false);
     setSearched(true);
+    setLastParams(params);
 
     try {
       const res = await fetch("/api/search/flights", {
@@ -33,31 +37,36 @@ export default function SearchPage() {
         body: JSON.stringify(params),
       });
 
+      const data = await res.json();
+
       if (res.status === 429) {
-        setError(
-          "Daily search limit reached. Upgrade your plan for more searches."
-        );
+        if (data.retryable) {
+          setError("Flight data is temporarily busy. This usually resolves in a few seconds.");
+          setRetryable(true);
+        } else {
+          setError("Daily search limit reached. Upgrade your plan for more searches.");
+        }
         setResults([]);
         return;
       }
 
       if (res.status === 403) {
-        const data = await res.json();
         setError(data.error);
         setResults([]);
         return;
       }
 
       if (!res.ok) {
-        setError("Search failed. Please try again.");
+        setError(data.error || "Search failed. Please try again.");
+        setRetryable(true);
         setResults([]);
         return;
       }
 
-      const data = await res.json();
       setResults(data);
     } catch {
       setError("Something went wrong. Please try again.");
+      setRetryable(true);
     } finally {
       setLoading(false);
       sub.refresh();
@@ -133,26 +142,38 @@ export default function SearchPage() {
 
       {/* Error */}
       {error && (
-        <div className="rounded-xl border border-red-500/30 bg-red-500/10 backdrop-blur-sm p-4 flex items-start gap-3">
+        <div className={`rounded-xl border backdrop-blur-sm p-4 flex items-start gap-3 ${retryable ? "border-amber-500/30 bg-amber-500/10" : "border-red-500/30 bg-red-500/10"}`}>
           <div className="shrink-0 mt-0.5">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="18"
-              height="18"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="text-red-400"
-            >
-              <circle cx="12" cy="12" r="10" />
-              <line x1="12" y1="8" x2="12" y2="12" />
-              <line x1="12" y1="16" x2="12.01" y2="16" />
-            </svg>
+            {retryable ? (
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-amber-400">
+                <circle cx="12" cy="12" r="10" />
+                <polyline points="12 6 12 12 16 14" />
+              </svg>
+            ) : (
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-red-400">
+                <circle cx="12" cy="12" r="10" />
+                <line x1="12" y1="8" x2="12" y2="12" />
+                <line x1="12" y1="16" x2="12.01" y2="16" />
+              </svg>
+            )}
           </div>
-          <p className="text-sm text-red-300">{error}</p>
+          <div className="flex-1">
+            <p className={`text-sm ${retryable ? "text-amber-300" : "text-red-300"}`}>{error}</p>
+            {retryable && lastParams && (
+              <button
+                type="button"
+                onClick={() => handleSearch(lastParams as Parameters<typeof handleSearch>[0])}
+                disabled={loading}
+                className="mt-3 inline-flex items-center gap-2 rounded-lg bg-amber-500/20 border border-amber-500/30 px-4 py-2 text-sm font-medium text-amber-300 hover:bg-amber-500/30 transition-colors disabled:opacity-50"
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="23 4 23 10 17 10" />
+                  <path d="M20.49 15a9 9 0 11-2.12-9.36L23 10" />
+                </svg>
+                Try Again
+              </button>
+            )}
+          </div>
         </div>
       )}
 

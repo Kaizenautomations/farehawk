@@ -82,6 +82,16 @@ export async function POST(request: Request) {
   } catch (error) {
     const message =
       error instanceof Error ? error.message : "Search failed";
-    return NextResponse.json({ error: message }, { status: 500 });
+    const status = message.includes("429") ? 429 : 500;
+    return NextResponse.json(
+      {
+        error:
+          status === 429
+            ? "Flight data is temporarily unavailable due to high demand. Please wait a moment and try again."
+            : message,
+        retryable: status === 429,
+      },
+      { status }
+    );
   }
 }
