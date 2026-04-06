@@ -77,18 +77,36 @@ export default function WatchesPage() {
   }
 
   async function handleDelete(id: string) {
-    await fetch(`/api/watches/${id}`, { method: "DELETE" });
-    fetchWatches();
-    sub.refresh();
+    try {
+      const res = await fetch(`/api/watches/${id}`, { method: "DELETE" });
+      if (!res.ok) {
+        const data = await res.json();
+        alert(data.error || "Failed to delete watch");
+        return;
+      }
+      fetchWatches();
+      sub.refresh();
+    } catch {
+      alert("Something went wrong. Please try again.");
+    }
   }
 
   async function handleToggle(id: string, isActive: boolean) {
-    await fetch(`/api/watches/${id}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ is_active: !isActive }),
-    });
-    fetchWatches();
+    try {
+      const res = await fetch(`/api/watches/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ is_active: !isActive }),
+      });
+      if (!res.ok) {
+        const data = await res.json();
+        alert(data.error || "Failed to update watch");
+        return;
+      }
+      fetchWatches();
+    } catch {
+      alert("Something went wrong. Please try again.");
+    }
   }
 
   function getPriceProgress(current: number | null, target: number | null) {

@@ -69,8 +69,8 @@ function getPriceColor(price: number, allPrices: number[]): string {
 export default function ExplorePage() {
   const router = useRouter();
   const [origin, setOrigin] = useState("");
-  const [fromDate, setFromDate] = useState(getDefaultFromDate);
-  const [toDate, setToDate] = useState(getDefaultToDate);
+  const [fromDate, setFromDate] = useState(getDefaultFromDate());
+  const [toDate, setToDate] = useState(getDefaultToDate());
   const [budget, setBudget] = useState("");
   const [tripType, setTripType] = useState<"one_way" | "round_trip">("round_trip");
   const [duration, setDuration] = useState("7");

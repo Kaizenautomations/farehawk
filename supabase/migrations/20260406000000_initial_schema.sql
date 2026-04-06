@@ -12,6 +12,7 @@ create table public.profiles (
   notification_sms boolean default false,
   phone text,
   stripe_customer_id text unique,
+  is_admin boolean default false,
   created_at timestamptz default now(),
   updated_at timestamptz default now()
 );
@@ -44,6 +45,7 @@ create table public.daily_usage (
   user_id uuid not null references public.profiles(id) on delete cascade,
   date date not null default current_date,
   search_count integer default 0,
+  ai_message_count integer default 0,
   created_at timestamptz default now(),
   unique(user_id, date)
 );

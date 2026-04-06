@@ -149,7 +149,7 @@ def search_dates(req: DateSearchRequest) -> list[DatePriceResponse]:
             FlightSegment(
                 departure_airport=[[destination, 0]],
                 arrival_airport=[[origin, 0]],
-                travel_date=req.from_date,
+                travel_date=req.to_date,
             )
         )
 
