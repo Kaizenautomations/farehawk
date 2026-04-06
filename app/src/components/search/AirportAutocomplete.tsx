@@ -1,20 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "@/components/ui/command";
-import { Button } from "@/components/ui/button";
+import { useState, useMemo, useRef, useEffect } from "react";
 import { POPULAR_AIRPORTS } from "@/lib/airports";
 
 interface Props {
@@ -37,60 +23,41 @@ const COUNTRY_FLAGS: Record<string, string> = {
   ES: "\u{1F1EA}\u{1F1F8}",
   IT: "\u{1F1EE}\u{1F1F9}",
   BR: "\u{1F1E7}\u{1F1F7}",
-  IN: "\u{1F1EE}\u{1F1F3}",
-  CN: "\u{1F1E8}\u{1F1F3}",
   KR: "\u{1F1F0}\u{1F1F7}",
   SG: "\u{1F1F8}\u{1F1EC}",
   HK: "\u{1F1ED}\u{1F1F0}",
   TH: "\u{1F1F9}\u{1F1ED}",
   PT: "\u{1F1F5}\u{1F1F9}",
   IE: "\u{1F1EE}\u{1F1EA}",
-  IS: "\u{1F1EE}\u{1F1F8}",
+  TR: "\u{1F1F9}\u{1F1F7}",
+  CH: "\u{1F1E8}\u{1F1ED}",
+  AT: "\u{1F1E6}\u{1F1F9}",
+  SE: "\u{1F1F8}\u{1F1EA}",
+  NO: "\u{1F1F3}\u{1F1F4}",
+  DK: "\u{1F1E9}\u{1F1F0}",
+  NZ: "\u{1F1F3}\u{1F1FF}",
+  IN: "\u{1F1EE}\u{1F1F3}",
+  CN: "\u{1F1E8}\u{1F1F3}",
   CU: "\u{1F1E8}\u{1F1FA}",
   DO: "\u{1F1E9}\u{1F1F4}",
   JM: "\u{1F1EF}\u{1F1F2}",
   CO: "\u{1F1E8}\u{1F1F4}",
-  PE: "\u{1F1F5}\u{1F1EA}",
-  CL: "\u{1F1E8}\u{1F1F1}",
   AR: "\u{1F1E6}\u{1F1F7}",
-  TR: "\u{1F1F9}\u{1F1F7}",
+  CL: "\u{1F1E8}\u{1F1F1}",
+  PE: "\u{1F1F5}\u{1F1EA}",
+  PH: "\u{1F1F5}\u{1F1ED}",
   GR: "\u{1F1EC}\u{1F1F7}",
-  HR: "\u{1F1ED}\u{1F1F7}",
   IL: "\u{1F1EE}\u{1F1F1}",
   EG: "\u{1F1EA}\u{1F1EC}",
-  MA: "\u{1F1F2}\u{1F1E6}",
   ZA: "\u{1F1FF}\u{1F1E6}",
-  KE: "\u{1F1F0}\u{1F1EA}",
-  NZ: "\u{1F1F3}\u{1F1FF}",
   FI: "\u{1F1EB}\u{1F1EE}",
-  SE: "\u{1F1F8}\u{1F1EA}",
-  NO: "\u{1F1F3}\u{1F1F4}",
-  DK: "\u{1F1E9}\u{1F1F0}",
-  CH: "\u{1F1E8}\u{1F1ED}",
-  AT: "\u{1F1E6}\u{1F1F9}",
   PL: "\u{1F1F5}\u{1F1F1}",
-  CZ: "\u{1F1E8}\u{1F1FF}",
-  PH: "\u{1F1F5}\u{1F1ED}",
+  HR: "\u{1F1ED}\u{1F1F7}",
   TW: "\u{1F1F9}\u{1F1FC}",
 };
 
 function getFlag(country: string): string {
   return COUNTRY_FLAGS[country] ?? "\u{2708}\u{FE0F}";
-}
-
-function highlightMatch(text: string, query: string): React.ReactNode {
-  if (!query) return text;
-  const idx = text.toLowerCase().indexOf(query.toLowerCase());
-  if (idx === -1) return text;
-  return (
-    <>
-      {text.slice(0, idx)}
-      <span className="text-blue-400 font-semibold">
-        {text.slice(idx, idx + query.length)}
-      </span>
-      {text.slice(idx + query.length)}
-    </>
-  );
 }
 
 export function AirportAutocomplete({
@@ -100,82 +67,111 @@ export function AirportAutocomplete({
 }: Props) {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const filtered = useMemo(() => {
-    if (!search) return POPULAR_AIRPORTS.slice(0, 20);
+    if (!search) return POPULAR_AIRPORTS.slice(0, 30);
     const q = search.toLowerCase();
     return POPULAR_AIRPORTS.filter(
       (a) =>
         a.code.toLowerCase().includes(q) ||
         a.city.toLowerCase().includes(q) ||
         a.name.toLowerCase().includes(q)
-    ).slice(0, 20);
+    ).slice(0, 30);
   }, [search]);
 
   const selected = POPULAR_AIRPORTS.find((a) => a.code === value);
 
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (wrapperRef.current && !wrapperRef.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  function handleSelect(code: string) {
+    onChange(code);
+    setOpen(false);
+    setSearch("");
+  }
+
   return (
-    <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger>
-        <Button
-          variant="outline"
-          role="combobox"
-          className="w-full justify-start font-normal bg-slate-900/50 border-slate-700 hover:bg-slate-800 hover:border-slate-600 text-white h-11"
+    <div ref={wrapperRef} className="relative">
+      {/* Trigger / display */}
+      {!open ? (
+        <button
+          type="button"
+          onClick={() => {
+            setOpen(true);
+            setTimeout(() => inputRef.current?.focus(), 50);
+          }}
+          className="flex h-11 w-full items-center gap-2 rounded-lg border border-slate-700 bg-slate-900/50 px-3 text-left text-sm hover:bg-slate-800 hover:border-slate-600 transition-colors"
         >
           {selected ? (
-            <span className="flex items-center gap-2">
+            <>
               <span className="text-base">{getFlag(selected.country)}</span>
               <span className="font-semibold text-white">{selected.code}</span>
               <span className="text-slate-400 truncate">{selected.city}</span>
-            </span>
+            </>
           ) : (
             <span className="text-slate-500">{placeholder}</span>
           )}
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent
-        className="w-[340px] p-0 bg-slate-900 border-slate-700 shadow-xl shadow-black/20"
-        align="start"
-      >
-        <Command shouldFilter={false} className="bg-transparent">
-          <CommandInput
-            placeholder="Search airports..."
-            value={search}
-            onValueChange={setSearch}
-            className="text-white"
-          />
-          <CommandList className="max-h-[280px]">
-            <CommandEmpty className="py-6 text-center text-slate-500">
-              No airports found.
-            </CommandEmpty>
-            <CommandGroup>
-              {filtered.map((airport) => (
-                <CommandItem
-                  key={airport.code}
-                  value={airport.code}
-                  onSelect={() => {
-                    onChange(airport.code);
-                    setOpen(false);
-                    setSearch("");
-                  }}
-                  className="flex items-center gap-2.5 px-3 py-2.5 cursor-pointer hover:bg-slate-800 data-[selected=true]:bg-slate-800 text-slate-300"
-                >
-                  <span className="text-base flex-shrink-0">
-                    {getFlag(airport.country)}
-                  </span>
-                  <span className="font-semibold text-white flex-shrink-0">
-                    {highlightMatch(airport.code, search)}
-                  </span>
-                  <span className="text-slate-400 truncate">
-                    {highlightMatch(airport.city, search)} -{" "}
-                    {highlightMatch(airport.name, search)}
-                  </span>
-                </CommandItem>
-              ))}
-            </CommandGroup>
-          </CommandList>
-        </Command>
-      </PopoverContent>
-    </Popover>
+        </button>
+      ) : (
+        <input
+          ref={inputRef}
+          type="text"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Escape") {
+              setOpen(false);
+              setSearch("");
+            }
+            if (e.key === "Enter" && filtered.length > 0) {
+              handleSelect(filtered[0].code);
+            }
+          }}
+          placeholder="Search airports..."
+          className="h-11 w-full rounded-lg border border-blue-500 bg-slate-900 px-3 text-sm text-white placeholder:text-slate-500 outline-none ring-2 ring-blue-500/20"
+          autoComplete="off"
+        />
+      )}
+
+      {/* Dropdown */}
+      {open && (
+        <div className="absolute z-50 mt-1 w-full max-h-[280px] overflow-y-auto rounded-lg border border-slate-700 bg-slate-900 shadow-xl shadow-black/30">
+          {filtered.length === 0 ? (
+            <div className="px-3 py-6 text-center text-sm text-slate-500">
+              No airports found
+            </div>
+          ) : (
+            filtered.map((airport) => (
+              <button
+                key={airport.code}
+                type="button"
+                onClick={() => handleSelect(airport.code)}
+                className="flex w-full items-center gap-2.5 px-3 py-2.5 text-left text-sm hover:bg-slate-800 transition-colors cursor-pointer"
+              >
+                <span className="text-base shrink-0">
+                  {getFlag(airport.country)}
+                </span>
+                <span className="font-semibold text-white shrink-0">
+                  {airport.code}
+                </span>
+                <span className="text-slate-400 truncate">
+                  {airport.city} - {airport.name}
+                </span>
+              </button>
+            ))
+          )}
+        </div>
+      )}
+    </div>
   );
 }
