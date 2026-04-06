@@ -20,7 +20,7 @@ export default function LandingPage() {
         {/* Dot grid background */}
         <div className="pointer-events-none absolute inset-0 dot-grid opacity-40" />
 
-        {/* Animated floating elements */}
+        {/* Ambient glow */}
         <div className="pointer-events-none absolute inset-0">
           <div className="absolute left-1/4 top-20 h-72 w-72 rounded-full bg-primary/10 blur-[120px]" />
           <div className="absolute right-1/4 top-40 h-96 w-96 rounded-full bg-[oklch(0.55_0.2_280)]/10 blur-[120px]" />
@@ -31,7 +31,7 @@ export default function LandingPage() {
             variant="secondary"
             className="animate-fade-up mb-6 border-primary/20 bg-primary/10 px-4 py-1.5 text-sm text-primary"
           >
-            Launching Soon -- Join the Waitlist
+            Now in Early Access
           </Badge>
 
           <h1 className="animate-fade-up-delay-1 mx-auto max-w-4xl text-5xl font-bold leading-[1.1] tracking-tight sm:text-7xl">
@@ -40,9 +40,9 @@ export default function LandingPage() {
           </h1>
 
           <p className="animate-fade-up-delay-2 mx-auto mt-8 max-w-2xl text-lg leading-relaxed text-muted-foreground sm:text-xl">
-            FareHawk tracks thousands of flight prices in real time so you
-            don&apos;t have to. Search routes, visualize the cheapest dates, and
-            get instant alerts when prices drop.
+            FareHawk tracks flight prices in real time so you don&apos;t have
+            to. Search routes, visualize the cheapest dates, and get instant
+            alerts when prices drop.
           </p>
 
           <div className="animate-fade-up-delay-3 mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
@@ -51,7 +51,7 @@ export default function LandingPage() {
                 size="lg"
                 className="bg-gradient-brand px-8 text-base font-semibold text-white shadow-lg shadow-primary/25 transition-all hover:shadow-xl hover:shadow-primary/30 hover:brightness-110"
               >
-                Get Started Free
+                Join the Waitlist
               </Button>
             </Link>
             <Link href="/pricing">
@@ -65,42 +65,42 @@ export default function LandingPage() {
             </Link>
           </div>
 
-          {/* Animated plane */}
-          <div className="animate-fade-up-delay-4 relative mx-auto mt-16 flex items-center justify-center">
-            <div className="animate-[fly_8s_ease-in-out_infinite] text-5xl opacity-60">
+          {/* Clean plane icon — not animated weirdly, just a subtle static element */}
+          <div className="animate-fade-up-delay-4 mt-16 flex items-center justify-center">
+            <div className="flex items-center gap-4 rounded-full border border-white/10 bg-white/5 px-6 py-3 backdrop-blur-sm">
               <svg
-                width="48"
-                height="48"
+                width="20"
+                height="20"
                 viewBox="0 0 24 24"
-                fill="currentColor"
-                className="text-primary/80"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="text-primary"
               >
-                <path d="M22 2L2 12l7 2 4 8 3-6 6-2z" stroke="currentColor" strokeWidth="1" strokeLinejoin="round" />
+                <path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 00-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z" />
               </svg>
+              <span className="text-sm text-muted-foreground">
+                Powered by Google Flights data
+              </span>
             </div>
-            <style
-              dangerouslySetInnerHTML={{
-                __html: `
-              @keyframes fly {
-                0%, 100% { transform: translateX(-30px) translateY(4px) rotate(-1deg); opacity: 0.6; }
-                50% { transform: translateX(30px) translateY(-4px) rotate(1deg); opacity: 0.4; }
-              }
-            `,
-              }}
-            />
           </div>
         </div>
       </section>
 
-      {/* Stats Bar */}
+      {/* What You Get — replacing fake stats */}
       <section className="border-y border-border/50 bg-card/50 backdrop-blur-sm">
         <div className="mx-auto flex max-w-5xl flex-col items-center justify-center gap-8 px-4 py-10 sm:flex-row sm:gap-16">
           {[
-            { value: "50,000+", label: "Prices Tracked" },
-            { value: "3,200+", label: "Users" },
-            { value: "$147", label: "Avg Savings" },
+            { value: "170+", label: "Airports Covered" },
+            { value: "Real-Time", label: "Google Flights Data" },
+            { value: "6hr", label: "Price Check Intervals" },
           ].map((stat, i) => (
-            <div key={stat.label} className={`flex items-center gap-6 animate-fade-up-delay-${i + 3}`}>
+            <div
+              key={stat.label}
+              className={`flex items-center gap-6 animate-fade-up-delay-${i + 3}`}
+            >
               {i > 0 && (
                 <Separator
                   orientation="vertical"
@@ -151,10 +151,7 @@ export default function LandingPage() {
                     strokeWidth={2}
                   >
                     <circle cx="11" cy="11" r="8" />
-                    <path
-                      d="M21 21l-4.35-4.35"
-                      strokeLinecap="round"
-                    />
+                    <path d="M21 21l-4.35-4.35" strokeLinecap="round" />
                   </svg>
                 ),
                 title: "Smart Search",
@@ -229,9 +226,7 @@ export default function LandingPage() {
             </h2>
           </div>
 
-          {/* Horizontal timeline */}
           <div className="relative mt-20">
-            {/* Connecting line */}
             <div className="absolute left-0 right-0 top-8 hidden h-0.5 bg-gradient-to-r from-transparent via-primary/30 to-transparent lg:block" />
 
             <div className="grid gap-12 lg:grid-cols-3 lg:gap-8">
@@ -267,78 +262,8 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Testimonials / Social Proof */}
-      <section className="py-24 sm:py-32">
-        <div className="mx-auto max-w-6xl px-4">
-          <div className="text-center">
-            <Badge
-              variant="secondary"
-              className="mb-4 border-primary/20 bg-primary/10 text-primary"
-            >
-              Testimonials
-            </Badge>
-            <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
-              Loved by smart travelers
-            </h2>
-          </div>
-
-          <div className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {[
-              {
-                quote:
-                  "FareHawk saved me $320 on my flight to Tokyo. The price alerts are a game changer -- I booked the second prices dropped.",
-                name: "Sarah M.",
-                route: "YYC to NRT",
-              },
-              {
-                quote:
-                  "I used to spend hours comparing prices across different sites. Now I just set my routes and FareHawk does the rest.",
-                name: "James K.",
-                route: "YEG to LAX",
-              },
-              {
-                quote:
-                  "The price calendar is incredible. I shifted my trip by two days and saved almost $200. Absolutely worth it.",
-                name: "Priya S.",
-                route: "YVR to LHR",
-              },
-            ].map((testimonial) => (
-              <Card
-                key={testimonial.name}
-                className="border-border/50 bg-card/50 backdrop-blur-sm transition-all duration-300 hover:border-primary/20 gradient-border-hover"
-              >
-                <CardHeader className="relative z-10 space-y-4">
-                  <div className="flex gap-1 text-primary">
-                    {[...Array(5)].map((_, i) => (
-                      <svg
-                        key={i}
-                        className="h-4 w-4 fill-current"
-                        viewBox="0 0 20 20"
-                      >
-                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                      </svg>
-                    ))}
-                  </div>
-                  <CardDescription className="text-base leading-relaxed text-foreground/80">
-                    &ldquo;{testimonial.quote}&rdquo;
-                  </CardDescription>
-                  <div className="flex items-center justify-between pt-2">
-                    <span className="font-semibold text-foreground">
-                      {testimonial.name}
-                    </span>
-                    <Badge variant="secondary" className="text-xs">
-                      {testimonial.route}
-                    </Badge>
-                  </div>
-                </CardHeader>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* Pricing Preview */}
-      <section className="border-y border-border/50 bg-muted/30 py-24 sm:py-32">
+      <section className="py-24 sm:py-32">
         <div className="mx-auto max-w-4xl px-4 text-center">
           <Badge
             variant="secondary"
@@ -350,8 +275,8 @@ export default function LandingPage() {
             Plans that pay for themselves
           </h2>
           <p className="mx-auto mt-4 max-w-xl text-muted-foreground">
-            Start free and upgrade when you need more. Most users save enough on
-            their first flight to cover a year of Pro.
+            Start free and upgrade when you need more. Save enough on your first
+            flight to cover a year of Pro.
           </p>
 
           <div className="mt-12 grid gap-6 sm:grid-cols-2">
@@ -367,10 +292,11 @@ export default function LandingPage() {
                 <Separator className="my-6" />
                 <ul className="space-y-3 text-left text-sm text-muted-foreground">
                   <li className="flex items-center gap-2">
-                    <span className="text-primary">&#10003;</span> 3 price alerts
+                    <span className="text-primary">&#10003;</span> 3 searches
+                    per day
                   </li>
                   <li className="flex items-center gap-2">
-                    <span className="text-primary">&#10003;</span> Basic search
+                    <span className="text-primary">&#10003;</span> 1 price watch
                   </li>
                   <li className="flex items-center gap-2">
                     <span className="text-primary">&#10003;</span> Price calendar
@@ -387,27 +313,27 @@ export default function LandingPage() {
                 <div className="text-sm font-medium text-muted-foreground">
                   Pro
                 </div>
-                <div className="mt-2 text-4xl font-bold">$5</div>
+                <div className="mt-2 text-4xl font-bold">$6</div>
                 <div className="mt-1 text-sm text-muted-foreground">
                   / month
                 </div>
                 <Separator className="my-6" />
                 <ul className="space-y-3 text-left text-sm text-muted-foreground">
                   <li className="flex items-center gap-2">
-                    <span className="text-primary">&#10003;</span> Unlimited
-                    alerts
+                    <span className="text-primary">&#10003;</span> 50 searches
+                    per day
                   </li>
                   <li className="flex items-center gap-2">
-                    <span className="text-primary">&#10003;</span> Advanced
-                    filters
+                    <span className="text-primary">&#10003;</span> 10 price
+                    watches
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="text-primary">&#10003;</span> Email price
+                    drop alerts
                   </li>
                   <li className="flex items-center gap-2">
                     <span className="text-primary">&#10003;</span> Price history
                     charts
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <span className="text-primary">&#10003;</span> Priority
-                    notifications
                   </li>
                 </ul>
               </div>
@@ -422,18 +348,18 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* CTA */}
+      {/* CTA — Waitlist */}
       <section className="py-24 sm:py-32">
         <div className="mx-auto max-w-4xl px-4">
           <div className="relative overflow-hidden rounded-3xl bg-gradient-cta p-12 text-center shadow-2xl shadow-primary/10 sm:p-16 noise-overlay">
             <div className="pointer-events-none absolute inset-0 dot-grid opacity-30" />
             <div className="relative z-10">
               <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
-                Start saving on flights today
+                Be the first to know when we launch
               </h2>
               <p className="mx-auto mt-4 max-w-xl text-lg text-muted-foreground">
-                Join thousands of travelers who never overpay. Free to start, no
-                credit card required.
+                Join the waitlist and get early access to FareHawk. Free to
+                start, no credit card required.
               </p>
               <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
                 <Link href="/signup">
@@ -441,7 +367,7 @@ export default function LandingPage() {
                     size="lg"
                     className="bg-gradient-brand px-8 text-base font-semibold text-white shadow-lg shadow-primary/25 transition-all hover:shadow-xl hover:shadow-primary/30 hover:brightness-110"
                   >
-                    Create Free Account
+                    Join the Waitlist
                   </Button>
                 </Link>
                 <Link href="/search">
@@ -462,7 +388,7 @@ export default function LandingPage() {
       {/* Footer */}
       <footer className="border-t border-border/50">
         <div className="mx-auto max-w-6xl px-4 py-12">
-          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
             <div>
               <div className="font-heading text-lg font-bold text-gradient-brand">
                 FareHawk
@@ -485,68 +411,39 @@ export default function LandingPage() {
                 </li>
                 <li>
                   <Link
+                    href="/calendar"
+                    className="transition-colors hover:text-foreground"
+                  >
+                    Price Calendar
+                  </Link>
+                </li>
+                <li>
+                  <Link
                     href="/pricing"
                     className="transition-colors hover:text-foreground"
                   >
                     Pricing
                   </Link>
                 </li>
-                <li>
-                  <Link
-                    href="/alerts"
-                    className="transition-colors hover:text-foreground"
-                  >
-                    Price Alerts
-                  </Link>
-                </li>
               </ul>
             </div>
             <div>
-              <h4 className="mb-3 text-sm font-semibold">Company</h4>
+              <h4 className="mb-3 text-sm font-semibold">Account</h4>
               <ul className="space-y-2 text-sm text-muted-foreground">
                 <li>
                   <Link
-                    href="/about"
+                    href="/login"
                     className="transition-colors hover:text-foreground"
                   >
-                    About
+                    Sign In
                   </Link>
                 </li>
                 <li>
                   <Link
-                    href="/blog"
+                    href="/signup"
                     className="transition-colors hover:text-foreground"
                   >
-                    Blog
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/contact"
-                    className="transition-colors hover:text-foreground"
-                  >
-                    Contact
-                  </Link>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="mb-3 text-sm font-semibold">Legal</h4>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li>
-                  <Link
-                    href="/privacy"
-                    className="transition-colors hover:text-foreground"
-                  >
-                    Privacy Policy
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/terms"
-                    className="transition-colors hover:text-foreground"
-                  >
-                    Terms of Service
+                    Create Account
                   </Link>
                 </li>
               </ul>
