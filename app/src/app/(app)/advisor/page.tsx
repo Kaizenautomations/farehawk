@@ -1,8 +1,11 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { Sparkles, Send, User } from "lucide-react";
+import { Sparkles, Send, User, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { useSubscription } from "@/hooks/useSubscription";
+import Link from "next/link";
 
 interface ChatMessage {
   role: "user" | "assistant";
@@ -20,14 +23,23 @@ export default function AdvisorPage() {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const [aiUsage, setAiUsage] = useState<{
+    messages_used: number;
+    messages_limit: number;
+    model: string;
+  } | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const sub = useSubscription();
 
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
   }, [messages]);
+
+  const isFree = sub.tier === "free";
+  const isPremium = sub.tier === "premium";
 
   async function sendMessage(text: string) {
     if (!text.trim() || loading) return;
@@ -50,21 +62,51 @@ export default function AdvisorPage() {
 
       const data = await res.json();
 
-      if (!res.ok) {
+      if (res.status === 403 && data.upgrade) {
         setMessages([
           ...history,
-          { role: "assistant", content: data.error || "Something went wrong. Please try again." },
+          {
+            role: "assistant",
+            content:
+              "The AI Travel Advisor is available on Pro and Premium plans. Upgrade to start chatting about your next trip!",
+          },
+        ]);
+      } else if (res.status === 429 && data.limit_reached) {
+        setMessages([
+          ...history,
+          {
+            role: "assistant",
+            content: `You've used all ${data.limit} AI messages for today. Your limit resets at midnight UTC. ${
+              data.tier === "pro"
+                ? "Upgrade to Premium for 50 messages/day with our best AI model."
+                : ""
+            }`,
+          },
+        ]);
+      } else if (!res.ok) {
+        setMessages([
+          ...history,
+          {
+            role: "assistant",
+            content: data.error || "Something went wrong. Please try again.",
+          },
         ]);
       } else {
         setMessages([
           ...history,
           { role: "assistant", content: data.response },
         ]);
+        if (data.usage) {
+          setAiUsage(data.usage);
+        }
       }
     } catch {
       setMessages([
         ...history,
-        { role: "assistant", content: "Network error. Please check your connection and try again." },
+        {
+          role: "assistant",
+          content: "Network error. Please check your connection and try again.",
+        },
       ]);
     } finally {
       setLoading(false);
@@ -77,17 +119,77 @@ export default function AdvisorPage() {
     sendMessage(input);
   }
 
+  // Free tier gate
+  if (isFree) {
+    return (
+      <div className="flex flex-col items-center justify-center h-[calc(100vh-12rem)] text-center px-4">
+        <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-500/20 to-indigo-600/20 mb-6">
+          <Lock className="size-8 text-blue-400" />
+        </div>
+        <h1 className="text-2xl font-bold text-white mb-2">
+          AI Travel Advisor
+        </h1>
+        <p className="text-muted-foreground max-w-md mb-8">
+          Chat with AI to find the perfect trip. Get personalized flight
+          recommendations, destination ideas, and booking tips.
+        </p>
+        <div className="flex flex-col sm:flex-row gap-3">
+          <Link href="/pricing">
+            <Button className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white min-h-[44px] px-6">
+              Upgrade to Pro — 15 messages/day
+            </Button>
+          </Link>
+        </div>
+        <div className="mt-6 text-xs text-muted-foreground space-y-1">
+          <p>
+            <strong className="text-slate-400">Pro:</strong> 15 messages/day
+            (GPT-4o mini — fast responses)
+          </p>
+          <p>
+            <strong className="text-amber-400">Premium:</strong> 50
+            messages/day (GPT-4o — smarter, more detailed)
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col h-[calc(100vh-8rem)]">
       {/* Header */}
-      <div className="mb-6">
-        <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 shadow-lg shadow-blue-500/20">
-            <Sparkles className="size-5 text-white" />
+      <div className="mb-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 shadow-lg shadow-blue-500/20">
+              <Sparkles className="size-5 text-white" />
+            </div>
+            <div>
+              <h1 className="text-2xl font-bold tracking-tight">
+                AI Travel Advisor
+              </h1>
+              <p className="text-sm text-muted-foreground">
+                Tell me what you&apos;re looking for
+              </p>
+            </div>
           </div>
-          <div>
-            <h1 className="text-2xl font-bold tracking-tight">AI Travel Advisor</h1>
-            <p className="text-sm text-muted-foreground">Tell me what you&apos;re looking for</p>
+          <div className="flex items-center gap-2">
+            {aiUsage && (
+              <Badge
+                variant="outline"
+                className="text-xs border-slate-700 text-slate-400"
+              >
+                {aiUsage.messages_used}/{aiUsage.messages_limit} messages
+              </Badge>
+            )}
+            <Badge
+              className={
+                isPremium
+                  ? "bg-amber-500/15 text-amber-400 border border-amber-500/30"
+                  : "bg-blue-500/15 text-blue-400 border border-blue-500/30"
+              }
+            >
+              {isPremium ? "GPT-4o" : "GPT-4o mini"}
+            </Badge>
           </div>
         </div>
       </div>
@@ -104,7 +206,8 @@ export default function AdvisorPage() {
               What kind of trip are you looking for?
             </h2>
             <p className="text-sm text-muted-foreground max-w-md mb-8">
-              I can help you find cheap flights, suggest destinations, compare routes, and give travel tips.
+              I can help you find cheap flights, suggest destinations, compare
+              routes, and give travel tips.
             </p>
           </div>
         )}
@@ -153,9 +256,18 @@ export default function AdvisorPage() {
               </div>
               <div className="rounded-2xl px-4 py-3 bg-slate-800/80 border border-slate-700/50">
                 <div className="flex gap-1.5">
-                  <span className="size-2 rounded-full bg-slate-500 animate-bounce" style={{ animationDelay: "0ms" }} />
-                  <span className="size-2 rounded-full bg-slate-500 animate-bounce" style={{ animationDelay: "150ms" }} />
-                  <span className="size-2 rounded-full bg-slate-500 animate-bounce" style={{ animationDelay: "300ms" }} />
+                  <span
+                    className="size-2 rounded-full bg-slate-500 animate-bounce"
+                    style={{ animationDelay: "0ms" }}
+                  />
+                  <span
+                    className="size-2 rounded-full bg-slate-500 animate-bounce"
+                    style={{ animationDelay: "150ms" }}
+                  />
+                  <span
+                    className="size-2 rounded-full bg-slate-500 animate-bounce"
+                    style={{ animationDelay: "300ms" }}
+                  />
                 </div>
               </div>
             </div>

@@ -5,6 +5,8 @@ export const TIER_LIMITS = {
     email_alerts: false,
     sms_alerts: false,
     business_cabin: false,
+    ai_messages_per_day: 0,
+    ai_model: null,
   },
   pro: {
     searches_per_day: 50,
@@ -12,6 +14,8 @@ export const TIER_LIMITS = {
     email_alerts: true,
     sms_alerts: false,
     business_cabin: false,
+    ai_messages_per_day: 15,
+    ai_model: "gpt-4o-mini",
   },
   premium: {
     searches_per_day: 200,
@@ -19,6 +23,8 @@ export const TIER_LIMITS = {
     email_alerts: true,
     sms_alerts: true,
     business_cabin: true,
+    ai_messages_per_day: 50,
+    ai_model: "gpt-4o",
   },
 } as const;
 
