@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { SearchForm } from "@/components/search/SearchForm";
 import { FlightResultsList } from "@/components/search/FlightResultsList";
+import { LoadingBar } from "@/components/ui/loading-bar";
 import { useSubscription } from "@/hooks/useSubscription";
 import type { FlightResult } from "@/types/flight";
 
@@ -91,6 +92,7 @@ export default function SearchPage() {
 
   return (
     <div className="space-y-6">
+      <LoadingBar visible={loading} />
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
