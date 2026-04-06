@@ -135,21 +135,33 @@ def search_dates(req: DateSearchRequest) -> list[DatePriceResponse]:
 
     is_round_trip = req.trip_type == "round_trip"
 
+    segments = [
+        FlightSegment(
+            departure_airport=[[origin, 0]],
+            arrival_airport=[[destination, 0]],
+            travel_date=req.from_date,
+        )
+    ]
+
+    # Round trip requires two segments
+    if is_round_trip:
+        segments.append(
+            FlightSegment(
+                departure_airport=[[destination, 0]],
+                arrival_airport=[[origin, 0]],
+                travel_date=req.from_date,
+            )
+        )
+
     filters = DateSearchFilters(
         trip_type=TripType.ROUND_TRIP if is_round_trip else TripType.ONE_WAY,
         passenger_info=PassengerInfo(adults=1),
-        flight_segments=[
-            FlightSegment(
-                departure_airport=[[origin, 0]],
-                arrival_airport=[[destination, 0]],
-                travel_date=req.from_date,
-            )
-        ],
+        flight_segments=segments,
         seat_type=CABIN_MAP.get(req.cabin_class, SeatType.ECONOMY),
         stops=STOPS_MAP.get(req.max_stops, MaxStops.ANY),
         from_date=req.from_date,
         to_date=req.to_date,
-        duration=req.duration,
+        duration=req.duration if is_round_trip else None,
     )
 
     searcher = SearchDates()
