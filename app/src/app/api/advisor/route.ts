@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { TIER_LIMITS, type PlanTier } from "@/lib/constants";
+import { isAdmin, ADMIN_LIMITS } from "@/lib/admin";
 import { NextResponse } from "next/server";
 
 const SYSTEM_PROMPT = `You are FareHawk's AI Travel Advisor. You help users find cheap flights and plan trips.
@@ -34,10 +35,11 @@ export async function POST(request: Request) {
     .eq("user_id", user.id)
     .single();
   const tier: PlanTier = (sub?.tier as PlanTier) || "free";
-  const limits = TIER_LIMITS[tier];
+  const userIsAdmin = await isAdmin(user.id);
+  const limits = userIsAdmin ? ADMIN_LIMITS : TIER_LIMITS[tier];
 
-  // Check if tier has AI access
-  if (!limits.ai_model || tier === "free") {
+  // Check if tier has AI access (admins always have access)
+  if (!userIsAdmin && (!limits.ai_model || tier === "free")) {
     return NextResponse.json(
       {
         error: "AI Travel Advisor requires a Pro or Premium plan.",
@@ -47,13 +49,17 @@ export async function POST(request: Request) {
     );
   }
 
-  // Check daily AI message limit
+  // Check daily AI message limit (skip for admins)
   const admin = createAdminClient();
-  const { data: countData } = await admin.rpc("increment_ai_message_count", {
-    p_user_id: user.id,
-  });
+  let countData = 0;
+  if (!userIsAdmin) {
+    const { data } = await admin.rpc("increment_ai_message_count", {
+      p_user_id: user.id,
+    });
+    countData = data ?? 0;
+  }
 
-  if (countData && countData > limits.ai_messages_per_day) {
+  if (!userIsAdmin && countData > limits.ai_messages_per_day) {
     return NextResponse.json(
       {
         error: `Daily AI message limit reached (${limits.ai_messages_per_day} for ${tier} plan). Resets at midnight UTC.`,

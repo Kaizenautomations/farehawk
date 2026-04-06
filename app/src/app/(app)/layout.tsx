@@ -12,7 +12,9 @@ import {
   Globe,
   Sparkles,
   Sun,
+  Shield,
 } from "lucide-react";
+import { useSubscription } from "@/hooks/useSubscription";
 
 const sidebarLinks = [
   { href: "/search", label: "Search", icon: Search },
@@ -31,6 +33,7 @@ export default function AppLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
+  const sub = useSubscription();
 
   return (
     <div className="min-h-screen bg-background">
@@ -57,6 +60,25 @@ export default function AppLayout({
               </Link>
             );
           })}
+          {/* Admin link — only for admins */}
+          {sub.is_admin && (
+            <>
+              <div className="my-2 mx-3 h-px bg-white/10" />
+              <Link
+                href="/admin"
+                className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors whitespace-nowrap ${
+                  pathname?.startsWith("/admin")
+                    ? "bg-red-500/15 text-red-400"
+                    : "text-red-400/60 hover:text-red-400 hover:bg-red-500/10"
+                }`}
+              >
+                <Shield className="size-5 shrink-0" />
+                <span className="opacity-0 group-hover/sidebar:opacity-100 transition-opacity duration-200">
+                  Admin
+                </span>
+              </Link>
+            </>
+          )}
         </aside>
 
         {/* Main content */}

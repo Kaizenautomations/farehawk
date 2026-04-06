@@ -4,10 +4,13 @@ import { useEffect, useState } from "react";
 
 interface UsageData {
   tier: string;
+  is_admin: boolean;
   searches_used: number;
   searches_limit: number;
   watches_used: number;
   watches_limit: number;
+  ai_messages_used: number;
+  ai_messages_limit: number;
   email_alerts: boolean;
   sms_alerts: boolean;
   business_cabin: boolean;
