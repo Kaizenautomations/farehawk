@@ -39,12 +39,12 @@ export default function DashboardPage() {
     <div className="space-y-8">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold text-white">Welcome back, Scott</h1>
+        <h1 className="text-2xl sm:text-3xl font-bold text-white">Welcome back, Scott</h1>
         <p className="mt-1 text-zinc-400">Here is what is happening with your flight watches.</p>
       </div>
 
       {/* Stat Cards */}
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
         {/* Plan Card */}
         <Card className="border-zinc-800 bg-zinc-900/80 backdrop-blur">
           <CardContent className="p-5">
@@ -142,9 +142,9 @@ export default function DashboardPage() {
       {sub.tier === "free" && (
         <div className="relative overflow-hidden rounded-xl border border-blue-500/20 bg-gradient-to-r from-blue-600/10 via-indigo-600/10 to-violet-600/10 p-6">
           <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 to-violet-500/5" />
-          <div className="relative flex items-center justify-between">
+          <div className="relative flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div className="flex items-center gap-4">
-              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600">
                 <svg className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
                 </svg>
@@ -156,8 +156,8 @@ export default function DashboardPage() {
                 </p>
               </div>
             </div>
-            <Link href="/pricing">
-              <Button className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:from-blue-500 hover:to-indigo-500">
+            <Link href="/pricing" className="w-full sm:w-auto shrink-0">
+              <Button className="w-full sm:w-auto bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:from-blue-500 hover:to-indigo-500 min-h-[44px]">
                 View Plans
               </Button>
             </Link>

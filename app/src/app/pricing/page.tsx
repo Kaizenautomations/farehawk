@@ -136,10 +136,10 @@ export default function PricingPage() {
           <div className="absolute left-1/2 top-0 -translate-x-1/2 h-[500px] w-[800px] rounded-full bg-blue-600/5 blur-3xl" />
         </div>
 
-        <div className="relative mx-auto max-w-5xl px-4 pb-8 pt-24">
+        <div className="relative mx-auto max-w-5xl px-4 pb-8 pt-16 sm:pt-24">
           {/* Headline */}
           <div className="text-center">
-            <h1 className="text-5xl font-bold tracking-tight text-white">
+            <h1 className="text-3xl sm:text-5xl font-bold tracking-tight text-white">
               Simple, transparent pricing
             </h1>
             <p className="mt-4 text-lg text-zinc-400">
@@ -246,7 +246,7 @@ export default function PricingPage() {
                         : handleSubscribe(activePriceId)
                     }
                     disabled={loadingPlan === activePriceId}
-                    className={`mt-6 w-full rounded-lg px-4 py-2.5 text-sm font-semibold transition-all ${
+                    className={`mt-6 w-full rounded-lg px-4 py-3 min-h-[44px] text-sm font-semibold transition-all ${
                       isPopular
                         ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg shadow-blue-600/25 hover:from-blue-500 hover:to-indigo-500 hover:shadow-blue-600/40"
                         : isAmber
@@ -291,14 +291,14 @@ export default function PricingPage() {
           <h2 className="mb-8 text-center text-2xl font-bold text-white">
             Feature Comparison
           </h2>
-          <div className="overflow-hidden rounded-xl border border-zinc-800">
-            <table className="w-full">
+          <div className="overflow-x-auto rounded-xl border border-zinc-800 -mx-4 sm:mx-0">
+            <table className="w-full min-w-[480px]">
               <thead>
                 <tr className="border-b border-zinc-800 bg-zinc-900/80">
-                  <th className="px-6 py-4 text-left text-sm font-medium text-zinc-400">Feature</th>
-                  <th className="px-6 py-4 text-center text-sm font-medium text-zinc-400">Free</th>
-                  <th className="px-6 py-4 text-center text-sm font-medium text-blue-400">Pro</th>
-                  <th className="px-6 py-4 text-center text-sm font-medium text-amber-400">Premium</th>
+                  <th className="px-4 sm:px-6 py-4 text-left text-sm font-medium text-zinc-400">Feature</th>
+                  <th className="px-3 sm:px-6 py-4 text-center text-sm font-medium text-zinc-400">Free</th>
+                  <th className="px-3 sm:px-6 py-4 text-center text-sm font-medium text-blue-400">Pro</th>
+                  <th className="px-3 sm:px-6 py-4 text-center text-sm font-medium text-amber-400">Premium</th>
                 </tr>
               </thead>
               <tbody>
@@ -333,7 +333,7 @@ export default function PricingPage() {
               >
                 <button
                   onClick={() => setOpenFaq(openFaq === i ? null : i)}
-                  className="flex w-full items-center justify-between px-6 py-4 text-left"
+                  className="flex w-full items-center justify-between px-4 sm:px-6 py-4 min-h-[44px] text-left"
                 >
                   <span className="text-sm font-medium text-white">{faq.q}</span>
                   <svg

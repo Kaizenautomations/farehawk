@@ -103,9 +103,9 @@ export default function WatchesPage() {
   return (
     <div className="space-y-8">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <h1 className="text-3xl font-bold text-white">Price Watches</h1>
+      <div className="flex items-center justify-between gap-3">
+        <div className="flex items-center gap-3 min-w-0">
+          <h1 className="text-2xl sm:text-3xl font-bold text-white truncate">Price Watches</h1>
           {sub.tier && (
             <span className="inline-flex items-center rounded-full bg-zinc-800 px-3 py-1 text-xs font-medium text-zinc-300">
               {sub.watches_used}/{sub.watches_limit}
@@ -114,7 +114,7 @@ export default function WatchesPage() {
         </div>
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
           <DialogTrigger>
-            <span className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-blue-600 to-indigo-600 px-4 py-2.5 text-sm font-medium text-white shadow-lg shadow-blue-600/20 transition-all hover:from-blue-500 hover:to-indigo-500 hover:shadow-blue-600/30">
+            <span className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-blue-600 to-indigo-600 px-4 py-2.5 min-h-[44px] text-sm font-medium text-white shadow-lg shadow-blue-600/20 transition-all hover:from-blue-500 hover:to-indigo-500 hover:shadow-blue-600/30 shrink-0">
               <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
               </svg>
@@ -227,12 +227,12 @@ export default function WatchesPage() {
                   isAtTarget ? "border-l-2 border-l-emerald-500" : ""
                 }`}
               >
-                <CardContent className="p-5">
-                  <div className="flex items-start justify-between gap-4">
+                <CardContent className="p-4 sm:p-5">
+                  <div className="flex flex-col sm:flex-row items-start justify-between gap-4">
                     {/* Left: Route + dates */}
-                    <div className="flex-1 space-y-3">
-                      <div className="flex items-center gap-3">
-                        <h3 className="text-xl font-bold tracking-wide text-white">
+                    <div className="flex-1 min-w-0 space-y-3 w-full">
+                      <div className="flex items-center gap-3 flex-wrap">
+                        <h3 className="text-lg sm:text-xl font-bold tracking-wide text-white">
                           {watch.origin}{" "}
                           <span className="mx-1 text-zinc-500">→</span>{" "}
                           {watch.destination}
@@ -258,7 +258,7 @@ export default function WatchesPage() {
                       </p>
 
                       {/* Price row */}
-                      <div className="flex items-end gap-6">
+                      <div className="flex items-end gap-4 sm:gap-6 flex-wrap">
                         {watch.current_price != null && (
                           <div>
                             <p className="text-xs font-medium uppercase tracking-wider text-zinc-500">Current</p>
@@ -312,11 +312,11 @@ export default function WatchesPage() {
                     </div>
 
                     {/* Right: Action buttons */}
-                    <div className="flex items-center gap-1.5">
+                    <div className="flex items-center gap-1.5 self-end sm:self-start">
                       {/* Pause/Resume */}
                       <button
                         onClick={() => handleToggle(watch.id, watch.is_active)}
-                        className="flex h-9 w-9 items-center justify-center rounded-lg border border-zinc-700 bg-zinc-800 text-zinc-400 transition-colors hover:bg-zinc-700 hover:text-white"
+                        className="flex h-10 w-10 min-h-[44px] min-w-[44px] items-center justify-center rounded-lg border border-zinc-700 bg-zinc-800 text-zinc-400 transition-colors hover:bg-zinc-700 hover:text-white"
                         title={watch.is_active ? "Pause" : "Resume"}
                       >
                         {watch.is_active ? (
@@ -332,7 +332,7 @@ export default function WatchesPage() {
                       {/* Delete */}
                       <button
                         onClick={() => handleDelete(watch.id)}
-                        className="flex h-9 w-9 items-center justify-center rounded-lg border border-zinc-700 bg-zinc-800 text-zinc-400 transition-colors hover:border-red-800 hover:bg-red-950 hover:text-red-400"
+                        className="flex h-10 w-10 min-h-[44px] min-w-[44px] items-center justify-center rounded-lg border border-zinc-700 bg-zinc-800 text-zinc-400 transition-colors hover:border-red-800 hover:bg-red-950 hover:text-red-400"
                         title="Delete"
                       >
                         <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">

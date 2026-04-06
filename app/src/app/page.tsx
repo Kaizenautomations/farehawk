@@ -26,7 +26,7 @@ export default function LandingPage() {
           <div className="absolute right-1/4 top-40 h-96 w-96 rounded-full bg-[oklch(0.55_0.2_280)]/10 blur-[120px]" />
         </div>
 
-        <div className="relative z-10 mx-auto max-w-6xl px-4 pb-24 pt-32 text-center sm:pt-40 sm:pb-32">
+        <div className="relative z-10 mx-auto max-w-6xl px-4 pb-16 pt-20 text-center sm:pt-40 sm:pb-32 safe-x">
           <Badge
             variant="secondary"
             className="animate-fade-up mb-6 border-primary/20 bg-primary/10 px-4 py-1.5 text-sm text-primary"
@@ -34,31 +34,31 @@ export default function LandingPage() {
             Now in Early Access
           </Badge>
 
-          <h1 className="animate-fade-up-delay-1 mx-auto max-w-4xl text-5xl font-bold leading-[1.1] tracking-tight sm:text-7xl">
+          <h1 className="animate-fade-up-delay-1 mx-auto max-w-4xl text-3xl font-bold leading-[1.1] tracking-tight sm:text-5xl lg:text-7xl">
             Never Overpay for a{" "}
             <span className="text-gradient-brand">Flight Again</span>
           </h1>
 
-          <p className="animate-fade-up-delay-2 mx-auto mt-8 max-w-2xl text-lg leading-relaxed text-muted-foreground sm:text-xl">
+          <p className="animate-fade-up-delay-2 mx-auto mt-6 sm:mt-8 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg lg:text-xl">
             FareHawk tracks flight prices in real time so you don&apos;t have
             to. Search routes, visualize the cheapest dates, and get instant
             alerts when prices drop.
           </p>
 
-          <div className="animate-fade-up-delay-3 mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
+          <div className="animate-fade-up-delay-3 mt-8 sm:mt-10 flex flex-col items-center justify-center gap-3 sm:gap-4 sm:flex-row w-full sm:w-auto">
             <Link href="/signup">
               <Button
                 size="lg"
-                className="bg-gradient-brand px-8 text-base font-semibold text-white shadow-lg shadow-primary/25 transition-all hover:shadow-xl hover:shadow-primary/30 hover:brightness-110"
+                className="bg-gradient-brand px-8 text-base font-semibold text-white shadow-lg shadow-primary/25 transition-all hover:shadow-xl hover:shadow-primary/30 hover:brightness-110 min-h-[44px] w-full sm:w-auto"
               >
                 Join the Waitlist
               </Button>
             </Link>
-            <Link href="/pricing">
+            <Link href="/pricing" className="w-full sm:w-auto">
               <Button
                 size="lg"
                 variant="outline"
-                className="border-border/50 bg-white/5 px-8 text-base backdrop-blur-sm hover:bg-white/10"
+                className="border-border/50 bg-white/5 px-8 text-base backdrop-blur-sm hover:bg-white/10 min-h-[44px] w-full sm:w-auto"
               >
                 See Pricing
               </Button>
@@ -108,7 +108,7 @@ export default function LandingPage() {
                 />
               )}
               <div className="text-center">
-                <div className="text-4xl font-bold tracking-tight text-gradient-brand sm:text-5xl">
+                <div className="text-2xl sm:text-4xl font-bold tracking-tight text-gradient-brand lg:text-5xl">
                   {stat.value}
                 </div>
                 <div className="mt-2 text-sm font-medium uppercase tracking-wider text-muted-foreground">
@@ -351,7 +351,7 @@ export default function LandingPage() {
       {/* CTA — Waitlist */}
       <section className="py-24 sm:py-32">
         <div className="mx-auto max-w-4xl px-4">
-          <div className="relative overflow-hidden rounded-3xl bg-gradient-cta p-12 text-center shadow-2xl shadow-primary/10 sm:p-16 noise-overlay">
+          <div className="relative overflow-hidden rounded-2xl sm:rounded-3xl bg-gradient-cta p-8 text-center shadow-2xl shadow-primary/10 sm:p-12 lg:p-16 noise-overlay">
             <div className="pointer-events-none absolute inset-0 dot-grid opacity-30" />
             <div className="relative z-10">
               <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
@@ -361,20 +361,20 @@ export default function LandingPage() {
                 Join the waitlist and get early access to FareHawk. Free to
                 start, no credit card required.
               </p>
-              <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
-                <Link href="/signup">
+              <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:gap-4 sm:flex-row w-full sm:w-auto">
+                <Link href="/signup" className="w-full sm:w-auto">
                   <Button
                     size="lg"
-                    className="bg-gradient-brand px-8 text-base font-semibold text-white shadow-lg shadow-primary/25 transition-all hover:shadow-xl hover:shadow-primary/30 hover:brightness-110"
+                    className="bg-gradient-brand px-8 text-base font-semibold text-white shadow-lg shadow-primary/25 transition-all hover:shadow-xl hover:shadow-primary/30 hover:brightness-110 min-h-[44px] w-full sm:w-auto"
                   >
                     Join the Waitlist
                   </Button>
                 </Link>
-                <Link href="/search">
+                <Link href="/search" className="w-full sm:w-auto">
                   <Button
                     size="lg"
                     variant="outline"
-                    className="border-white/20 bg-white/5 px-8 text-base hover:bg-white/10"
+                    className="border-white/20 bg-white/5 px-8 text-base hover:bg-white/10 min-h-[44px] w-full sm:w-auto"
                   >
                     Try a Search
                   </Button>

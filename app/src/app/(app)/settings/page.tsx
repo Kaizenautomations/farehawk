@@ -85,10 +85,10 @@ export default function SettingsPage() {
   const isPremium = sub.tier === "premium";
 
   return (
-    <div className="mx-auto max-w-2xl space-y-8">
+    <div className="mx-auto max-w-2xl space-y-6 sm:space-y-8">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold text-white">Settings</h1>
+        <h1 className="text-2xl sm:text-3xl font-bold text-white">Settings</h1>
         <p className="mt-1 text-zinc-400">Manage your account and preferences.</p>
       </div>
 
@@ -173,7 +173,7 @@ export default function SettingsPage() {
         <Button
           onClick={handleSave}
           disabled={saving}
-          className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:from-blue-500 hover:to-indigo-500"
+          className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:from-blue-500 hover:to-indigo-500 min-h-[44px] w-full sm:w-auto"
         >
           {saving ? "Saving..." : saved ? "Saved!" : "Save Changes"}
         </Button>
@@ -199,7 +199,7 @@ export default function SettingsPage() {
             </span>
           </div>
 
-          <div className="grid grid-cols-3 gap-4 rounded-lg border border-zinc-800 bg-zinc-800/30 p-4">
+          <div className="grid grid-cols-3 gap-2 sm:gap-4 rounded-lg border border-zinc-800 bg-zinc-800/30 p-3 sm:p-4">
             <div className="text-center">
               <p className="text-xs font-medium uppercase tracking-wider text-zinc-500">Searches/day</p>
               <p className="mt-1 text-xl font-bold text-white">{sub.searches_limit}</p>
@@ -248,7 +248,7 @@ export default function SettingsPage() {
           </div>
         </CardHeader>
         <CardContent className="pt-5">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div>
               <p className="text-sm font-medium text-white">Delete account</p>
               <p className="text-xs text-zinc-500">
@@ -257,7 +257,7 @@ export default function SettingsPage() {
             </div>
             <Button
               variant="outline"
-              className="border-red-800 text-red-400 hover:bg-red-950 hover:text-red-300"
+              className="border-red-800 text-red-400 hover:bg-red-950 hover:text-red-300 min-h-[44px] w-full sm:w-auto shrink-0"
               onClick={() => {
                 if (confirm("Are you sure you want to delete your account? This cannot be undone.")) {
                   // TODO: implement account deletion

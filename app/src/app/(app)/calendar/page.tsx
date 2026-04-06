@@ -154,7 +154,7 @@ export default function CalendarPage() {
           <Button
             type="submit"
             disabled={loading}
-            className="h-11 px-8 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-semibold shadow-lg shadow-blue-500/20 transition-all duration-200 disabled:opacity-50"
+            className="h-11 min-h-[44px] px-8 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-semibold shadow-lg shadow-blue-500/20 transition-all duration-200 disabled:opacity-50"
           >
             {loading ? (
               <span className="flex items-center gap-2">
@@ -306,8 +306,8 @@ export default function CalendarPage() {
           </div>
 
           {/* Calendar grid */}
-          <div className="rounded-xl border border-slate-800 bg-slate-900/40 p-3 md:p-4 overflow-x-auto">
-            <div className="grid grid-cols-7 gap-1.5 min-w-[420px]">
+          <div className="rounded-xl border border-slate-800 bg-slate-900/40 p-2 sm:p-3 md:p-4 overflow-x-auto -mx-2 sm:mx-0">
+            <div className="grid grid-cols-7 gap-1 sm:gap-1.5 min-w-[320px] sm:min-w-[420px]">
               {/* Day headers */}
               {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((d) => (
                 <div
@@ -340,23 +340,23 @@ export default function CalendarPage() {
                     key={day}
                     onClick={() => dp && setSelectedDate(isSelected ? null : dateStr)}
                     className={`
-                      aspect-square rounded-lg border text-center flex flex-col items-center justify-center gap-0.5 transition-all duration-200 cursor-default
+                      aspect-square min-h-[44px] rounded-lg border text-center flex flex-col items-center justify-center gap-0.5 transition-all duration-200 cursor-default
                       ${
                         dp
-                          ? `${styles?.cell} cursor-pointer`
+                          ? `${styles?.cell} cursor-pointer active:scale-95`
                           : "border-transparent bg-slate-800/30"
                       }
                       ${isSelected ? "ring-2 ring-blue-500 ring-offset-1 ring-offset-slate-950 scale-105" : ""}
                     `}
                   >
                     <span
-                      className={`text-xs ${dp ? "text-slate-300" : "text-slate-600"}`}
+                      className={`text-[10px] sm:text-xs ${dp ? "text-slate-300" : "text-slate-600"}`}
                     >
                       {day}
                     </span>
                     {dp && (
                       <span
-                        className={`text-sm font-bold ${styles?.text}`}
+                        className={`text-xs sm:text-sm font-bold ${styles?.text}`}
                       >
                         ${dp.price.toFixed(0)}
                       </span>

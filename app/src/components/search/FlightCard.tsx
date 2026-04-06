@@ -85,7 +85,7 @@ export function FlightCard({ flight, onWatch, style }: Props) {
           </div>
 
           {/* Center: Airline, duration, stops */}
-          <div className="flex md:flex-col items-center md:items-center gap-2 md:gap-1.5 md:min-w-[140px] md:px-4 md:border-l md:border-r md:border-slate-800">
+          <div className="flex flex-wrap md:flex-col items-center md:items-center gap-2 md:gap-1.5 md:min-w-[140px] md:px-4 md:border-l md:border-r md:border-slate-800 border-t md:border-t-0 border-slate-800/50 pt-3 md:pt-0">
             <span className="text-sm font-medium text-slate-300">
               {firstLeg?.airline || "Unknown"}
             </span>
@@ -104,7 +104,7 @@ export function FlightCard({ flight, onWatch, style }: Props) {
           </div>
 
           {/* Right: Price & actions */}
-          <div className="flex md:flex-col items-center md:items-end gap-3 md:gap-2 md:min-w-[130px]">
+          <div className="flex md:flex-col items-center justify-between md:items-end gap-3 md:gap-2 md:min-w-[130px] w-full md:w-auto border-t md:border-t-0 border-slate-800/50 pt-3 md:pt-0">
             <div className="flex items-baseline gap-1">
               <span className="text-2xl font-bold text-white">
                 ${flight.price.toFixed(0)}
@@ -119,7 +119,7 @@ export function FlightCard({ flight, onWatch, style }: Props) {
                   variant="outline"
                   size="sm"
                   onClick={onWatch}
-                  className="border-slate-700 text-slate-300 hover:bg-slate-800 hover:text-white hover:border-slate-600 text-xs h-8"
+                  className="border-slate-700 text-slate-300 hover:bg-slate-800 hover:text-white hover:border-slate-600 text-xs h-9 min-h-[44px] min-w-[44px]"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -146,7 +146,7 @@ export function FlightCard({ flight, onWatch, style }: Props) {
               >
                 <Button
                   size="sm"
-                  className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs h-8 shadow-md shadow-blue-500/15"
+                  className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs h-9 min-h-[44px] min-w-[44px] shadow-md shadow-blue-500/15"
                 >
                   Book
                   <svg

@@ -79,7 +79,7 @@ export function SearchForm({ onSearch, loading }: Props) {
           <button
             type="button"
             onClick={swapAirports}
-            className="h-10 w-10 rounded-full border border-slate-700 bg-slate-800 hover:bg-slate-700 hover:border-blue-500/50 transition-all duration-200 flex items-center justify-center text-slate-400 hover:text-blue-400 shrink-0"
+            className="h-11 w-11 min-h-[44px] min-w-[44px] rounded-full border border-slate-700 bg-slate-800 hover:bg-slate-700 hover:border-blue-500/50 transition-all duration-200 flex items-center justify-center text-slate-400 hover:text-blue-400 shrink-0"
             aria-label="Swap airports"
           >
             <svg
@@ -149,7 +149,7 @@ export function SearchForm({ onSearch, loading }: Props) {
         <Button
           type="submit"
           disabled={loading}
-          className="h-11 px-8 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-semibold shadow-lg shadow-blue-500/20 transition-all duration-200 disabled:opacity-50 md:min-w-[160px]"
+          className="h-11 min-h-[44px] px-8 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-semibold shadow-lg shadow-blue-500/20 transition-all duration-200 disabled:opacity-50 md:min-w-[160px]"
         >
           {loading ? (
             <span className="flex items-center gap-2">
@@ -202,7 +202,7 @@ export function SearchForm({ onSearch, loading }: Props) {
         <button
           type="button"
           onClick={() => setFiltersOpen(!filtersOpen)}
-          className="flex items-center gap-1.5 text-sm text-slate-400 hover:text-slate-300 transition-colors"
+          className="flex items-center gap-1.5 text-sm text-slate-400 hover:text-slate-300 transition-colors min-h-[44px] py-2"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"

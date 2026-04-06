@@ -110,7 +110,7 @@ export function AirportAutocomplete({
             setOpen(true);
             setTimeout(() => inputRef.current?.focus(), 50);
           }}
-          className="flex h-11 w-full items-center gap-2 rounded-lg border border-slate-700 bg-slate-900/50 px-3 text-left text-sm hover:bg-slate-800 hover:border-slate-600 transition-colors"
+          className="flex h-11 min-h-[44px] w-full items-center gap-2 rounded-lg border border-slate-700 bg-slate-900/50 px-3 text-left text-sm hover:bg-slate-800 hover:border-slate-600 transition-colors"
         >
           {selected ? (
             <>
@@ -145,7 +145,7 @@ export function AirportAutocomplete({
 
       {/* Dropdown */}
       {open && (
-        <div className="absolute z-50 mt-1 w-full max-h-[280px] overflow-y-auto rounded-lg border border-slate-700 bg-slate-900 shadow-xl shadow-black/30">
+        <div className="absolute z-50 mt-1 w-full max-h-[240px] sm:max-h-[280px] overflow-y-auto rounded-lg border border-slate-700 bg-slate-900 shadow-xl shadow-black/30 overscroll-contain">
           {filtered.length === 0 ? (
             <div className="px-3 py-6 text-center text-sm text-slate-500">
               No airports found
@@ -156,7 +156,7 @@ export function AirportAutocomplete({
                 key={airport.code}
                 type="button"
                 onClick={() => handleSelect(airport.code)}
-                className="flex w-full items-center gap-2.5 px-3 py-2.5 text-left text-sm hover:bg-slate-800 transition-colors cursor-pointer"
+                className="flex w-full items-center gap-2.5 px-3 py-3 min-h-[44px] text-left text-sm hover:bg-slate-800 active:bg-slate-700 transition-colors cursor-pointer"
               >
                 <span className="text-base shrink-0">
                   {getFlag(airport.country)}

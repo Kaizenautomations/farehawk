@@ -67,13 +67,13 @@ export function Navbar() {
 
   return (
     <nav
-      className={`sticky top-0 z-50 bg-background/80 backdrop-blur-lg border-b transition-all duration-300 ${
+      className={`sticky top-0 z-50 bg-background/80 backdrop-blur-lg border-b transition-all duration-300 safe-top ${
         scrolled
           ? "border-primary/20 shadow-[0_1px_12px_0_oklch(0.67_0.22_262_/_0.12)]"
           : "border-white/10"
       }`}
     >
-      <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4 lg:px-6">
+      <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4 lg:px-6 safe-x">
         {/* Logo */}
         <Link
           href={user ? "/dashboard" : "/"}
@@ -182,7 +182,7 @@ export function Navbar() {
                             key={link.href}
                             href={link.href}
                             onClick={() => setMobileOpen(false)}
-                            className={`flex items-center gap-2.5 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
+                            className={`flex items-center gap-2.5 rounded-lg px-3 py-3 min-h-[44px] text-sm font-medium transition-colors ${
                               isActive
                                 ? "bg-blue-500/15 text-blue-400"
                                 : "text-muted-foreground hover:text-foreground hover:bg-white/5"
@@ -197,7 +197,7 @@ export function Navbar() {
                       <Link
                         href="/dashboard"
                         onClick={() => setMobileOpen(false)}
-                        className="flex items-center gap-2.5 rounded-lg px-3 py-2.5 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-white/5 transition-colors"
+                        className="flex items-center gap-2.5 rounded-lg px-3 py-3 min-h-[44px] text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-white/5 transition-colors"
                       >
                         <LayoutDashboard className="size-4" />
                         Dashboard
@@ -205,7 +205,7 @@ export function Navbar() {
                       <Link
                         href="/settings"
                         onClick={() => setMobileOpen(false)}
-                        className="flex items-center gap-2.5 rounded-lg px-3 py-2.5 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-white/5 transition-colors"
+                        className="flex items-center gap-2.5 rounded-lg px-3 py-3 min-h-[44px] text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-white/5 transition-colors"
                       >
                         <Settings className="size-4" />
                         Settings
@@ -217,7 +217,7 @@ export function Navbar() {
                           setMobileOpen(false);
                           handleLogout();
                         }}
-                        className="flex items-center gap-2.5 rounded-lg px-3 py-2.5 text-sm font-medium text-red-400 hover:bg-red-500/10 transition-colors"
+                        className="flex items-center gap-2.5 rounded-lg px-3 py-3 min-h-[44px] text-sm font-medium text-red-400 hover:bg-red-500/10 transition-colors"
                       >
                         <LogOut className="size-4" />
                         Log out
