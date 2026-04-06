@@ -93,7 +93,7 @@ export default function LandingPage() {
       <section className="border-y border-border/50 bg-card/50 backdrop-blur-sm">
         <div className="mx-auto flex max-w-5xl flex-col items-center justify-center gap-8 px-4 py-10 sm:flex-row sm:gap-16">
           {[
-            { value: "450+", label: "Airports Covered" },
+            { value: "2,800+", label: "Airports Worldwide" },
             { value: "Real-Time", label: "Google Flights Data" },
             { value: "6hr", label: "Price Check Intervals" },
           ].map((stat, i) => (
