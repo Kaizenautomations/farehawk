@@ -33,7 +33,15 @@ export function NearbyAirportComparison({
   const nearby = NEARBY_AIRPORTS[origin];
   const hasNearby = nearby && nearby.length > 0;
 
-  // Auto-expand on desktop
+  // Build a lookup for city names from the nearby airports data
+  const cityLookup: Record<string, string> = {};
+  if (nearby) {
+    nearby.forEach((n) => {
+      cityLookup[n.code] = n.city;
+    });
+  }
+  cityLookup[origin] = "Your airport";
+
   useEffect(() => {
     if (typeof window !== "undefined" && window.innerWidth >= 1024) {
       setExpanded(true);
@@ -60,10 +68,14 @@ export function NearbyAirportComparison({
         });
         if (res.ok && !cancelled) {
           const json = (await res.json()) as NearbyCompareResponse;
-          setData(json.comparisons);
+          // Filter out the home airport — only show alternatives
+          const alternatives = json.comparisons.filter(
+            (c) => !c.is_home_airport
+          );
+          setData(alternatives);
         }
       } catch {
-        // silently fail — this is a nice-to-have
+        // silently fail
       } finally {
         if (!cancelled) setLoading(false);
       }
@@ -96,7 +108,6 @@ export function NearbyAirportComparison({
 
   return (
     <div className="rounded-xl border border-slate-800 bg-slate-900/60 backdrop-blur-sm overflow-hidden">
-      {/* Header / toggle */}
       <button
         type="button"
         onClick={() => setExpanded(!expanded)}
@@ -107,7 +118,6 @@ export function NearbyAirportComparison({
           Compare nearby airports
         </span>
         <svg
-          xmlns="http://www.w3.org/2000/svg"
           width="14"
           height="14"
           viewBox="0 0 24 24"
@@ -116,9 +126,7 @@ export function NearbyAirportComparison({
           strokeWidth="2"
           strokeLinecap="round"
           strokeLinejoin="round"
-          className={`ml-auto text-slate-500 transition-transform duration-200 ${
-            expanded ? "rotate-180" : ""
-          }`}
+          className={`ml-auto text-slate-500 transition-transform duration-200 ${expanded ? "rotate-180" : ""}`}
         >
           <polyline points="6 9 12 15 18 9" />
         </svg>
@@ -129,10 +137,7 @@ export function NearbyAirportComparison({
           {loading && (
             <div className="space-y-2">
               {nearby.map((n) => (
-                <div
-                  key={n.code}
-                  className="flex items-center gap-3 animate-pulse"
-                >
+                <div key={n.code} className="flex items-center gap-3 animate-pulse">
                   <div className="h-4 w-24 rounded bg-slate-700" />
                   <div className="h-4 w-32 rounded bg-slate-700 ml-auto" />
                 </div>
@@ -143,9 +148,11 @@ export function NearbyAirportComparison({
           {!loading && data && data.length > 0 && (
             <div className="space-y-2">
               {data.map((comp) => {
-                const savings = currentPrice - (comp.cheapest_price ?? currentPrice);
+                const savings = currentPrice - comp.price;
                 const isCheaper = savings > 0;
                 const isMoreExpensive = savings < 0;
+                const cityName =
+                  cityLookup[comp.origin_code] || comp.origin_code;
 
                 return (
                   <div
@@ -154,16 +161,14 @@ export function NearbyAirportComparison({
                   >
                     <div className="flex items-center gap-2 min-w-0">
                       <span className="text-slate-400 shrink-0">
-                        {formatDrive(comp.drive_minutes)} to
+                        {formatDrive(comp.drive_time_minutes)} to
                       </span>
                       <span className="text-white font-medium">
-                        {comp.origin_city} ({comp.origin_code})
+                        {cityName} ({comp.origin_code})
                       </span>
                     </div>
                     <div className="flex items-center gap-2 shrink-0">
-                      {comp.cheapest_price === null ? (
-                        <span className="text-slate-500">No flights</span>
-                      ) : isCheaper ? (
+                      {isCheaper ? (
                         <span className="text-emerald-400 font-medium">
                           Save ${Math.round(savings)}
                         </span>
@@ -174,27 +179,13 @@ export function NearbyAirportComparison({
                       ) : (
                         <span className="text-slate-400">Same price</span>
                       )}
-                      {comp.cheapest_price !== null && isCheaper && (
+                      {isCheaper && (
                         <button
                           type="button"
                           onClick={() => handleSearchFrom(comp.origin_code)}
                           className="text-xs font-medium text-blue-400 hover:text-blue-300 transition-colors min-h-[44px] flex items-center gap-1 px-1"
                         >
-                          Search from {comp.origin_code}
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="12"
-                            height="12"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          >
-                            <path d="M5 12h14" />
-                            <path d="m12 5 7 7-7 7" />
-                          </svg>
+                          Search →
                         </button>
                       )}
                     </div>
@@ -205,7 +196,9 @@ export function NearbyAirportComparison({
           )}
 
           {!loading && data && data.length === 0 && (
-            <p className="text-sm text-slate-500">No nearby airports to compare</p>
+            <p className="text-sm text-slate-500">
+              No nearby airport prices available right now
+            </p>
           )}
         </div>
       )}

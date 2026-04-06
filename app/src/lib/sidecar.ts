@@ -80,19 +80,19 @@ export function searchDates(params: SearchDatesParams) {
 // Explore Anywhere
 export interface ExploreDestination {
   destination_code: string;
-  destination_city: string;
-  destination_country: string;
+  city: string;
+  country: string;
   cheapest_price: number;
   cheapest_date: string;
-  return_date: string | null;
   currency: string;
 }
 
 export interface ExploreAnywhereResponse {
   origin: string;
-  results: ExploreDestination[];
-  searched_count: number;
-  failed_count: number;
+  destinations: ExploreDestination[];
+  total_searched: number;
+  from_date: string;
+  to_date: string;
 }
 
 export interface ExploreAnywhereParams {
@@ -113,10 +113,10 @@ export function exploreAnywhere(params: ExploreAnywhereParams) {
 // Nearby comparison
 export interface AirportComparison {
   origin_code: string;
-  origin_city: string;
-  cheapest_price: number | null;
+  price: number;
   currency: string;
-  drive_minutes: number;
+  drive_time_minutes: number;
+  is_home_airport: boolean;
   savings: number;
 }
 

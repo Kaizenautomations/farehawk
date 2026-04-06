@@ -130,7 +130,7 @@ export default function ExplorePage() {
       }
 
       const response = data as ExploreAnywhereResponse;
-      setResults(response.results);
+      setResults(response.destinations || []);
     } catch {
       setError("Something went wrong. Please try again.");
       setRetryable(true);
@@ -145,9 +145,7 @@ export default function ExplorePage() {
       destination: dest.destination_code,
       date: dest.cheapest_date,
     });
-    if (dest.return_date) {
-      params.set("return_date", dest.return_date);
-    }
+    // No return_date in one-way explore results
     router.push(`/search?${params.toString()}`);
   }
 
@@ -517,11 +515,11 @@ export default function ExplorePage() {
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex items-center gap-2 min-w-0">
                     <span className="text-lg shrink-0">
-                      {getFlag(dest.destination_country)}
+                      {getFlag(dest.country)}
                     </span>
                     <div className="min-w-0">
                       <h3 className="text-white font-semibold truncate">
-                        {dest.destination_city}
+                        {dest.city}
                       </h3>
                       <span className="text-xs text-slate-500">
                         {dest.destination_code}
@@ -545,7 +543,7 @@ export default function ExplorePage() {
                 <div className="mt-3 flex items-center justify-between">
                   <span className="text-xs text-slate-500">
                     {formatDate(dest.cheapest_date)}
-                    {dest.return_date ? ` - ${formatDate(dest.return_date)}` : ""}
+                    {""}
                   </span>
                   <button
                     type="button"
