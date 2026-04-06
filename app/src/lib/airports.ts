@@ -31,6 +31,10 @@ export const POPULAR_AIRPORTS: Airport[] = [
   { code: "YQG", city: "Windsor", name: "Windsor Intl", country: "CA" },
   { code: "YHM", city: "Hamilton", name: "John C. Munro", country: "CA" },
   { code: "YXX", city: "Abbotsford", name: "Abbotsford Intl", country: "CA" },
+  { code: "YQT", city: "Thunder Bay", name: "Thunder Bay Intl", country: "CA" },
+  { code: "YXS", city: "Prince George", name: "Prince George", country: "CA" },
+  { code: "YFC", city: "Fredericton", name: "Fredericton Intl", country: "CA" },
+  { code: "YYG", city: "Charlottetown", name: "Charlottetown", country: "CA" },
 
   // ============================================================
   // UNITED STATES — Major
@@ -107,6 +111,14 @@ export const POPULAR_AIRPORTS: Airport[] = [
   { code: "KOA", city: "Kona", name: "Ellison Onizuka Kona", country: "US" },
   { code: "LIH", city: "Kauai", name: "Lihue Airport", country: "US" },
 
+  // US — Premium / Resort
+  { code: "ASE", city: "Aspen", name: "Aspen/Pitkin County", country: "US" },
+  { code: "JAC", city: "Jackson Hole", name: "Jackson Hole", country: "US" },
+  { code: "PSP", city: "Palm Springs", name: "Palm Springs Intl", country: "US" },
+  { code: "EYW", city: "Key West", name: "Key West Intl", country: "US" },
+  { code: "MVY", city: "Martha's Vineyard", name: "Martha's Vineyard", country: "US" },
+  { code: "FAI", city: "Fairbanks", name: "Fairbanks Intl", country: "US" },
+
   // ============================================================
   // MEXICO & CENTRAL AMERICA
   // ============================================================
@@ -126,6 +138,9 @@ export const POPULAR_AIRPORTS: Airport[] = [
   { code: "SAL", city: "San Salvador", name: "Oscar Romero", country: "SV" },
   { code: "GUA", city: "Guatemala City", name: "La Aurora Intl", country: "GT" },
   { code: "BZE", city: "Belize City", name: "Philip Goldson", country: "BZ" },
+  { code: "CZM", city: "Cozumel", name: "Cozumel Intl", country: "MX" },
+  { code: "HUX", city: "Huatulco", name: "Bahias de Huatulco", country: "MX" },
+  { code: "ZIH", city: "Ixtapa", name: "Ixtapa-Zihuatanejo", country: "MX" },
 
   // ============================================================
   // CARIBBEAN
@@ -150,6 +165,10 @@ export const POPULAR_AIRPORTS: Airport[] = [
   { code: "UVF", city: "St. Lucia", name: "Hewanorra Intl", country: "LC" },
   { code: "TAB", city: "Tobago", name: "A.N.R. Robinson", country: "TT" },
   { code: "SKB", city: "St. Kitts", name: "Robert Bradshaw", country: "KN" },
+  { code: "PLS", city: "Providenciales", name: "Providenciales Intl", country: "TC" },
+  { code: "BDA", city: "Bermuda", name: "L.F. Wade Intl", country: "BM" },
+  { code: "ANU", city: "Antigua", name: "V.C. Bird Intl", country: "AG" },
+  { code: "GND", city: "Grenada", name: "Maurice Bishop", country: "GD" },
 
   // ============================================================
   // EUROPE — UK & Ireland
@@ -167,6 +186,8 @@ export const POPULAR_AIRPORTS: Airport[] = [
   { code: "LPL", city: "Liverpool", name: "John Lennon", country: "GB" },
   { code: "BFS", city: "Belfast", name: "Belfast Intl", country: "GB" },
   { code: "ABZ", city: "Aberdeen", name: "Aberdeen", country: "GB" },
+  { code: "LCY", city: "London", name: "London City", country: "GB" },
+  { code: "CWL", city: "Cardiff", name: "Cardiff Airport", country: "GB" },
   { code: "DUB", city: "Dublin", name: "Dublin Airport", country: "IE" },
   { code: "SNN", city: "Shannon", name: "Shannon Airport", country: "IE" },
   { code: "ORK", city: "Cork", name: "Cork Airport", country: "IE" },
@@ -322,6 +343,9 @@ export const POPULAR_AIRPORTS: Airport[] = [
   { code: "BOJ", city: "Burgas", name: "Burgas Airport", country: "BG" },
   { code: "BTS", city: "Bratislava", name: "M. R. Stefanik", country: "SK" },
   { code: "LJU", city: "Ljubljana", name: "Joze Pucnik", country: "SI" },
+  { code: "SVO", city: "Moscow", name: "Sheremetyevo", country: "RU" },
+  { code: "DME", city: "Moscow", name: "Domodedovo", country: "RU" },
+  { code: "LED", city: "St. Petersburg", name: "Pulkovo", country: "RU" },
 
   // ============================================================
   // EUROPE — Balkans

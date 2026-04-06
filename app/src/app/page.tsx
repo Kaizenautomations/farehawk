@@ -40,9 +40,9 @@ export default function LandingPage() {
           </h1>
 
           <p className="animate-fade-up-delay-2 mx-auto mt-6 sm:mt-8 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg lg:text-xl">
-            FareHawk tracks flight prices in real time so you don&apos;t have
-            to. Search routes, visualize the cheapest dates, and get instant
-            alerts when prices drop.
+            The smart flight tracker that finds deals Google can&apos;t. AI-powered
+            search, budget-based destination discovery, nearby airport savings,
+            and automated price alerts — all in one place.
           </p>
 
           <div className="animate-fade-up-delay-3 mt-8 sm:mt-10 flex flex-col items-center justify-center gap-3 sm:gap-4 sm:flex-row w-full sm:w-auto">
@@ -93,7 +93,7 @@ export default function LandingPage() {
       <section className="border-y border-border/50 bg-card/50 backdrop-blur-sm">
         <div className="mx-auto flex max-w-5xl flex-col items-center justify-center gap-8 px-4 py-10 sm:flex-row sm:gap-16">
           {[
-            { value: "170+", label: "Airports Covered" },
+            { value: "450+", label: "Airports Covered" },
             { value: "Real-Time", label: "Google Flights Data" },
             { value: "6hr", label: "Price Check Intervals" },
           ].map((stat, i) => (
@@ -139,7 +139,7 @@ export default function LandingPage() {
             </p>
           </div>
 
-          <div className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {[
               {
                 icon: (
@@ -250,6 +250,42 @@ export default function LandingPage() {
                 title: "Weekend Getaways",
                 desc: "Find cheap Friday-to-Sunday trips from your airport. Perfect for spontaneous weekend adventures.",
               },
+              {
+                icon: (
+                  <svg
+                    className="h-6 w-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <polyline points="22 7 13.5 15.5 8.5 10.5 2 17" />
+                    <polyline points="16 7 22 7 22 13" />
+                  </svg>
+                ),
+                title: "Deal Score on Every Flight",
+                desc: "Every result gets a 1-10 deal score so you know instantly if you're getting a good price — no guesswork, no second-guessing.",
+              },
+              {
+                icon: (
+                  <svg
+                    className="h-6 w-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
+                    <circle cx="12" cy="10" r="3" />
+                  </svg>
+                ),
+                title: "Nearby Airport Savings",
+                desc: "Automatically checks if flying from a nearby airport could save you money. Drive 2 hours, save $200.",
+              },
             ].map((feature) => (
               <Card
                 key={feature.title}
@@ -272,8 +308,8 @@ export default function LandingPage() {
 
       {/* Why FareHawk */}
       <section className="border-y border-border/50 bg-card/30 py-16 sm:py-24">
-        <div className="mx-auto max-w-3xl px-4">
-          <div className="text-center mb-10">
+        <div className="mx-auto max-w-5xl px-4">
+          <div className="text-center mb-12">
             <Badge
               variant="secondary"
               className="mb-4 border-primary/20 bg-primary/10 text-primary"
@@ -288,24 +324,73 @@ export default function LandingPage() {
             </p>
           </div>
 
-          <div className="grid gap-3 sm:grid-cols-2">
+          <div className="grid gap-6 sm:grid-cols-3">
             {[
-              "AI-powered travel recommendations",
-              "Explore any destination on a budget",
-              "Nearby airport price comparison",
-              "Weekend getaway finder",
-              "Deal score on every flight",
-              "Automated price drop alerts",
-            ].map((item) => (
-              <div
-                key={item}
-                className="flex items-center gap-3 rounded-lg border border-border/50 bg-card/50 px-4 py-3"
+              {
+                icon: (
+                  <svg
+                    className="h-7 w-7"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+                  </svg>
+                ),
+                title: "Find Deals Faster",
+                desc: "Stop manually searching dates and routes. Explore tells you everywhere you can fly on your budget. Calendar shows the cheapest dates at a glance. Weekend Getaways finds last-minute trips automatically.",
+              },
+              {
+                icon: (
+                  <svg
+                    className="h-7 w-7"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z" />
+                    <path d="M12 6v6l4 2" />
+                  </svg>
+                ),
+                title: "Know If It's Actually Cheap",
+                desc: "Every flight gets a deal score from 1-10. Nearby airport comparison shows if you could save by driving. Price watches track routes and alert you when prices drop.",
+              },
+              {
+                icon: (
+                  <svg
+                    className="h-7 w-7"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M9.663 17h4.674M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                  </svg>
+                ),
+                title: "Get Personalized Advice",
+                desc: "Our AI Travel Advisor learns what you're looking for and suggests routes, dates, and destinations you hadn't considered. Like having a travel agent in your pocket.",
+              },
+            ].map((card) => (
+              <Card
+                key={card.title}
+                className="border-border/50 bg-card/50 backdrop-blur-sm p-6"
               >
-                <span className="flex items-center justify-center size-5 rounded-full bg-blue-500/15 text-blue-400 text-xs shrink-0">
-                  &#10003;
-                </span>
-                <span className="text-sm text-slate-300">{item}</span>
-              </div>
+                <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 text-primary mb-4">
+                  {card.icon}
+                </div>
+                <h3 className="text-lg font-semibold mb-3">{card.title}</h3>
+                <p className="text-sm leading-relaxed text-muted-foreground">
+                  {card.desc}
+                </p>
+              </Card>
             ))}
           </div>
         </div>

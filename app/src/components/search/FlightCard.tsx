@@ -5,6 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { DealScoreBadge } from "@/components/search/DealScoreBadge";
+import { getAirlineName } from "@/lib/airlines";
 
 interface Props {
   flight: FlightResult;
@@ -88,7 +89,10 @@ export function FlightCard({ flight, onWatch, style }: Props) {
           {/* Center: Airline, duration, stops */}
           <div className="flex flex-wrap md:flex-col items-center md:items-center gap-2 md:gap-1.5 md:min-w-[140px] md:px-4 md:border-l md:border-r md:border-slate-800 border-t md:border-t-0 border-slate-800/50 pt-3 md:pt-0">
             <span className="text-sm font-medium text-slate-300">
-              {firstLeg?.airline || "Unknown"}
+              {getAirlineName(firstLeg?.airline_code || firstLeg?.airline || "")}
+              <span className="ml-1.5 text-xs text-slate-500">
+                {firstLeg?.airline_code || firstLeg?.airline || ""}
+              </span>
             </span>
             <span className="text-xs text-slate-500">
               {formatDuration(flight.duration_minutes)}

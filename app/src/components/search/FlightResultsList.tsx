@@ -1,8 +1,39 @@
 "use client";
 
+import { useState, useMemo } from "react";
 import type { FlightResult } from "@/types/flight";
 import { FlightCard } from "./FlightCard";
 import { Skeleton } from "@/components/ui/skeleton";
+import { getDealScore } from "@/components/search/DealScoreBadge";
+
+type SortOption = "price-asc" | "price-desc" | "duration" | "stops" | "deal-score";
+
+const SORT_OPTIONS: { value: SortOption; label: string }[] = [
+  { value: "price-asc", label: "Price: Low \u2192 High" },
+  { value: "price-desc", label: "Price: High \u2192 Low" },
+  { value: "duration", label: "Duration: Shortest" },
+  { value: "stops", label: "Stops: Fewest" },
+  { value: "deal-score", label: "Deal Score: Best" },
+];
+
+function sortFlights(flights: FlightResult[], sort: SortOption): FlightResult[] {
+  const sorted = [...flights];
+  switch (sort) {
+    case "price-asc":
+      return sorted.sort((a, b) => a.price - b.price);
+    case "price-desc":
+      return sorted.sort((a, b) => b.price - a.price);
+    case "duration":
+      return sorted.sort((a, b) => a.duration_minutes - b.duration_minutes);
+    case "stops":
+      return sorted.sort((a, b) => a.stops - b.stops);
+    case "deal-score":
+      // Higher deal score = better deal, so sort descending
+      return sorted.sort((a, b) => getDealScore(b.price).score - getDealScore(a.price).score || a.price - b.price);
+    default:
+      return sorted;
+  }
+}
 
 interface Props {
   results: FlightResult[];
@@ -11,6 +42,8 @@ interface Props {
 }
 
 export function FlightResultsList({ results, loading, onWatch }: Props) {
+  const [sortBy, setSortBy] = useState<SortOption>("price-asc");
+  const sortedResults = useMemo(() => sortFlights(results, sortBy), [results, sortBy]);
   if (loading) {
     return (
       <div className="space-y-3">
@@ -97,9 +130,20 @@ export function FlightResultsList({ results, loading, onWatch }: Props) {
           <span className="text-white font-semibold">{results.length}</span>{" "}
           flight{results.length !== 1 ? "s" : ""} found
         </p>
+        <select
+          value={sortBy}
+          onChange={(e) => setSortBy(e.target.value as SortOption)}
+          className="rounded-lg border border-slate-700 bg-slate-900/80 text-sm text-slate-300 px-3 py-1.5 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/20 hover:border-slate-600 transition-colors cursor-pointer"
+        >
+          {SORT_OPTIONS.map((opt) => (
+            <option key={opt.value} value={opt.value}>
+              {opt.label}
+            </option>
+          ))}
+        </select>
       </div>
       <div className="space-y-3">
-        {results.map((flight, i) => (
+        {sortedResults.map((flight, i) => (
           <FlightCard
             key={i}
             flight={flight}

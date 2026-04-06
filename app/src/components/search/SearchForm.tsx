@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -23,12 +23,22 @@ interface SearchParams {
   max_stops: number | null;
 }
 
+interface InitialValues {
+  origin?: string;
+  destination?: string;
+  departure_date?: string;
+  return_date?: string;
+  cabin_class?: string;
+  max_stops?: string;
+}
+
 interface Props {
   onSearch: (params: SearchParams) => void;
   loading?: boolean;
+  initialValues?: InitialValues;
 }
 
-export function SearchForm({ onSearch, loading }: Props) {
+export function SearchForm({ onSearch, loading, initialValues }: Props) {
   const [origin, setOrigin] = useState("");
   const [destination, setDestination] = useState("");
   const [departureDate, setDepartureDate] = useState("");
@@ -36,6 +46,41 @@ export function SearchForm({ onSearch, loading }: Props) {
   const [cabinClass, setCabinClass] = useState("economy");
   const [maxStops, setMaxStops] = useState("");
   const [filtersOpen, setFiltersOpen] = useState(false);
+  const autoSubmitRef = useRef(false);
+
+  // Populate form from initialValues (e.g. URL params from explore page)
+  useEffect(() => {
+    if (!initialValues) return;
+    if (initialValues.origin) setOrigin(initialValues.origin);
+    if (initialValues.destination) setDestination(initialValues.destination);
+    if (initialValues.departure_date) setDepartureDate(initialValues.departure_date);
+    if (initialValues.return_date) setReturnDate(initialValues.return_date);
+    if (initialValues.cabin_class) setCabinClass(initialValues.cabin_class);
+    if (initialValues.max_stops) setMaxStops(initialValues.max_stops);
+  }, [initialValues]);
+
+  // Auto-submit when initialValues provide enough data
+  useEffect(() => {
+    if (autoSubmitRef.current) return;
+    if (
+      initialValues?.origin &&
+      initialValues?.destination &&
+      initialValues?.departure_date
+    ) {
+      autoSubmitRef.current = true;
+      const timer = setTimeout(() => {
+        onSearch({
+          origin: initialValues.origin!,
+          destination: initialValues.destination!,
+          departure_date: initialValues.departure_date!,
+          return_date: initialValues.return_date || undefined,
+          cabin_class: initialValues.cabin_class || "economy",
+          max_stops: initialValues.max_stops ? parseInt(initialValues.max_stops) : null,
+        });
+      }, 100);
+      return () => clearTimeout(timer);
+    }
+  }, [initialValues, onSearch]);
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();

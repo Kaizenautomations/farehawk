@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo, useCallback, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import { SearchForm } from "@/components/search/SearchForm";
 import { FlightResultsList } from "@/components/search/FlightResultsList";
 import { NearbyAirportComparison } from "@/components/search/NearbyAirportComparison";
@@ -9,6 +10,25 @@ import { useSubscription } from "@/hooks/useSubscription";
 import type { FlightResult } from "@/types/flight";
 
 export default function SearchPage() {
+  return (
+    <Suspense fallback={<div className="space-y-6"><div className="h-8 w-48 animate-pulse rounded bg-slate-800" /><div className="h-40 animate-pulse rounded-2xl bg-slate-900/60" /></div>}>
+      <SearchPageInner />
+    </Suspense>
+  );
+}
+
+function SearchPageInner() {
+  const searchParams = useSearchParams();
+
+  // Read URL params from explore page handoff
+  const initialValues = useMemo(() => {
+    const origin = searchParams.get("origin") || undefined;
+    const destination = searchParams.get("destination") || undefined;
+    const departure_date = searchParams.get("date") || undefined;
+    const return_date = searchParams.get("return_date") || undefined;
+    if (!origin && !destination && !departure_date) return undefined;
+    return { origin, destination, departure_date, return_date };
+  }, [searchParams]);
   const [results, setResults] = useState<FlightResult[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -17,14 +37,14 @@ export default function SearchPage() {
   const [lastParams, setLastParams] = useState<Record<string, unknown> | null>(null);
   const sub = useSubscription();
 
-  async function handleSearch(params: {
+  const handleSearch = useCallback(async (params: {
     origin: string;
     destination: string;
     departure_date: string;
     return_date?: string;
     cabin_class: string;
     max_stops: number | null;
-  }) {
+  }) => {
     setLoading(true);
     setError("");
     setRetryable(false);
@@ -72,7 +92,7 @@ export default function SearchPage() {
       setLoading(false);
       sub.refresh();
     }
-  }
+  }, [sub]);
 
   async function handleWatch(flight: FlightResult) {
     const firstLeg = flight.legs[0];
@@ -139,7 +159,7 @@ export default function SearchPage() {
       </div>
 
       {/* Search Form */}
-      <SearchForm onSearch={handleSearch} loading={loading} />
+      <SearchForm onSearch={handleSearch} loading={loading} initialValues={initialValues} />
 
       {/* Error */}
       {error && (
