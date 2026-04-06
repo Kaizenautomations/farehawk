@@ -121,7 +121,7 @@ export default function LandingPage() {
       </section>
 
       {/* Features */}
-      <section className="py-24 sm:py-32">
+      <section className="py-16 sm:py-24 lg:py-32">
         <div className="mx-auto max-w-6xl px-4">
           <div className="text-center">
             <Badge
@@ -270,70 +270,49 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Smarter Than Google Flights */}
-      <section className="border-y border-border/50 bg-card/30 py-24 sm:py-32">
-        <div className="mx-auto max-w-4xl px-4">
-          <div className="text-center mb-12">
+      {/* Why FareHawk */}
+      <section className="border-y border-border/50 bg-card/30 py-16 sm:py-24">
+        <div className="mx-auto max-w-3xl px-4">
+          <div className="text-center mb-10">
             <Badge
               variant="secondary"
               className="mb-4 border-primary/20 bg-primary/10 text-primary"
             >
               Why FareHawk?
             </Badge>
-            <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
-              Smarter Than Google Flights
+            <h2 className="text-2xl font-bold tracking-tight sm:text-4xl">
+              More than just a flight search
             </h2>
-            <p className="mx-auto mt-4 max-w-2xl text-muted-foreground">
-              Google Flights is great, but FareHawk adds the intelligence layer you&apos;ve been missing.
+            <p className="mx-auto mt-3 max-w-xl text-sm sm:text-base text-muted-foreground">
+              Tools that actually help you save — not just show you prices.
             </p>
           </div>
 
-          <Card className="border-border/50 bg-slate-900/60 backdrop-blur-sm overflow-hidden">
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b border-slate-800">
-                    <th className="text-left px-6 py-4 text-muted-foreground font-medium">Feature</th>
-                    <th className="text-center px-6 py-4">
-                      <span className="font-bold text-gradient-brand text-base">FareHawk</span>
-                    </th>
-                    <th className="text-center px-6 py-4">
-                      <span className="font-medium text-slate-500">Google Flights</span>
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {[
-                    { feature: "AI-Powered Recommendations", farehawk: true, google: false },
-                    { feature: "Explore Any Destination on a Budget", farehawk: true, google: false },
-                    { feature: "Nearby Airport Price Comparison", farehawk: true, google: false },
-                    { feature: "Weekend Getaway Finder", farehawk: true, google: false },
-                    { feature: "Deal Score on Every Flight", farehawk: true, google: false },
-                    { feature: "Price Drop Alerts", farehawk: true, google: "limited" as const },
-                  ].map((row, i) => (
-                    <tr key={row.feature} className={i < 5 ? "border-b border-slate-800/50" : ""}>
-                      <td className="px-6 py-3.5 text-slate-300 font-medium">{row.feature}</td>
-                      <td className="px-6 py-3.5 text-center">
-                        <span className="inline-flex items-center justify-center size-6 rounded-full bg-blue-500/15 text-blue-400 text-sm font-bold">&#10003;</span>
-                      </td>
-                      <td className="px-6 py-3.5 text-center">
-                        {row.google === "limited" ? (
-                          <span className="text-xs text-slate-500 font-medium">Limited</span>
-                        ) : (
-                          <span className="inline-flex items-center justify-center size-6 rounded-full bg-slate-800 text-slate-600 text-sm">&#10005;</span>
-                        )}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </Card>
+          <div className="grid gap-3 sm:grid-cols-2">
+            {[
+              "AI-powered travel recommendations",
+              "Explore any destination on a budget",
+              "Nearby airport price comparison",
+              "Weekend getaway finder",
+              "Deal score on every flight",
+              "Automated price drop alerts",
+            ].map((item) => (
+              <div
+                key={item}
+                className="flex items-center gap-3 rounded-lg border border-border/50 bg-card/50 px-4 py-3"
+              >
+                <span className="flex items-center justify-center size-5 rounded-full bg-blue-500/15 text-blue-400 text-xs shrink-0">
+                  &#10003;
+                </span>
+                <span className="text-sm text-slate-300">{item}</span>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
       {/* How it Works */}
-      <section className="border-y border-border/50 bg-muted/30 py-24 sm:py-32 noise-overlay">
+      <section className="border-y border-border/50 bg-muted/30 py-16 sm:py-24 lg:py-32 noise-overlay">
         <div className="relative z-10 mx-auto max-w-6xl px-4">
           <div className="text-center">
             <Badge
@@ -384,7 +363,7 @@ export default function LandingPage() {
       </section>
 
       {/* Pricing Preview */}
-      <section className="py-24 sm:py-32">
+      <section className="py-16 sm:py-24">
         <div className="mx-auto max-w-4xl px-4 text-center">
           <Badge
             variant="secondary"
@@ -392,77 +371,68 @@ export default function LandingPage() {
           >
             Pricing
           </Badge>
-          <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
+          <h2 className="text-2xl font-bold tracking-tight sm:text-4xl">
             Plans that pay for themselves
           </h2>
-          <p className="mx-auto mt-4 max-w-xl text-muted-foreground">
-            Start free and upgrade when you need more. Save enough on your first
-            flight to cover a year of Pro.
+          <p className="mx-auto mt-3 max-w-xl text-sm sm:text-base text-muted-foreground">
+            Start free. Upgrade when you need more.
           </p>
 
-          <div className="mt-12 grid gap-6 sm:grid-cols-2">
-            <Card className="border-border/50 bg-card/50 p-8 backdrop-blur-sm transition-all duration-300 hover:border-primary/20 gradient-border-hover">
+          <div className="mt-8 sm:mt-12 grid gap-4 sm:grid-cols-2">
+            <Card className="border-border/50 bg-card/50 p-5 sm:p-8 backdrop-blur-sm">
               <div className="relative z-10">
                 <div className="text-sm font-medium text-muted-foreground">
                   Free
                 </div>
-                <div className="mt-2 text-4xl font-bold">$0</div>
-                <div className="mt-1 text-sm text-muted-foreground">
-                  forever
+                <div className="mt-1 flex items-baseline gap-1">
+                  <span className="text-3xl sm:text-4xl font-bold">$0</span>
+                  <span className="text-sm text-muted-foreground">forever</span>
                 </div>
-                <Separator className="my-6" />
-                <ul className="space-y-3 text-left text-sm text-muted-foreground">
+                <Separator className="my-4 sm:my-6" />
+                <ul className="space-y-2 text-left text-sm text-muted-foreground">
                   <li className="flex items-center gap-2">
-                    <span className="text-primary">&#10003;</span> 3 searches
-                    per day
+                    <span className="text-primary text-xs">&#10003;</span> 3 searches/day
                   </li>
                   <li className="flex items-center gap-2">
-                    <span className="text-primary">&#10003;</span> 1 price watch
+                    <span className="text-primary text-xs">&#10003;</span> 1 price watch
                   </li>
                   <li className="flex items-center gap-2">
-                    <span className="text-primary">&#10003;</span> Price calendar
+                    <span className="text-primary text-xs">&#10003;</span> Price calendar
                   </li>
                 </ul>
               </div>
             </Card>
 
-            <Card className="relative border-primary/40 bg-card/50 p-8 shadow-lg shadow-primary/10 backdrop-blur-sm transition-all duration-300 glow-hover gradient-border-hover">
-              <Badge className="absolute -top-3 right-6 bg-gradient-brand text-white">
+            <Card className="relative border-primary/40 bg-card/50 p-5 sm:p-8 shadow-lg shadow-primary/10 backdrop-blur-sm">
+              <Badge className="absolute -top-3 right-4 sm:right-6 bg-gradient-brand text-white text-xs">
                 Popular
               </Badge>
               <div className="relative z-10">
                 <div className="text-sm font-medium text-muted-foreground">
                   Pro
                 </div>
-                <div className="mt-2 text-4xl font-bold">$6</div>
-                <div className="mt-1 text-sm text-muted-foreground">
-                  / month
+                <div className="mt-1 flex items-baseline gap-1">
+                  <span className="text-3xl sm:text-4xl font-bold">$6</span>
+                  <span className="text-sm text-muted-foreground">/month</span>
                 </div>
-                <Separator className="my-6" />
-                <ul className="space-y-3 text-left text-sm text-muted-foreground">
+                <Separator className="my-4 sm:my-6" />
+                <ul className="space-y-2 text-left text-sm text-muted-foreground">
                   <li className="flex items-center gap-2">
-                    <span className="text-primary">&#10003;</span> 50 searches
-                    per day
+                    <span className="text-primary text-xs">&#10003;</span> 50 searches/day
                   </li>
                   <li className="flex items-center gap-2">
-                    <span className="text-primary">&#10003;</span> 10 price
-                    watches
+                    <span className="text-primary text-xs">&#10003;</span> 10 price watches
                   </li>
                   <li className="flex items-center gap-2">
-                    <span className="text-primary">&#10003;</span> Email price
-                    drop alerts
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <span className="text-primary">&#10003;</span> Price history
-                    charts
+                    <span className="text-primary text-xs">&#10003;</span> Email alerts + AI advisor
                   </li>
                 </ul>
               </div>
             </Card>
           </div>
 
-          <Link href="/pricing" className="mt-8 inline-block">
-            <Button variant="outline" className="border-border/50">
+          <Link href="/pricing" className="mt-6 sm:mt-8 inline-block">
+            <Button variant="outline" className="border-border/50 min-h-[44px]">
               View Full Pricing Details
             </Button>
           </Link>
@@ -470,7 +440,7 @@ export default function LandingPage() {
       </section>
 
       {/* CTA — Waitlist */}
-      <section className="py-24 sm:py-32">
+      <section className="py-16 sm:py-24 lg:py-32">
         <div className="mx-auto max-w-4xl px-4">
           <div className="relative overflow-hidden rounded-2xl sm:rounded-3xl bg-gradient-cta p-8 text-center shadow-2xl shadow-primary/10 sm:p-12 lg:p-16 noise-overlay">
             <div className="pointer-events-none absolute inset-0 dot-grid opacity-30" />
