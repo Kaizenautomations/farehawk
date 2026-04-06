@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { SearchForm } from "@/components/search/SearchForm";
 import { FlightResultsList } from "@/components/search/FlightResultsList";
+import { NearbyAirportComparison } from "@/components/search/NearbyAirportComparison";
 import { LoadingBar } from "@/components/ui/loading-bar";
 import { useSubscription } from "@/hooks/useSubscription";
 import type { FlightResult } from "@/types/flight";
@@ -183,6 +184,19 @@ export default function SearchPage() {
           results={results}
           loading={loading}
           onWatch={handleWatch}
+        />
+      )}
+
+      {/* Nearby airport comparison */}
+      {!loading && results.length > 0 && lastParams && (
+        <NearbyAirportComparison
+          origin={lastParams.origin as string}
+          destination={lastParams.destination as string}
+          departure_date={lastParams.departure_date as string}
+          return_date={lastParams.return_date as string | undefined}
+          cabin_class={lastParams.cabin_class as string | undefined}
+          max_stops={lastParams.max_stops as number | null | undefined}
+          currentPrice={results[0].price}
         />
       )}
     </div>

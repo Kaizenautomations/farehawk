@@ -22,3 +22,23 @@ class DateSearchRequest(BaseModel):
     max_stops: int | None = None
     trip_type: str = "one_way"
     duration: int | None = None
+
+
+class ExploreAnywhereRequest(BaseModel):
+    origin: str
+    from_date: str
+    to_date: str
+    max_budget: float | None = None
+    cabin_class: str = "economy"
+    max_stops: int | None = None
+    trip_type: str = "one_way"
+    duration: int | None = None
+
+
+class NearbyCompareRequest(BaseModel):
+    origin: str
+    destination: str
+    departure_date: str
+    return_date: str | None = None
+    cabin_class: str = "economy"
+    max_stops: int | None = None

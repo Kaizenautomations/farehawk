@@ -76,3 +76,63 @@ export function searchFlights(params: SearchFlightsParams) {
 export function searchDates(params: SearchDatesParams) {
   return sidecarFetch<DatePrice[]>("/search/dates", params);
 }
+
+// Explore Anywhere
+export interface ExploreDestination {
+  destination_code: string;
+  destination_city: string;
+  destination_country: string;
+  cheapest_price: number;
+  cheapest_date: string;
+  return_date: string | null;
+  currency: string;
+}
+
+export interface ExploreAnywhereResponse {
+  origin: string;
+  results: ExploreDestination[];
+  searched_count: number;
+  failed_count: number;
+}
+
+export interface ExploreAnywhereParams {
+  origin: string;
+  from_date: string;
+  to_date: string;
+  max_budget?: number | null;
+  cabin_class?: string;
+  max_stops?: number | null;
+  trip_type?: string;
+  duration?: number | null;
+}
+
+export function exploreAnywhere(params: ExploreAnywhereParams) {
+  return sidecarFetch<ExploreAnywhereResponse>("/explore/anywhere", params);
+}
+
+// Nearby comparison
+export interface AirportComparison {
+  origin_code: string;
+  origin_city: string;
+  cheapest_price: number | null;
+  currency: string;
+  drive_minutes: number;
+  savings: number;
+}
+
+export interface NearbyCompareResponse {
+  comparisons: AirportComparison[];
+  destination: string;
+  departure_date: string;
+}
+
+export function compareNearby(params: {
+  origin: string;
+  destination: string;
+  departure_date: string;
+  return_date?: string;
+  cabin_class?: string;
+  max_stops?: number | null;
+}) {
+  return sidecarFetch<NearbyCompareResponse>("/compare/nearby", params);
+}

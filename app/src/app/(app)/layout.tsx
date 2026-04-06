@@ -9,10 +9,12 @@ import {
   Eye,
   LayoutDashboard,
   Settings,
+  Globe,
 } from "lucide-react";
 
 const sidebarLinks = [
   { href: "/search", label: "Search", icon: Search },
+  { href: "/explore", label: "Explore", icon: Globe },
   { href: "/calendar", label: "Calendar", icon: CalendarDays },
   { href: "/watches", label: "Watches", icon: Eye },
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
