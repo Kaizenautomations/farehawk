@@ -188,7 +188,7 @@ export default function TermsPage() {
           <p className="text-xs text-slate-600">
             Powered by{" "}
             <a
-              href="https://kaizenautomations.com"
+              href="https://kaizenshift.com"
               target="_blank"
               rel="noopener noreferrer"
               className="font-semibold text-slate-500 hover:text-slate-400 transition-colors"

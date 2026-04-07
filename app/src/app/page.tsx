@@ -758,7 +758,7 @@ export default function LandingPage() {
               <div className="flex items-center gap-1.5">
                 <span>Powered by</span>
                 <a
-                  href="https://kaizenautomations.com"
+                  href="https://kaizenshift.com"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="font-semibold text-foreground hover:text-primary transition-colors"

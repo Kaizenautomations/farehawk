@@ -1,6 +1,7 @@
 "use client";
 
 import { Navbar } from "@/components/layout/Navbar";
+import { BottomTabBar } from "@/components/layout/BottomTabBar";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -87,9 +88,10 @@ export default function AppLayout({
 
         {/* Main content */}
         <main className="flex-1 min-w-0">
-          <div className="mx-auto max-w-6xl px-4 lg:px-8 py-6 md:py-8 safe-x">{children}</div>
+          <div className="mx-auto max-w-6xl px-4 lg:px-8 py-6 md:py-8 pb-24 lg:pb-8 safe-x">{children}</div>
         </main>
       </div>
+      <BottomTabBar />
     </div>
   );
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter, usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import {
@@ -20,36 +20,22 @@ import {
 } from "@/components/ui/sheet";
 import { useEffect, useState } from "react";
 import {
-  Search,
-  CalendarDays,
-  Eye,
   LayoutDashboard,
   Settings,
   LogOut,
   Menu,
   Plane,
-  Globe,
   DollarSign,
   LogIn,
   UserPlus,
-  Sparkles,
 } from "lucide-react";
 import type { User } from "@supabase/supabase-js";
-
-const navLinks = [
-  { href: "/search", label: "Search", icon: Search },
-  { href: "/explore", label: "Explore", icon: Globe },
-  { href: "/calendar", label: "Calendar", icon: CalendarDays },
-  { href: "/advisor", label: "AI Advisor", icon: Sparkles },
-  { href: "/watches", label: "Watches", icon: Eye },
-];
 
 export function Navbar() {
   const [user, setUser] = useState<User | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const router = useRouter();
-  const pathname = usePathname();
   const supabase = createClient();
 
   useEffect(() => {
@@ -98,155 +84,47 @@ export function Navbar() {
           </span>
         </Link>
 
-        {/* Desktop nav links (authenticated) */}
-        {user && (
-          <div className="hidden md:flex items-center gap-1 rounded-full bg-white/5 p-1">
-            {navLinks.map((link) => {
-              const isActive = pathname?.startsWith(link.href);
-              return (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className={`flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-sm font-medium transition-all ${
-                    isActive
-                      ? "bg-blue-500/15 text-blue-400"
-                      : "text-muted-foreground hover:text-foreground hover:bg-white/5"
-                  }`}
-                >
-                  <link.icon className="size-3.5" />
-                  {link.label}
-                </Link>
-              );
-            })}
-          </div>
-        )}
-
         {/* Right side */}
         <div className="flex items-center gap-2">
           {user ? (
             <>
-              {/* Desktop user dropdown */}
-              <div className="hidden md:block">
-                <DropdownMenu>
-                  <DropdownMenuTrigger>
-                    <button
-                      type="button"
-                      className="flex items-center justify-center size-8 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 text-xs font-semibold text-white ring-2 ring-white/10 hover:ring-white/20 transition-all"
-                      aria-label="User menu"
-                    >
-                      {initial}
-                    </button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" sideOffset={8}>
-                    <div className="px-2 py-1.5">
-                      <p className="text-sm font-medium truncate">
-                        {user.email}
-                      </p>
-                    </div>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem
-                      onClick={() => router.push("/dashboard")}
-                    >
-                      <LayoutDashboard className="size-4 mr-2" />
-                      Dashboard
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                      onClick={() => router.push("/settings")}
-                    >
-                      <Settings className="size-4 mr-2" />
-                      Settings
-                    </DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={handleLogout}>
-                      <LogOut className="size-4 mr-2" />
-                      Log out
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </div>
-
-              {/* Mobile hamburger (authenticated) */}
-              <div className="md:hidden">
-                <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
-                  <SheetTrigger>
-                    <button
-                      type="button"
-                      className="flex items-center justify-center size-10 min-h-[44px] rounded-lg text-muted-foreground hover:text-foreground hover:bg-white/5 transition-colors"
-                      aria-label="Open menu"
-                    >
-                      <Menu className="size-5" />
-                    </button>
-                  </SheetTrigger>
-                  <SheetContent
-                    side="right"
-                    className="w-72 bg-background border-white/10"
+              {/* User avatar dropdown — visible on all screen sizes for logged-in users */}
+              <DropdownMenu>
+                <DropdownMenuTrigger>
+                  <button
+                    type="button"
+                    className="flex items-center justify-center size-8 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 text-xs font-semibold text-white ring-2 ring-white/10 hover:ring-white/20 transition-all"
+                    aria-label="User menu"
                   >
-                    <SheetHeader>
-                      <SheetTitle className="flex items-center gap-2">
-                        <Plane className="size-4 text-blue-400 -rotate-45" />
-                        <span
-                          className="bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent"
-                          style={{
-                            fontFamily:
-                              "var(--font-heading), ui-sans-serif, system-ui, sans-serif",
-                          }}
-                        >
-                          FareFlight
-                        </span>
-                      </SheetTitle>
-                    </SheetHeader>
-                    <div className="flex flex-col gap-1 px-2">
-                      {navLinks.map((link) => {
-                        const isActive = pathname?.startsWith(link.href);
-                        return (
-                          <Link
-                            key={link.href}
-                            href={link.href}
-                            onClick={() => setMobileOpen(false)}
-                            className={`flex items-center gap-2.5 rounded-lg px-3 py-3 min-h-[44px] text-sm font-medium transition-colors ${
-                              isActive
-                                ? "bg-blue-500/15 text-blue-400"
-                                : "text-muted-foreground hover:text-foreground hover:bg-white/5"
-                            }`}
-                          >
-                            <link.icon className="size-4" />
-                            {link.label}
-                          </Link>
-                        );
-                      })}
-                      <div className="my-2 h-px bg-white/10" />
-                      <Link
-                        href="/dashboard"
-                        onClick={() => setMobileOpen(false)}
-                        className="flex items-center gap-2.5 rounded-lg px-3 py-3 min-h-[44px] text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-white/5 transition-colors"
-                      >
-                        <LayoutDashboard className="size-4" />
-                        Dashboard
-                      </Link>
-                      <Link
-                        href="/settings"
-                        onClick={() => setMobileOpen(false)}
-                        className="flex items-center gap-2.5 rounded-lg px-3 py-3 min-h-[44px] text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-white/5 transition-colors"
-                      >
-                        <Settings className="size-4" />
-                        Settings
-                      </Link>
-                      <div className="my-2 h-px bg-white/10" />
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setMobileOpen(false);
-                          handleLogout();
-                        }}
-                        className="flex items-center gap-2.5 rounded-lg px-3 py-3 min-h-[44px] text-sm font-medium text-red-400 hover:bg-red-500/10 transition-colors"
-                      >
-                        <LogOut className="size-4" />
-                        Log out
-                      </button>
-                    </div>
-                  </SheetContent>
-                </Sheet>
-              </div>
+                    {initial}
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" sideOffset={8}>
+                  <div className="px-2 py-1.5">
+                    <p className="text-sm font-medium truncate">
+                      {user.email}
+                    </p>
+                  </div>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    onClick={() => router.push("/dashboard")}
+                  >
+                    <LayoutDashboard className="size-4 mr-2" />
+                    Dashboard
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => router.push("/settings")}
+                  >
+                    <Settings className="size-4 mr-2" />
+                    Settings
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={handleLogout}>
+                    <LogOut className="size-4 mr-2" />
+                    Log out
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </>
           ) : (
             <>

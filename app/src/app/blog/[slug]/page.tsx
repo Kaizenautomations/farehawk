@@ -238,7 +238,7 @@ export default async function BlogPostPage({
           <div className="flex items-center gap-1.5">
             <span>Powered by</span>
             <a
-              href="https://kaizenautomations.com"
+              href="https://kaizenshift.com"
               target="_blank"
               rel="noopener noreferrer"
               className="font-semibold text-zinc-300 hover:text-blue-400 transition-colors"
