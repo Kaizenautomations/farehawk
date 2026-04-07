@@ -564,6 +564,25 @@ function SearchPageInner() {
         />
       )}
 
+      {/* Pricing tip */}
+      {!loading && results.length > 0 && (
+        <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-4">
+          <div className="flex items-start gap-3">
+            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-emerald-500/15">
+              <svg className="h-4 w-4 text-emerald-400" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <div>
+              <p className="text-sm font-medium text-emerald-400">Save with US-market pricing</p>
+              <p className="text-xs text-slate-400 mt-1 leading-relaxed">
+                These prices are sourced from the US market, which is often significantly cheaper than Canadian or European pricing for the same flights. To book at these rates, use a VPN set to a US location when clicking &quot;Book.&quot; Most flights can be booked at the US price this way.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Nearby airport comparison */}
       {!loading && results.length > 0 && lastParams && (
         <NearbyAirportComparison
