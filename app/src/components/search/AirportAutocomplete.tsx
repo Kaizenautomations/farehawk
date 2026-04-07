@@ -7,6 +7,7 @@ interface Props {
   value: string;
   onChange: (value: string) => void;
   placeholder?: string;
+  id?: string;
 }
 
 // Generate flag emoji from 2-letter country code programmatically
@@ -23,6 +24,7 @@ export function AirportAutocomplete({
   value,
   onChange,
   placeholder = "Airport",
+  id,
 }: Props) {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
@@ -65,6 +67,7 @@ export function AirportAutocomplete({
       {!open ? (
         <button
           type="button"
+          id={id}
           onClick={() => {
             setOpen(true);
             setTimeout(() => inputRef.current?.focus(), 50);
@@ -84,6 +87,7 @@ export function AirportAutocomplete({
       ) : (
         <input
           ref={inputRef}
+          id={id}
           type="text"
           value={search}
           onChange={(e) => setSearch(e.target.value)}

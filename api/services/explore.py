@@ -130,7 +130,9 @@ def _search_single_destination(
     try:
         searcher = SearchDates()
         results = searcher.search(filters)
-    except Exception:
+    except Exception as e:
+        # Log the error for debugging but don't crash the batch
+        print(f"[Explore] Failed to search {dest_code}: {e}")
         return None
 
     if not results:

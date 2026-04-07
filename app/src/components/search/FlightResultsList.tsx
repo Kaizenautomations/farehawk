@@ -9,6 +9,34 @@ import { getAirlineName } from "@/lib/airlines";
 
 type SortOption = "price-asc" | "price-desc" | "duration" | "stops" | "deal-score";
 type StopsFilter = "nonstop" | "1stop" | "2plus";
+type TimeOfDayFilter = "morning" | "afternoon" | "evening" | "redeye";
+
+const TIME_OF_DAY_OPTIONS: { key: TimeOfDayFilter; label: string }[] = [
+  { key: "morning", label: "Morning (6a-12p)" },
+  { key: "afternoon", label: "Afternoon (12p-6p)" },
+  { key: "evening", label: "Evening (6p-12a)" },
+  { key: "redeye", label: "Red-eye (12a-6a)" },
+];
+
+function getDepartureHour(flight: FlightResult): number | null {
+  const dep = flight.legs[0]?.departure_time;
+  if (!dep) return null;
+  // Try parsing "HH:MM" or full datetime strings
+  const match = dep.match(/(\d{1,2}):(\d{2})/);
+  if (match) return parseInt(match[1], 10);
+  const d = new Date(dep);
+  if (!isNaN(d.getTime())) return d.getHours();
+  return null;
+}
+
+function matchesTimeOfDay(hour: number, filter: TimeOfDayFilter): boolean {
+  switch (filter) {
+    case "morning": return hour >= 6 && hour < 12;
+    case "afternoon": return hour >= 12 && hour < 18;
+    case "evening": return hour >= 18 && hour < 24;
+    case "redeye": return hour >= 0 && hour < 6;
+  }
+}
 
 const SORT_OPTIONS: { value: SortOption; label: string }[] = [
   { value: "price-asc", label: "Price: Low \u2192 High" },
@@ -48,6 +76,7 @@ export function FlightResultsList({ results, loading, onWatch }: Props) {
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [activeAirlines, setActiveAirlines] = useState<Set<string>>(new Set());
   const [activeStops, setActiveStops] = useState<Set<StopsFilter>>(new Set());
+  const [activeTimeOfDay, setActiveTimeOfDay] = useState<Set<TimeOfDayFilter>>(new Set());
 
   // Extract unique airlines from results
   const uniqueAirlines = useMemo(() => {
@@ -77,6 +106,15 @@ export function FlightResultsList({ results, loading, onWatch }: Props) {
     });
   }
 
+  function toggleTimeOfDay(filter: TimeOfDayFilter) {
+    setActiveTimeOfDay((prev) => {
+      const next = new Set(prev);
+      if (next.has(filter)) next.delete(filter);
+      else next.add(filter);
+      return next;
+    });
+  }
+
   // Apply filters then sort
   const filteredResults = useMemo(() => {
     let filtered = results;
@@ -99,8 +137,17 @@ export function FlightResultsList({ results, loading, onWatch }: Props) {
       });
     }
 
+    // Time-of-day filter
+    if (activeTimeOfDay.size > 0) {
+      filtered = filtered.filter((f) => {
+        const hour = getDepartureHour(f);
+        if (hour === null) return true; // Don't filter out flights with unknown times
+        return Array.from(activeTimeOfDay).some((tod) => matchesTimeOfDay(hour, tod));
+      });
+    }
+
     return filtered;
-  }, [results, activeAirlines, activeStops]);
+  }, [results, activeAirlines, activeStops, activeTimeOfDay]);
 
   const sortedResults = useMemo(() => sortFlights(filteredResults, sortBy), [filteredResults, sortBy]);
 
@@ -199,9 +246,9 @@ export function FlightResultsList({ results, loading, onWatch }: Props) {
                 <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
               </svg>
               <span>Filters</span>
-              {(activeAirlines.size > 0 || activeStops.size > 0) && (
+              {(activeAirlines.size > 0 || activeStops.size > 0 || activeTimeOfDay.size > 0) && (
                 <span className="inline-flex items-center justify-center h-5 min-w-[20px] rounded-full bg-blue-500/20 px-1.5 text-xs font-medium text-blue-400">
-                  {activeAirlines.size + activeStops.size}
+                  {activeAirlines.size + activeStops.size + activeTimeOfDay.size}
                 </span>
               )}
             </div>
@@ -270,13 +317,35 @@ export function FlightResultsList({ results, loading, onWatch }: Props) {
                 </div>
               )}
 
+              {/* Time of day filter */}
+              <div>
+                <p className="text-xs font-medium uppercase tracking-wider text-slate-500 mb-2">Departure Time</p>
+                <div className="flex flex-wrap gap-2">
+                  {TIME_OF_DAY_OPTIONS.map(({ key, label }) => (
+                    <button
+                      key={key}
+                      type="button"
+                      onClick={() => toggleTimeOfDay(key)}
+                      className={`rounded-full px-3 py-1.5 text-xs font-medium border transition-colors ${
+                        activeTimeOfDay.has(key)
+                          ? "bg-blue-500/20 text-blue-400 border-blue-500/40"
+                          : "bg-slate-800/60 text-slate-400 border-slate-700 hover:border-slate-600 hover:text-slate-300"
+                      }`}
+                    >
+                      {label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
               {/* Clear filters */}
-              {(activeAirlines.size > 0 || activeStops.size > 0) && (
+              {(activeAirlines.size > 0 || activeStops.size > 0 || activeTimeOfDay.size > 0) && (
                 <button
                   type="button"
                   onClick={() => {
                     setActiveAirlines(new Set());
                     setActiveStops(new Set());
+                    setActiveTimeOfDay(new Set());
                   }}
                   className="text-xs text-slate-500 hover:text-slate-300 transition-colors underline"
                 >

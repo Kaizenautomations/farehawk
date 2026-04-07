@@ -14,6 +14,7 @@ interface Stats {
   today_ai_messages: number;
   total_price_snapshots: number;
   recent_signups_7d: number;
+  waitlist_count: number;
 }
 
 interface UserRow {
@@ -27,9 +28,17 @@ interface UserRow {
   status: string;
 }
 
+interface WaitlistRow {
+  id: string;
+  email: string;
+  name: string | null;
+  created_at: string;
+}
+
 export default function AdminPage() {
   const [stats, setStats] = useState<Stats | null>(null);
   const [users, setUsers] = useState<UserRow[]>([]);
+  const [waitlist, setWaitlist] = useState<WaitlistRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const sub = useSubscription();
@@ -50,6 +59,7 @@ export default function AdminPage() {
       const data = await res.json();
       setStats(data.stats);
       setUsers(data.users);
+      setWaitlist(data.waitlist || []);
       setLoading(false);
     }
     load();
@@ -106,7 +116,7 @@ export default function AdminPage() {
 
       {/* Stats Grid */}
       {stats && (
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
           <Card className="border-zinc-800 bg-zinc-900/80">
             <CardContent className="p-5">
               <div className="flex items-center gap-3">
@@ -234,6 +244,36 @@ export default function AdminPage() {
               </div>
             </CardContent>
           </Card>
+
+          <Card className="border-zinc-800 bg-zinc-900/80">
+            <CardContent className="p-5">
+              <div className="flex items-center gap-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-green-500 to-teal-600">
+                  <svg
+                    className="h-5 w-5 text-white"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={2}
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"
+                    />
+                  </svg>
+                </div>
+                <div>
+                  <p className="text-xs font-medium uppercase tracking-wider text-zinc-500">
+                    Waitlist
+                  </p>
+                  <p className="text-2xl font-bold text-white">
+                    {stats.waitlist_count}
+                  </p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </div>
       )}
 
@@ -266,6 +306,53 @@ export default function AdminPage() {
             </div>
           </CardContent>
         </Card>
+      )}
+
+      {/* Waitlist Stats + Table */}
+      {stats && stats.waitlist_count > 0 && (
+        <div>
+          <div className="flex items-center gap-3 mb-3">
+            <h2 className="text-lg font-semibold text-white">Waitlist</h2>
+            <Badge className="bg-green-600/20 text-green-400 border border-green-500/30">
+              {stats.waitlist_count} signups
+            </Badge>
+          </div>
+          <Card className="border-zinc-800 bg-zinc-900/80 overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b border-zinc-800">
+                    <th className="text-left px-4 py-3 text-xs font-medium text-zinc-500 uppercase tracking-wider">
+                      Name
+                    </th>
+                    <th className="text-left px-4 py-3 text-xs font-medium text-zinc-500 uppercase tracking-wider">
+                      Email
+                    </th>
+                    <th className="text-left px-4 py-3 text-xs font-medium text-zinc-500 uppercase tracking-wider">
+                      Signed Up
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {waitlist.map((w) => (
+                    <tr
+                      key={w.id}
+                      className="border-b border-zinc-800/50 hover:bg-zinc-800/30"
+                    >
+                      <td className="px-4 py-3 text-white font-medium">
+                        {w.name || "\u2014"}
+                      </td>
+                      <td className="px-4 py-3 text-zinc-400">{w.email}</td>
+                      <td className="px-4 py-3 text-zinc-400">
+                        {new Date(w.created_at).toLocaleDateString()}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </Card>
+        </div>
       )}
 
       {/* Users Table */}

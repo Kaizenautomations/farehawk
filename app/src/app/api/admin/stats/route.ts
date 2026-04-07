@@ -65,6 +65,18 @@ export async function GET() {
     .select("*", { count: "exact", head: true })
     .gte("created_at", weekAgo.toISOString());
 
+  // Waitlist count
+  const { count: waitlistCount } = await admin
+    .from("waitlist")
+    .select("*", { count: "exact", head: true });
+
+  // Waitlist entries
+  const { data: waitlistEntries } = await admin
+    .from("waitlist")
+    .select("id, email, name, created_at")
+    .order("created_at", { ascending: false })
+    .limit(100);
+
   // All users list
   const { data: users } = await admin
     .from("profiles")
@@ -83,6 +95,7 @@ export async function GET() {
       today_ai_messages: todayAiMessages,
       total_price_snapshots: totalSnapshots ?? 0,
       recent_signups_7d: recentSignups ?? 0,
+      waitlist_count: waitlistCount ?? 0,
     },
     users:
       users?.map((u) => ({
@@ -98,6 +111,13 @@ export async function GET() {
         status:
           (u.subscriptions as unknown as { tier: string; status: string }[])?.[0]
             ?.status ?? "active",
+      })) ?? [],
+    waitlist:
+      waitlistEntries?.map((w) => ({
+        id: w.id,
+        email: w.email,
+        name: w.name,
+        created_at: w.created_at,
       })) ?? [],
   });
 }

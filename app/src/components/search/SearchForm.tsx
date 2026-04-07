@@ -131,10 +131,11 @@ export function SearchForm({ onSearch, loading, initialValues }: Props) {
       {/* Airport row */}
       <div className="flex flex-col md:flex-row items-stretch md:items-end gap-3">
         <div className="flex-1 space-y-1.5">
-          <Label className="text-xs font-medium text-slate-400 uppercase tracking-wider">
+          <Label htmlFor="origin-airport" className="text-xs font-medium text-slate-400 uppercase tracking-wider">
             From
           </Label>
           <AirportAutocomplete
+            id="origin-airport"
             value={origin}
             onChange={setOrigin}
             placeholder="Departure airport"
@@ -167,10 +168,11 @@ export function SearchForm({ onSearch, loading, initialValues }: Props) {
         </div>
 
         <div className="flex-1 space-y-1.5">
-          <Label className="text-xs font-medium text-slate-400 uppercase tracking-wider">
+          <Label htmlFor="destination-airport" className="text-xs font-medium text-slate-400 uppercase tracking-wider">
             To
           </Label>
           <AirportAutocomplete
+            id="destination-airport"
             value={destination}
             onChange={setDestination}
             placeholder="Arrival airport"

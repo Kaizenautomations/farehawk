@@ -46,7 +46,7 @@ export default function LandingPage() {
           </p>
 
           <div className="animate-fade-up-delay-3 mt-8 sm:mt-10 flex flex-col items-center justify-center gap-3 sm:gap-4 sm:flex-row w-full sm:w-auto">
-            <Link href="/signup">
+            <Link href="/waitlist">
               <Button
                 size="lg"
                 className="bg-gradient-brand px-8 text-base font-semibold text-white shadow-lg shadow-primary/25 transition-all hover:shadow-xl hover:shadow-primary/30 hover:brightness-110 min-h-[44px] w-full sm:w-auto"
@@ -618,7 +618,7 @@ export default function LandingPage() {
                 start, no credit card required.
               </p>
               <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:gap-4 sm:flex-row w-full sm:w-auto">
-                <Link href="/signup" className="w-full sm:w-auto">
+                <Link href="/waitlist" className="w-full sm:w-auto">
                   <Button
                     size="lg"
                     className="bg-gradient-brand px-8 text-base font-semibold text-white shadow-lg shadow-primary/25 transition-all hover:shadow-xl hover:shadow-primary/30 hover:brightness-110 min-h-[44px] w-full sm:w-auto"
