@@ -94,7 +94,7 @@ export function Navbar() {
                 "var(--font-heading), ui-sans-serif, system-ui, sans-serif",
             }}
           >
-            FareHawk
+            FareFlight
           </span>
         </Link>
 
@@ -191,7 +191,7 @@ export function Navbar() {
                               "var(--font-heading), ui-sans-serif, system-ui, sans-serif",
                           }}
                         >
-                          FareHawk
+                          FareFlight
                         </span>
                       </SheetTitle>
                     </SheetHeader>
@@ -306,7 +306,7 @@ export function Navbar() {
                               "var(--font-heading), ui-sans-serif, system-ui, sans-serif",
                           }}
                         >
-                          FareHawk
+                          FareFlight
                         </span>
                       </SheetTitle>
                     </SheetHeader>

@@ -96,7 +96,7 @@ export default function AdminPage() {
         <div>
           <h1 className="text-3xl font-bold text-white">Admin Dashboard</h1>
           <p className="text-sm text-zinc-400 mt-1">
-            FareHawk platform overview
+            FareFlight platform overview
           </p>
         </div>
         <Badge className="bg-red-600/20 text-red-400 border border-red-500/30">

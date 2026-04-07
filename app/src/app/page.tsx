@@ -306,7 +306,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Why FareHawk */}
+      {/* Why FareFlight */}
       <section className="border-y border-border/50 bg-card/30 py-16 sm:py-24">
         <div className="mx-auto max-w-5xl px-4">
           <div className="text-center mb-12">
@@ -314,7 +314,7 @@ export default function LandingPage() {
               variant="secondary"
               className="mb-4 border-primary/20 bg-primary/10 text-primary"
             >
-              Why FareHawk?
+              Why FareFlight?
             </Badge>
             <h2 className="text-2xl font-bold tracking-tight sm:text-4xl">
               More than just a flight search
@@ -534,7 +534,7 @@ export default function LandingPage() {
                 Be the first to know when we launch
               </h2>
               <p className="mx-auto mt-4 max-w-xl text-lg text-muted-foreground">
-                Join the waitlist and get early access to FareHawk. Free to
+                Join the waitlist and get early access to FareFlight. Free to
                 start, no credit card required.
               </p>
               <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:gap-4 sm:flex-row w-full sm:w-auto">
@@ -567,7 +567,7 @@ export default function LandingPage() {
           <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
             <div>
               <div className="font-heading text-lg font-bold text-gradient-brand">
-                FareHawk
+                FareFlight
               </div>
               <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
                 Track flight prices, get alerts, and never overpay again.
@@ -653,7 +653,7 @@ export default function LandingPage() {
           <Separator className="my-8" />
 
           <div className="flex flex-col items-center justify-between gap-4 text-sm text-muted-foreground sm:flex-row">
-            <p>&copy; 2026 FareHawk. All rights reserved.</p>
+            <p>&copy; 2026 FareFlight. All rights reserved.</p>
             <div className="flex items-center gap-4">
               <Link
                 href="/privacy"

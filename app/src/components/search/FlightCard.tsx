@@ -39,7 +39,7 @@ export function FlightCard({ flight, onWatch, style }: Props) {
     const depDate = firstLeg?.departure_time
       ? new Date(firstLeg.departure_time).toLocaleDateString("en-US", { month: "short", day: "numeric" })
       : "";
-    const shareText = `Found a flight from ${firstLeg?.departure_airport} to ${lastLeg?.arrival_airport} for $${flight.price.toFixed(0)} on ${depDate}! Check it out on FareHawk`;
+    const shareText = `Found a flight from ${firstLeg?.departure_airport} to ${lastLeg?.arrival_airport} for $${flight.price.toFixed(0)} on ${depDate}! Check it out on FareFlight`;
     const shareUrl = flight.booking_url;
 
     if (typeof navigator !== "undefined" && navigator.share) {

@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from routers import search, health, explore, compare, insights
 
-app = FastAPI(title="FareHawk API", version="0.1.0")
+app = FastAPI(title="FareFlight API", version="0.1.0")
 
 API_SECRET_KEY = os.environ.get("API_SECRET_KEY", "dev-secret")
 
@@ -21,11 +21,11 @@ if PROXY_URL:
             if hasattr(self, 'session'):
                 self.session.proxies = {"https": PROXY_URL, "http": PROXY_URL}
         fli_client.FlightClient.__init__ = patched_init
-        print(f"[FareHawk] Proxy enabled: {PROXY_URL.split('@')[-1] if '@' in PROXY_URL else 'configured'}")
+        print(f"[FareFlight] Proxy enabled: {PROXY_URL.split('@')[-1] if '@' in PROXY_URL else 'configured'}")
     except Exception as e:
-        print(f"[FareHawk] Proxy setup failed: {e}")
+        print(f"[FareFlight] Proxy setup failed: {e}")
 else:
-    print("[FareHawk] No proxy configured (set PROXY_URL env var to enable)")
+    print("[FareFlight] No proxy configured (set PROXY_URL env var to enable)")
 
 ALLOWED_ORIGINS = os.environ.get(
     "ALLOWED_ORIGINS",

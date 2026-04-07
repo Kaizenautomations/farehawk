@@ -8,7 +8,7 @@ export interface SearchHistoryEntry {
   saved?: boolean;
 }
 
-const STORAGE_KEY = "farehawk_search_history";
+const STORAGE_KEY = "fareflight_search_history";
 const MAX_ENTRIES = 10;
 
 export function getSearchHistory(): SearchHistoryEntry[] {

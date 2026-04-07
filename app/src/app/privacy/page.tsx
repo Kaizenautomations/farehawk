@@ -44,7 +44,7 @@ export default function PrivacyPage() {
               2. How We Use Your Data
             </h2>
             <ul className="list-disc pl-5 space-y-1.5 text-slate-400">
-              <li>Provide and improve the FareHawk service.</li>
+              <li>Provide and improve the FareFlight service.</li>
               <li>
                 Send price drop alerts and notifications you have opted into.
               </li>

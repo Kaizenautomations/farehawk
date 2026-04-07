@@ -52,7 +52,7 @@ export default function LoginPage() {
             <div className="flex items-center gap-2">
               <Plane className="size-6 text-blue-400 -rotate-45" />
               <span className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">
-                FareHawk
+                FareFlight
               </span>
             </div>
             <div className="text-center">

@@ -8,7 +8,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/client";
 
-const ONBOARDING_DISMISSED_KEY = "farehawk_onboarding_dismissed";
+const ONBOARDING_DISMISSED_KEY = "fareflight_onboarding_dismissed";
 
 export default function DashboardPage() {
   const [watches, setWatches] = useState<Watch[]>([]);
@@ -88,7 +88,7 @@ export default function DashboardPage() {
           <div className="relative space-y-5">
             <div>
               <h2 className="text-xl sm:text-2xl font-bold text-white">
-                Welcome to FareHawk{userName ? `, ${userName}` : ""}!
+                Welcome to FareFlight{userName ? `, ${userName}` : ""}!
               </h2>
               <p className="mt-2 text-sm text-slate-400 max-w-lg">
                 Start by setting your home airports in{" "}

@@ -2,7 +2,7 @@
   "version": "0.0.1",
   "configurations": [
     {
-      "name": "farehawk-dev",
+      "name": "fareflight-dev",
       "runtimeExecutable": "npx",
       "runtimeArgs": ["next", "dev", "--port", "3888"],
       "port": 3888

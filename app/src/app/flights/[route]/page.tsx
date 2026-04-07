@@ -22,7 +22,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { route } = await params;
   const parts = route.split("-to-");
   if (parts.length !== 2) {
-    return { title: "Flight Route | FareHawk" };
+    return { title: "Flight Route | FareFlight" };
   }
 
   const originCode = parts[0].toUpperCase();
@@ -31,10 +31,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const destCity = getAirportCity(destCode);
 
   return {
-    title: `Cheap Flights from ${originCity} (${originCode}) to ${destCity} (${destCode}) | FareHawk`,
-    description: `Track and compare flight prices from ${originCity} (${originCode}) to ${destCity} (${destCode}). Get alerts when prices drop with FareHawk.`,
+    title: `Cheap Flights from ${originCity} (${originCode}) to ${destCity} (${destCode}) | FareFlight`,
+    description: `Track and compare flight prices from ${originCity} (${originCode}) to ${destCity} (${destCode}). Get alerts when prices drop with FareFlight.`,
     openGraph: {
-      title: `Cheap Flights from ${originCity} to ${destCity} | FareHawk`,
+      title: `Cheap Flights from ${originCity} to ${destCity} | FareFlight`,
       description: `Find the best deals on flights from ${originCity} (${originCode}) to ${destCity} (${destCode}). Set price alerts and never miss a deal.`,
     },
   };
@@ -89,7 +89,7 @@ export default async function FlightRoutePage({ params }: Props) {
             />
           </svg>
           <span className="text-lg font-bold bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">
-            FareHawk
+            FareFlight
           </span>
         </div>
 
@@ -174,7 +174,7 @@ export default async function FlightRoutePage({ params }: Props) {
                       d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0"
                     />
                   </svg>
-                  Join FareHawk
+                  Join FareFlight
                 </Link>
                 <Link
                   href={`/search?origin=${originCode}&destination=${destCode}`}

@@ -18,7 +18,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "FareHawk - Track Flight Prices & Get Deal Alerts",
+  title: "FareFlight - Track Flight Prices & Get Deal Alerts",
   description:
     "Find the cheapest flights, track prices over time, and get instant alerts when prices drop. Save hundreds on your next trip.",
   manifest: "/manifest.json",
@@ -26,7 +26,7 @@ export const metadata: Metadata = {
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
-    title: "FareHawk",
+    title: "FareFlight",
   },
   icons: {
     icon: "/icon.svg",

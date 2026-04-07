@@ -16,9 +16,9 @@ export default function TermsPage() {
               1. Service Description
             </h2>
             <p className="text-slate-400">
-              FareHawk is a flight price tracking and discovery platform. We
+              FareFlight is a flight price tracking and discovery platform. We
               aggregate publicly available flight pricing data to help you find
-              deals, set price alerts, and explore destinations. FareHawk is{" "}
+              deals, set price alerts, and explore destinations. FareFlight is{" "}
               <strong className="text-slate-300">not a travel agency</strong>{" "}
               and does not sell, book, or guarantee any flights. All bookings are
               made directly with the airline or a third-party booking provider.
@@ -55,11 +55,11 @@ export default function TermsPage() {
             </p>
             <ul className="list-disc pl-5 space-y-1.5 text-slate-400">
               <li>
-                Use automated tools, bots, or scrapers to access FareHawk.
+                Use automated tools, bots, or scrapers to access FareFlight.
               </li>
               <li>
                 Resell, redistribute, or commercially exploit data obtained from
-                FareHawk.
+                FareFlight.
               </li>
               <li>
                 Attempt to circumvent usage limits or subscription restrictions.
@@ -118,7 +118,7 @@ export default function TermsPage() {
                 delivery timing or accuracy.
               </li>
               <li>
-                FareHawk is not a travel agent, airline, or booking platform. We
+                FareFlight is not a travel agent, airline, or booking platform. We
                 do not guarantee availability, pricing, or booking outcomes.
               </li>
               <li>
@@ -137,7 +137,7 @@ export default function TermsPage() {
               6. Limitation of Liability
             </h2>
             <p className="text-slate-400">
-              To the maximum extent permitted by law, FareHawk and its operators
+              To the maximum extent permitted by law, FareFlight and its operators
               shall not be liable for any indirect, incidental, special, or
               consequential damages arising from your use of the service,
               including but not limited to missed flights, incorrect pricing, or
@@ -162,7 +162,7 @@ export default function TermsPage() {
             </h2>
             <p className="text-slate-400">
               We may update these terms from time to time. Continued use of
-              FareHawk after changes constitutes acceptance. We will notify you
+              FareFlight after changes constitutes acceptance. We will notify you
               of significant changes via email.
             </p>
           </section>

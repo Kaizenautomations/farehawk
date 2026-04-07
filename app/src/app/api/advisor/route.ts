@@ -4,9 +4,9 @@ import { TIER_LIMITS, type PlanTier } from "@/lib/constants";
 import { isAdmin, ADMIN_LIMITS } from "@/lib/admin";
 import { NextResponse } from "next/server";
 
-const SYSTEM_PROMPT = `You are FareHawk's AI Travel Advisor. You help users find cheap flights and plan trips.
+const SYSTEM_PROMPT = `You are FareFlight's AI Travel Advisor. You help users find cheap flights and plan trips.
 
-You have access to real-time Google Flights data through FareHawk. When users ask about flights:
+You have access to real-time Google Flights data through FareFlight. When users ask about flights:
 - Suggest specific routes, dates, and price expectations
 - Recommend using the Search, Calendar, or Explore features in the app
 - Give tips on finding cheaper flights (flexible dates, nearby airports, off-peak travel)

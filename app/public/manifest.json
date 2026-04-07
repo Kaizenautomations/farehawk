@@ -1,6 +1,6 @@
 {
-  "name": "FareHawk",
-  "short_name": "FareHawk",
+  "name": "FareFlight",
+  "short_name": "FareFlight",
   "description": "Track flight prices & get deal alerts",
   "start_url": "/dashboard",
   "display": "standalone",
