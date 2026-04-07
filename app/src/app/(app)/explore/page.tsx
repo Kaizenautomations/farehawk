@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/select";
 import { CABIN_OPTIONS, STOPS_OPTIONS } from "@/lib/constants";
 import { Globe } from "lucide-react";
+import { useCurrency } from "@/hooks/useCurrency";
 import type { ExploreAnywhereResponse, ExploreDestination } from "@/lib/sidecar";
 
 const COUNTRY_FLAGS: Record<string, string> = {
@@ -68,6 +69,7 @@ function getPriceColor(price: number, allPrices: number[]): string {
 
 export default function ExplorePage() {
   const router = useRouter();
+  const { format, currency } = useCurrency();
   const [origin, setOrigin] = useState("");
   const [fromDate, setFromDate] = useState(getDefaultFromDate());
   const [toDate, setToDate] = useState(getDefaultToDate());
@@ -534,10 +536,10 @@ export default function ExplorePage() {
                         allPrices
                       )}`}
                     >
-                      ${Math.round(dest.cheapest_price)}
+                      {format(dest.cheapest_price)}
                     </p>
                     <p className="text-xs text-slate-500">
-                      {dest.currency}
+                      {currency}
                     </p>
                   </div>
                 </div>

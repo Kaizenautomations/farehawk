@@ -6,7 +6,7 @@ const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { name, email } = body;
+    const { name, email, referral_code } = body;
 
     if (!email || typeof email !== "string" || !EMAIL_REGEX.test(email.trim())) {
       return NextResponse.json(
@@ -17,6 +17,7 @@ export async function POST(request: Request) {
 
     const trimmedEmail = email.trim().toLowerCase();
     const trimmedName = typeof name === "string" ? name.trim() : "";
+    const trimmedReferral = typeof referral_code === "string" ? referral_code.trim() : null;
 
     const admin = createAdminClient();
 
@@ -26,6 +27,7 @@ export async function POST(request: Request) {
     const { error } = await admin.from("waitlist").insert({
       email: trimmedEmail,
       name: trimmedName || null,
+      ...(trimmedReferral ? { referral_code: trimmedReferral } : {}),
     });
 
     if (error) {

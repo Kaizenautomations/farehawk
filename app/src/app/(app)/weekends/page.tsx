@@ -5,6 +5,7 @@ import { CalendarDays, Plane, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { DealScoreBadge } from "@/components/search/DealScoreBadge";
+import { useCurrency } from "@/hooks/useCurrency";
 
 interface WeekendGetaway {
   destination_code: string;
@@ -56,6 +57,7 @@ function buildGoogleFlightsUrl(origin: string, dest: string, depDate: string, re
 }
 
 export default function WeekendsPage() {
+  const { format, currency } = useCurrency();
   const [origin, setOrigin] = useState("");
   const [budget, setBudget] = useState("");
   const [loading, setLoading] = useState(false);
@@ -195,8 +197,8 @@ export default function WeekendsPage() {
                           <span className="text-xs text-slate-500">{g.destination_code} &middot; {g.destination_country}</span>
                         </div>
                         <div className="text-right">
-                          <div className="text-2xl font-bold text-white">${g.price.toFixed(0)}</div>
-                          <span className="text-xs text-slate-500 uppercase">{g.currency}</span>
+                          <div className="text-2xl font-bold text-white">{format(g.price)}</div>
+                          <span className="text-xs text-slate-500 uppercase">{currency}</span>
                         </div>
                       </div>
 

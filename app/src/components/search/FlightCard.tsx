@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { DealScoreBadge } from "@/components/search/DealScoreBadge";
 import { getAirlineName } from "@/lib/airlines";
+import { useCurrency } from "@/hooks/useCurrency";
 
 interface Props {
   flight: FlightResult;
@@ -32,6 +33,7 @@ function formatTime(iso: string): string {
 
 export function FlightCard({ flight, onWatch, style }: Props) {
   const [copied, setCopied] = useState(false);
+  const { format, currency } = useCurrency();
   const firstLeg = flight.legs[0];
   const lastLeg = flight.legs[flight.legs.length - 1];
 
@@ -39,7 +41,7 @@ export function FlightCard({ flight, onWatch, style }: Props) {
     const depDate = firstLeg?.departure_time
       ? new Date(firstLeg.departure_time).toLocaleDateString("en-US", { month: "short", day: "numeric" })
       : "";
-    const shareText = `Found a flight from ${firstLeg?.departure_airport} to ${lastLeg?.arrival_airport} for $${flight.price.toFixed(0)} on ${depDate}! Check it out on FareFlight`;
+    const shareText = `Found a flight from ${firstLeg?.departure_airport} to ${lastLeg?.arrival_airport} for ${format(flight.price)} on ${depDate}! Check it out on FareFlight`;
     const shareUrl = flight.booking_url;
 
     if (typeof navigator !== "undefined" && navigator.share) {
@@ -166,10 +168,10 @@ export function FlightCard({ flight, onWatch, style }: Props) {
             <div className="flex flex-col items-end gap-1.5">
               <div className="flex items-baseline gap-1">
                 <span className="text-2xl font-bold text-white">
-                  ${flight.price.toFixed(0)}
+                  {format(flight.price)}
                 </span>
                 <span className="text-xs text-slate-500 uppercase">
-                  {flight.currency}
+                  {currency}
                 </span>
               </div>
               <DealScoreBadge price={flight.price} />

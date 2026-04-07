@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { AirportAutocomplete } from "@/components/search/AirportAutocomplete";
 import { FlightCard } from "@/components/search/FlightCard";
 import { LoadingBar } from "@/components/ui/loading-bar";
+import { useCurrency } from "@/hooks/useCurrency";
 import type { DatePrice, FlightResult } from "@/types/flight";
 
 type PriceTier = "cheap" | "mid" | "expensive";
@@ -54,6 +55,7 @@ function getCurrentMonth(): string {
 }
 
 export default function CalendarPage() {
+  const { format, currency } = useCurrency();
   const [origin, setOrigin] = useState("");
   const [destination, setDestination] = useState("");
   const [month, setMonth] = useState(getCurrentMonth());
@@ -314,7 +316,7 @@ export default function CalendarPage() {
                 </div>
                 <div>
                   <div className="text-xs text-emerald-400/70 font-medium">Cheapest</div>
-                  <div className="text-lg font-bold text-emerald-400">${cheapestResult.price.toFixed(0)}</div>
+                  <div className="text-lg font-bold text-emerald-400">{format(cheapestResult.price)}</div>
                   <div className="text-xs text-slate-400">
                     {new Date(cheapestResult.date + "T12:00:00").toLocaleDateString("en-US", { month: "short", day: "numeric" })}
                   </div>
@@ -330,7 +332,7 @@ export default function CalendarPage() {
                 </div>
                 <div>
                   <div className="text-xs text-red-400/70 font-medium">Most Expensive</div>
-                  <div className="text-lg font-bold text-red-400">${mostExpensiveResult.price.toFixed(0)}</div>
+                  <div className="text-lg font-bold text-red-400">{format(mostExpensiveResult.price)}</div>
                   <div className="text-xs text-slate-400">
                     {new Date(mostExpensiveResult.date + "T12:00:00").toLocaleDateString("en-US", { month: "short", day: "numeric" })}
                   </div>
@@ -379,7 +381,7 @@ export default function CalendarPage() {
                   >
                     <span className={`text-[10px] sm:text-xs ${dp ? "text-slate-300" : "text-slate-600"}`}>{day}</span>
                     {dp && (
-                      <span className={`text-xs sm:text-sm font-bold ${styles?.text}`}>${dp.price.toFixed(0)}</span>
+                      <span className={`text-xs sm:text-sm font-bold ${styles?.text}`}>{format(dp.price)}</span>
                     )}
                   </button>
                 );
@@ -404,8 +406,8 @@ export default function CalendarPage() {
                   </div>
                   <div className="text-right">
                     <div className="text-xs text-blue-400/70 font-medium">From</div>
-                    <div className="text-2xl font-bold text-white">${selectedDp.price.toFixed(0)}</div>
-                    <div className="text-xs text-slate-400 uppercase">{selectedDp.currency}</div>
+                    <div className="text-2xl font-bold text-white">{format(selectedDp.price)}</div>
+                    <div className="text-xs text-slate-400 uppercase">{currency}</div>
                   </div>
                 </div>
               )}

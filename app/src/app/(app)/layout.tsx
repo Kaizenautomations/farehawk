@@ -12,6 +12,7 @@ import {
   Globe,
   Sparkles,
   Sun,
+  Gift,
   Shield,
 } from "lucide-react";
 import { useSubscription } from "@/hooks/useSubscription";
@@ -24,6 +25,7 @@ const sidebarLinks = [
   { href: "/weekends", label: "Weekends", icon: Sun },
   { href: "/watches", label: "Watches", icon: Eye },
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+  { href: "/referrals", label: "Refer", icon: Gift },
   { href: "/settings", label: "Settings", icon: Settings },
 ];
 

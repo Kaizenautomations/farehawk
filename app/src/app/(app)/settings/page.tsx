@@ -20,6 +20,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useSubscription } from "@/hooks/useSubscription";
+import { SUPPORTED_CURRENCIES, getCurrencyPreference, setCurrencyPreference, type CurrencyCode } from "@/lib/currency";
 import type { Profile } from "@/types/database";
 
 export default function SettingsPage() {
@@ -32,9 +33,18 @@ export default function SettingsPage() {
   const [deleteConfirmText, setDeleteConfirmText] = useState("");
   const [deleting, setDeleting] = useState(false);
   const [deleteError, setDeleteError] = useState("");
+  const [selectedCurrency, setSelectedCurrency] = useState<CurrencyCode>("USD");
+  const [weeklyDigest, setWeeklyDigest] = useState(false);
+  const [priceDropFrequency, setPriceDropFrequency] = useState("immediately");
   const sub = useSubscription();
   const supabase = createClient();
   const router = useRouter();
+
+  useEffect(() => {
+    setSelectedCurrency(getCurrencyPreference());
+    setWeeklyDigest(localStorage.getItem("fareflight_weekly_digest") === "true");
+    setPriceDropFrequency(localStorage.getItem("fareflight_pricedrop_freq") || "immediately");
+  }, []);
 
   useEffect(() => {
     async function load() {
@@ -138,6 +148,30 @@ export default function SettingsPage() {
             />
             <p className="text-xs text-zinc-600">Comma-separated IATA codes</p>
           </div>
+          <div className="space-y-2">
+            <Label htmlFor="currency" className="text-sm text-zinc-400">
+              Display Currency
+            </Label>
+            <select
+              id="currency"
+              value={selectedCurrency}
+              onChange={(e) => {
+                const code = e.target.value as CurrencyCode;
+                setSelectedCurrency(code);
+                setCurrencyPreference(code);
+              }}
+              className="flex h-10 w-full rounded-md border border-zinc-700 bg-zinc-800 px-3 py-2 text-sm text-white ring-offset-background focus:outline-none focus:ring-2 focus:ring-blue-500/40 focus:ring-offset-2 focus:ring-offset-zinc-900"
+            >
+              {SUPPORTED_CURRENCIES.map((c) => (
+                <option key={c.code} value={c.code}>
+                  {c.symbol} {c.code} - {c.name}
+                </option>
+              ))}
+            </select>
+            <p className="text-xs text-zinc-600">
+              Prices are sourced in USD and converted using live exchange rates
+            </p>
+          </div>
         </CardContent>
       </Card>
 
@@ -181,6 +215,68 @@ export default function SettingsPage() {
               ) : null}
             </div>
             <Switch checked={false} disabled={!isPremium || !profile?.phone} />
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Email Preferences Section */}
+      <Card className="border-zinc-800 bg-zinc-900/80">
+        <CardHeader className="border-b border-zinc-800 pb-4">
+          <div className="flex items-center gap-3">
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-emerald-500 to-teal-600">
+              <svg className="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+              </svg>
+            </div>
+            <CardTitle className="text-base font-semibold text-white">Email Preferences</CardTitle>
+          </div>
+        </CardHeader>
+        <CardContent className="space-y-1 pt-2">
+          {/* Weekly digest toggle */}
+          <div className="flex items-center justify-between rounded-lg px-1 py-4">
+            <div>
+              <p className="text-sm font-medium text-white">Weekly deal digest</p>
+              <p className="text-xs text-zinc-500">Receive a weekly summary of the best deals from your home airports</p>
+            </div>
+            <Switch
+              checked={weeklyDigest}
+              onCheckedChange={(checked) => {
+                setWeeklyDigest(checked);
+                localStorage.setItem("fareflight_weekly_digest", String(checked));
+              }}
+            />
+          </div>
+          {/* Price drop frequency */}
+          <div className="rounded-lg px-1 py-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-white">Price drop alert frequency</p>
+                <p className="text-xs text-zinc-500">How often to receive price drop notifications</p>
+              </div>
+            </div>
+            <div className="mt-3 flex gap-2">
+              {[
+                { value: "immediately", label: "Immediately" },
+                { value: "daily", label: "Daily summary" },
+                { value: "weekly", label: "Weekly summary" },
+              ].map((opt) => (
+                <button
+                  key={opt.value}
+                  type="button"
+                  onClick={() => {
+                    setPriceDropFrequency(opt.value);
+                    localStorage.setItem("fareflight_pricedrop_freq", opt.value);
+                  }}
+                  className={`min-h-[44px] flex-1 rounded-lg border px-3 py-2 text-xs font-medium transition-colors ${
+                    priceDropFrequency === opt.value
+                      ? "border-blue-500/50 bg-blue-500/15 text-blue-400"
+                      : "border-zinc-700 bg-zinc-800/50 text-zinc-400 hover:border-zinc-600 hover:text-zinc-300"
+                  }`}
+                >
+                  {opt.label}
+                </button>
+              ))}
+            </div>
           </div>
         </CardContent>
       </Card>
