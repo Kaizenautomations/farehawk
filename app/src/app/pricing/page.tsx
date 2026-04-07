@@ -153,15 +153,16 @@ export default function PricingPage() {
               </span>
               <button
                 onClick={() => setYearly(!yearly)}
-                className={`relative h-7 w-12 rounded-full transition-colors duration-200 ${
+                aria-label="Toggle yearly billing"
+                className={`relative inline-flex h-7 w-14 items-center rounded-full transition-colors duration-200 ${
                   yearly
                     ? "bg-gradient-to-r from-blue-600 to-indigo-600"
                     : "bg-zinc-700"
                 }`}
               >
                 <span
-                  className={`absolute top-0.5 h-6 w-6 rounded-full bg-white shadow-sm transition-transform duration-200 ${
-                    yearly ? "translate-x-5" : "translate-x-0.5"
+                  className={`inline-block h-5 w-5 rounded-full bg-white shadow-sm transition-transform duration-200 ${
+                    yearly ? "translate-x-8" : "translate-x-1"
                   }`}
                 />
               </button>
