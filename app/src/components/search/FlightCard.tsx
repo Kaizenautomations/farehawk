@@ -66,13 +66,13 @@ export function FlightCard({ flight, onWatch, style }: Props) {
       style={style}
     >
       <CardContent className="relative z-10 p-4 md:p-5">
-        <div className="flex flex-col md:flex-row md:items-center gap-4">
+        <div className="flex flex-col md:flex-row md:items-center gap-3 md:gap-4">
           {/* Left: Times & airports */}
           <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-3 md:gap-4">
+            <div className="flex items-center gap-2 md:gap-4">
               {/* Departure */}
-              <div className="text-center min-w-[70px]">
-                <div className="text-lg font-bold text-white">
+              <div className="text-center min-w-[60px] md:min-w-[70px] shrink-0">
+                <div className="text-base md:text-lg font-bold text-white">
                   {formatTime(firstLeg?.departure_time)}
                 </div>
                 <div className="text-xs font-medium text-slate-400">
@@ -81,29 +81,29 @@ export function FlightCard({ flight, onWatch, style }: Props) {
               </div>
 
               {/* Flight path visualization */}
-              <div className="flex-1 flex items-center gap-1 px-1">
-                <div className="h-2 w-2 rounded-full bg-blue-500 shrink-0" />
-                <div className="flex-1 relative">
+              <div className="flex-1 flex items-center gap-1 px-1 min-w-0">
+                <div className="h-1.5 w-1.5 md:h-2 md:w-2 rounded-full bg-blue-500 shrink-0" />
+                <div className="flex-1 relative min-w-[30px]">
                   <div className="h-px bg-gradient-to-r from-blue-500 via-slate-600 to-indigo-500 w-full" />
                   <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
-                      width="14"
-                      height="14"
+                      width="12"
+                      height="12"
                       viewBox="0 0 24 24"
                       fill="currentColor"
-                      className="text-slate-500 rotate-90"
+                      className="text-slate-500 rotate-90 md:w-[14px] md:h-[14px]"
                     >
                       <path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 00-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z" />
                     </svg>
                   </div>
                 </div>
-                <div className="h-2 w-2 rounded-full bg-indigo-500 shrink-0" />
+                <div className="h-1.5 w-1.5 md:h-2 md:w-2 rounded-full bg-indigo-500 shrink-0" />
               </div>
 
               {/* Arrival */}
-              <div className="text-center min-w-[70px]">
-                <div className="text-lg font-bold text-white">
+              <div className="text-center min-w-[60px] md:min-w-[70px] shrink-0">
+                <div className="text-base md:text-lg font-bold text-white">
                   {formatTime(lastLeg?.arrival_time)}
                 </div>
                 <div className="text-xs font-medium text-slate-400">
@@ -114,7 +114,7 @@ export function FlightCard({ flight, onWatch, style }: Props) {
           </div>
 
           {/* Center: Airline, duration, stops */}
-          <div className="flex flex-wrap md:flex-col items-center md:items-center gap-2 md:gap-1.5 md:min-w-[140px] md:px-4 md:border-l md:border-r md:border-slate-800 border-t md:border-t-0 border-slate-800/50 pt-3 md:pt-0">
+          <div className="flex flex-row flex-wrap md:flex-col items-center gap-1.5 md:gap-1.5 md:min-w-[140px] md:px-4 md:border-l md:border-r md:border-slate-800 border-t md:border-t-0 border-slate-800/50 pt-2 md:pt-0 text-xs md:text-sm">
             <span className="text-sm font-medium text-slate-300">
               {getAirlineName(firstLeg?.airline_code || firstLeg?.airline || "")}
               <span className="ml-1.5 text-xs text-slate-500">
@@ -162,7 +162,7 @@ export function FlightCard({ flight, onWatch, style }: Props) {
           </div>
 
           {/* Right: Price & actions */}
-          <div className="flex md:flex-col items-center justify-between md:items-end gap-3 md:gap-2 md:min-w-[150px] w-full md:w-auto border-t md:border-t-0 border-slate-800/50 pt-3 md:pt-0">
+          <div className="flex flex-row items-center justify-between md:flex-col md:items-end gap-3 md:gap-2 md:min-w-[150px] w-full md:w-auto border-t md:border-t-0 border-slate-800/50 pt-2 md:pt-0">
             <div className="flex flex-col items-end gap-1.5">
               <div className="flex items-baseline gap-1">
                 <span className="text-2xl font-bold text-white">

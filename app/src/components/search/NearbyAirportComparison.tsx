@@ -29,6 +29,7 @@ export function NearbyAirportComparison({
   const [data, setData] = useState<AirportComparison[] | null>(null);
   const [loading, setLoading] = useState(false);
   const [expanded, setExpanded] = useState(false);
+  const [fetchError, setFetchError] = useState(false);
 
   const nearby = NEARBY_AIRPORTS[origin];
   const hasNearby = nearby && nearby.length > 0;
@@ -53,6 +54,7 @@ export function NearbyAirportComparison({
     let cancelled = false;
     async function fetchComparison() {
       setLoading(true);
+      setFetchError(false);
       try {
         const res = await fetch("/api/compare/nearby", {
           method: "POST",
@@ -73,9 +75,11 @@ export function NearbyAirportComparison({
             (c) => !c.is_home_airport
           );
           setData(alternatives);
+        } else if (!cancelled) {
+          setFetchError(true);
         }
       } catch {
-        // silently fail
+        if (!cancelled) setFetchError(true);
       } finally {
         if (!cancelled) setLoading(false);
       }
@@ -195,7 +199,13 @@ export function NearbyAirportComparison({
             </div>
           )}
 
-          {!loading && data && data.length === 0 && (
+          {!loading && fetchError && (
+            <p className="text-sm text-slate-500">
+              Couldn&apos;t load nearby airport prices
+            </p>
+          )}
+
+          {!loading && !fetchError && data && data.length === 0 && (
             <p className="text-sm text-slate-500">
               No nearby airport prices available right now
             </p>

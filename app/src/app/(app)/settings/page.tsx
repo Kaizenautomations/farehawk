@@ -163,19 +163,24 @@ export default function SettingsPage() {
             <Switch checked={notifyEmail} onCheckedChange={setNotifyEmail} />
           </div>
           {/* SMS toggle */}
-          <div className="flex items-center justify-between rounded-lg px-1 py-4 opacity-60">
-            <div className="flex items-center gap-2">
-              <div>
+          <div className={`flex items-center justify-between rounded-lg px-1 py-4 ${!isPremium ? "opacity-60" : ""}`}>
+            <div className="flex flex-col gap-1">
+              <div className="flex items-center gap-2">
                 <p className="text-sm font-medium text-white">SMS notifications</p>
-                <p className="text-xs text-zinc-500">Get text alerts for big price drops</p>
+                {!isPremium && (
+                  <span className="rounded-full bg-amber-500/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-amber-400 border border-amber-500/20">
+                    Premium
+                  </span>
+                )}
               </div>
-              {!isPremium && (
-                <span className="rounded-full bg-amber-500/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-amber-400 border border-amber-500/20">
-                  Premium
-                </span>
-              )}
+              <p className="text-xs text-zinc-500">Get text alerts for big price drops</p>
+              {!isPremium ? (
+                <p className="text-xs text-zinc-500">SMS alerts are available on the Premium plan</p>
+              ) : !profile?.phone ? (
+                <p className="text-xs text-amber-400/80">Add your phone number to enable SMS alerts</p>
+              ) : null}
             </div>
-            <Switch checked={false} disabled />
+            <Switch checked={false} disabled={!isPremium || !profile?.phone} />
           </div>
         </CardContent>
       </Card>

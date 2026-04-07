@@ -280,8 +280,9 @@ export function SearchForm({ onSearch, loading, initialValues }: Props) {
         </Button>
       </div>
 
-      {/* Collapsible Filters */}
+      {/* Filters + Clear */}
       <div>
+        <div className="flex items-center gap-3">
         <button
           type="button"
           onClick={() => setFiltersOpen(!filtersOpen)}
@@ -303,6 +304,23 @@ export function SearchForm({ onSearch, loading, initialValues }: Props) {
           </svg>
           Filters
         </button>
+        <button
+          type="button"
+          onClick={() => {
+            setOrigin("");
+            setDestination("");
+            setDepartureDate("");
+            setReturnDate("");
+            setCabinClass("economy");
+            setMaxStops("");
+            setFlexibleDates(false);
+            setFiltersOpen(false);
+          }}
+          className="text-xs text-slate-500 hover:text-slate-300 transition-colors min-h-[44px] py-2"
+        >
+          Clear
+        </button>
+        </div>
 
         {filtersOpen && (
           <div className="mt-3 flex flex-col sm:flex-row gap-3 pl-5">

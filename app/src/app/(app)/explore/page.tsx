@@ -504,7 +504,8 @@ export default function ExplorePage() {
       {searched && !loading && results.length > 0 && (
         <div className="space-y-3">
           <p className="text-sm text-slate-400">
-            {results.length} destination{results.length !== 1 ? "s" : ""} found
+            Showing {results.length} destination{results.length !== 1 ? "s" : ""}
+            {budget ? ` under $${budget}` : ""} from {origin}
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {results.map((dest) => (

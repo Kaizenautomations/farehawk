@@ -449,7 +449,7 @@ export default function LandingPage() {
 
       {/* Pricing Preview */}
       <section className="py-16 sm:py-24">
-        <div className="mx-auto max-w-4xl px-4 text-center">
+        <div className="mx-auto max-w-5xl px-4 text-center">
           <Badge
             variant="secondary"
             className="mb-4 border-primary/20 bg-primary/10 text-primary"
@@ -463,20 +463,21 @@ export default function LandingPage() {
             Start free. Upgrade when you need more.
           </p>
 
-          <div className="mt-8 sm:mt-12 grid gap-4 sm:grid-cols-2">
-            <Card className="border-border/50 bg-card/50 p-5 sm:p-8 backdrop-blur-sm">
+          <div className="mt-8 sm:mt-12 grid grid-cols-1 md:grid-cols-3 gap-4">
+            {/* Free */}
+            <Card className="border-border/50 bg-card/50 p-4 sm:p-5 backdrop-blur-sm">
               <div className="relative z-10">
                 <div className="text-sm font-medium text-muted-foreground">
                   Free
                 </div>
                 <div className="mt-1 flex items-baseline gap-1">
-                  <span className="text-3xl sm:text-4xl font-bold">$0</span>
-                  <span className="text-sm text-muted-foreground">forever</span>
+                  <span className="text-2xl sm:text-3xl font-bold">$0</span>
+                  <span className="text-xs text-muted-foreground">forever</span>
                 </div>
-                <Separator className="my-4 sm:my-6" />
-                <ul className="space-y-2 text-left text-sm text-muted-foreground">
+                <Separator className="my-3 sm:my-4" />
+                <ul className="space-y-1.5 text-left text-sm text-muted-foreground">
                   <li className="flex items-center gap-2">
-                    <span className="text-primary text-xs">&#10003;</span> 3 searches/day
+                    <span className="text-primary text-xs">&#10003;</span> 3 searches per day
                   </li>
                   <li className="flex items-center gap-2">
                     <span className="text-primary text-xs">&#10003;</span> 1 price watch
@@ -484,34 +485,113 @@ export default function LandingPage() {
                   <li className="flex items-center gap-2">
                     <span className="text-primary text-xs">&#10003;</span> Price calendar
                   </li>
+                  <li className="flex items-center gap-2">
+                    <span className="text-primary text-xs">&#10003;</span> Deal scores
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="text-primary text-xs">&#10003;</span> Economy class only
+                  </li>
                 </ul>
+                <Link href="/signup" className="mt-4 block">
+                  <Button
+                    variant="outline"
+                    className="w-full border-border/50 min-h-[44px] text-sm"
+                  >
+                    Get Started
+                  </Button>
+                </Link>
               </div>
             </Card>
 
-            <Card className="relative border-primary/40 bg-card/50 p-5 sm:p-8 shadow-lg shadow-primary/10 backdrop-blur-sm">
-              <Badge className="absolute -top-3 right-4 sm:right-6 bg-gradient-brand text-white text-xs">
-                Popular
+            {/* Pro — highlighted */}
+            <Card className="relative border-primary/40 bg-card/50 p-4 sm:p-5 shadow-lg shadow-primary/10 backdrop-blur-sm ring-1 ring-primary/30">
+              <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 bg-gradient-brand text-white text-xs whitespace-nowrap">
+                Most Popular
               </Badge>
               <div className="relative z-10">
                 <div className="text-sm font-medium text-muted-foreground">
                   Pro
                 </div>
                 <div className="mt-1 flex items-baseline gap-1">
-                  <span className="text-3xl sm:text-4xl font-bold">$6</span>
-                  <span className="text-sm text-muted-foreground">/month</span>
+                  <span className="text-2xl sm:text-3xl font-bold">$6</span>
+                  <span className="text-xs text-muted-foreground">/mo</span>
+                  <span className="text-xs text-muted-foreground ml-1">or $49/yr</span>
                 </div>
-                <Separator className="my-4 sm:my-6" />
-                <ul className="space-y-2 text-left text-sm text-muted-foreground">
+                <Separator className="my-3 sm:my-4" />
+                <ul className="space-y-1.5 text-left text-sm text-muted-foreground">
                   <li className="flex items-center gap-2">
-                    <span className="text-primary text-xs">&#10003;</span> 50 searches/day
+                    <span className="text-primary text-xs">&#10003;</span> 50 searches per day
                   </li>
                   <li className="flex items-center gap-2">
                     <span className="text-primary text-xs">&#10003;</span> 10 price watches
                   </li>
                   <li className="flex items-center gap-2">
-                    <span className="text-primary text-xs">&#10003;</span> Email alerts + AI advisor
+                    <span className="text-primary text-xs">&#10003;</span> Email price drop alerts
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="text-primary text-xs">&#10003;</span> AI Travel Advisor (15 msgs/day)
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="text-primary text-xs">&#10003;</span> Flexible date search
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="text-primary text-xs">&#10003;</span> Nearby airport comparison
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="text-primary text-xs">&#10003;</span> Economy &amp; Premium Economy
                   </li>
                 </ul>
+                <Link href="/pricing" className="mt-4 block">
+                  <Button className="w-full bg-gradient-brand text-white shadow-lg shadow-primary/25 hover:brightness-110 min-h-[44px] text-sm font-semibold">
+                    Start Pro
+                  </Button>
+                </Link>
+              </div>
+            </Card>
+
+            {/* Premium */}
+            <Card className="border-border/50 bg-card/50 p-4 sm:p-5 backdrop-blur-sm">
+              <div className="relative z-10">
+                <div className="text-sm font-medium text-muted-foreground">
+                  Premium
+                </div>
+                <div className="mt-1 flex items-baseline gap-1">
+                  <span className="text-2xl sm:text-3xl font-bold">$12</span>
+                  <span className="text-xs text-muted-foreground">/mo</span>
+                  <span className="text-xs text-muted-foreground ml-1">or $99/yr</span>
+                </div>
+                <Separator className="my-3 sm:my-4" />
+                <ul className="space-y-1.5 text-left text-sm text-muted-foreground">
+                  <li className="flex items-center gap-2">
+                    <span className="text-primary text-xs">&#10003;</span> 200 searches per day
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="text-primary text-xs">&#10003;</span> 50 price watches
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="text-primary text-xs">&#10003;</span> Email + SMS alerts
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="text-primary text-xs">&#10003;</span> AI Travel Advisor (50 msgs/day)
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="text-primary text-xs">&#10003;</span> All cabin classes incl. Business &amp; First
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="text-primary text-xs">&#10003;</span> Weekend getaway finder
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="text-primary text-xs">&#10003;</span> Priority features
+                  </li>
+                </ul>
+                <Link href="/pricing" className="mt-4 block">
+                  <Button
+                    variant="outline"
+                    className="w-full border-border/50 min-h-[44px] text-sm"
+                  >
+                    Start Premium
+                  </Button>
+                </Link>
               </div>
             </Card>
           </div>
