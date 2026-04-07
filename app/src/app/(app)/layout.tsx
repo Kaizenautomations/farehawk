@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { Navbar } from "@/components/layout/Navbar";
 import { BottomTabBar } from "@/components/layout/BottomTabBar";
 import Link from "next/link";
@@ -16,8 +17,12 @@ import {
   Gift,
   Shield,
   Route,
+  ChevronLeft,
+  ChevronRight,
+  Moon,
 } from "lucide-react";
 import { useSubscription } from "@/hooks/useSubscription";
+import { useTheme } from "@/hooks/useTheme";
 
 const sidebarLinks = [
   { href: "/search", label: "Search", icon: Search },
@@ -39,13 +44,49 @@ export default function AppLayout({
 }) {
   const pathname = usePathname();
   const sub = useSubscription();
+  const { theme, toggleTheme } = useTheme();
+
+  const [sidebarExpanded, setSidebarExpanded] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setSidebarExpanded(
+        localStorage.getItem("fareflight_sidebar_expanded") === "true"
+      );
+    }
+  }, []);
+
+  function handleToggleSidebar() {
+    const next = !sidebarExpanded;
+    setSidebarExpanded(next);
+    localStorage.setItem("fareflight_sidebar_expanded", String(next));
+  }
 
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
       <div className="flex">
         {/* Sidebar — desktop only */}
-        <aside className="hidden lg:flex flex-col gap-1 w-16 hover:w-48 group/sidebar border-r border-white/10 bg-background/50 backdrop-blur-sm pt-4 px-2 transition-all duration-200 overflow-hidden shrink-0 sticky top-14 h-[calc(100vh-3.5rem)]">
+        <aside
+          className={`hidden lg:flex flex-col gap-1 ${
+            sidebarExpanded ? "w-48" : "w-16"
+          } border-r border-white/10 bg-background/50 backdrop-blur-sm pt-4 px-2 transition-all duration-200 overflow-hidden shrink-0 sticky top-14 h-[calc(100vh-3.5rem)]`}
+        >
+          {/* Toggle button */}
+          <button
+            type="button"
+            onClick={handleToggleSidebar}
+            className="flex items-center justify-center rounded-lg p-1.5 mb-1 text-muted-foreground hover:text-foreground hover:bg-white/5 transition-colors self-end min-h-[44px] min-w-[44px]"
+            title={sidebarExpanded ? "Collapse sidebar" : "Expand sidebar"}
+            aria-label={sidebarExpanded ? "Collapse sidebar" : "Expand sidebar"}
+          >
+            {sidebarExpanded ? (
+              <ChevronLeft className="size-4" />
+            ) : (
+              <ChevronRight className="size-4" />
+            )}
+          </button>
+
           {sidebarLinks.map((link) => {
             const isActive = pathname?.startsWith(link.href);
             return (
@@ -59,7 +100,11 @@ export default function AppLayout({
                 }`}
               >
                 <link.icon className="size-5 shrink-0" />
-                <span className="opacity-0 group-hover/sidebar:opacity-100 transition-opacity duration-200">
+                <span
+                  className={`transition-opacity duration-200 ${
+                    sidebarExpanded ? "opacity-100" : "opacity-0"
+                  }`}
+                >
                   {link.label}
                 </span>
               </Link>
@@ -78,12 +123,41 @@ export default function AppLayout({
                 }`}
               >
                 <Shield className="size-5 shrink-0" />
-                <span className="opacity-0 group-hover/sidebar:opacity-100 transition-opacity duration-200">
+                <span
+                  className={`transition-opacity duration-200 ${
+                    sidebarExpanded ? "opacity-100" : "opacity-0"
+                  }`}
+                >
                   Admin
                 </span>
               </Link>
             </>
           )}
+
+          {/* Spacer */}
+          <div className="flex-1" />
+
+          {/* Theme toggle at bottom */}
+          <button
+            type="button"
+            onClick={toggleTheme}
+            className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors whitespace-nowrap text-muted-foreground hover:text-foreground hover:bg-white/5 mb-2 min-h-[44px]"
+            title={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+            aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+          >
+            {theme === "dark" ? (
+              <Sun className="size-5 shrink-0" />
+            ) : (
+              <Moon className="size-5 shrink-0" />
+            )}
+            <span
+              className={`transition-opacity duration-200 ${
+                sidebarExpanded ? "opacity-100" : "opacity-0"
+              }`}
+            >
+              {theme === "dark" ? "Light Mode" : "Dark Mode"}
+            </span>
+          </button>
         </aside>
 
         {/* Main content */}

@@ -203,6 +203,7 @@ export default function CalendarPage() {
         <p className="text-sm text-slate-400 mt-0.5">
           Find the cheapest dates to fly — click any date to see flights
         </p>
+        <p className="text-[10px] text-slate-600 mt-1">Prices are approximate in USD and may vary</p>
       </div>
 
       {/* Search Form */}

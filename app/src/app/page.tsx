@@ -504,9 +504,9 @@ export default function LandingPage() {
             </Card>
 
             {/* Pro — highlighted */}
-            <Card className="relative border-primary/40 bg-card/50 p-4 sm:p-5 shadow-lg shadow-primary/10 backdrop-blur-sm ring-1 ring-primary/30">
-              <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 bg-gradient-brand text-white text-xs whitespace-nowrap">
-                Most Popular
+            <Card className="relative overflow-visible border-primary/40 bg-card/50 p-4 sm:p-5 shadow-lg shadow-primary/10 backdrop-blur-sm ring-1 ring-primary/30">
+              <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 bg-gradient-brand text-white text-xs whitespace-nowrap px-3 py-1">
+                Popular
               </Badge>
               <div className="relative z-10">
                 <div className="text-sm font-medium text-muted-foreground">

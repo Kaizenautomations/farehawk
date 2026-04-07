@@ -166,6 +166,7 @@ export default function ExplorePage() {
         <p className="text-sm text-slate-400 mt-1">
           Discover the cheapest destinations from your airport
         </p>
+        <p className="text-[10px] text-slate-600 mt-1">Prices are approximate in USD and may vary</p>
       </div>
 
       {/* Search Form */}

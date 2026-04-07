@@ -132,6 +132,20 @@ Deno.serve(async () => {
         (tier === "pro" || tier === "premium");
 
       if (canEmail && watch.profiles?.email) {
+        // Throttle: skip if a notification was sent for this watch in the last 24 hours
+        const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+        const { data: recentNotification } = await supabase
+          .from("notifications")
+          .select("sent_at")
+          .eq("watch_id", watch.id)
+          .gt("sent_at", twentyFourHoursAgo)
+          .order("sent_at", { ascending: false })
+          .limit(1);
+
+        if (recentNotification && recentNotification.length > 0) {
+          checked++;
+          continue;
+        }
         let shouldAlert = false;
         let subject = "";
         let html = "";

@@ -1,3 +1,4 @@
+import React from "react";
 import { Navbar } from "@/components/layout/Navbar";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -131,9 +132,40 @@ export async function generateMetadata({
   };
 }
 
-function renderContent(html: string) {
-  // Split content by double newlines into blocks, then process headings/paragraphs
-  const blocks = html.split("\n\n").filter((b) => b.trim());
+function renderInlineText(text: string): React.ReactNode[] {
+  // Parse inline links: <a href="/path" class="...">text</a> -> safe Link/span
+  const parts: React.ReactNode[] = [];
+  const linkRegex = /<a\s+href="([^"]*)"[^>]*>([^<]*)<\/a>/g;
+  let lastIndex = 0;
+  let match;
+
+  while ((match = linkRegex.exec(text)) !== null) {
+    if (match.index > lastIndex) {
+      parts.push(text.slice(lastIndex, match.index));
+    }
+    const href = match[1];
+    const linkText = match[2];
+    parts.push(
+      <Link
+        key={`link-${match.index}`}
+        href={href}
+        className="text-blue-400 hover:underline"
+      >
+        {linkText}
+      </Link>
+    );
+    lastIndex = match.index + match[0].length;
+  }
+
+  if (lastIndex < text.length) {
+    parts.push(text.slice(lastIndex));
+  }
+
+  return parts;
+}
+
+function renderContent(content: string) {
+  const blocks = content.split("\n\n").filter((b) => b.trim());
   return blocks.map((block, i) => {
     const trimmed = block.trim();
 
@@ -153,23 +185,18 @@ function renderContent(html: string) {
       return (
         <ul key={i} className="list-disc list-inside space-y-1.5 text-zinc-300 leading-relaxed ml-2">
           {items.map((item, j) => (
-            <li
-              key={j}
-              dangerouslySetInnerHTML={{
-                __html: item.replace("- ", ""),
-              }}
-            />
+            <li key={j}>
+              {renderInlineText(item.replace("- ", ""))}
+            </li>
           ))}
         </ul>
       );
     }
 
     return (
-      <p
-        key={i}
-        className="text-zinc-300 leading-relaxed"
-        dangerouslySetInnerHTML={{ __html: trimmed }}
-      />
+      <p key={i} className="text-zinc-300 leading-relaxed">
+        {renderInlineText(trimmed)}
+      </p>
     );
   });
 }

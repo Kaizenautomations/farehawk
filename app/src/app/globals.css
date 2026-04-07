@@ -301,6 +301,15 @@
     padding-right: env(safe-area-inset-right);
   }
 
+  /* Light mode overrides for custom effects */
+  :root:not(.dark) .bg-gradient-hero {
+    background: linear-gradient(to bottom, oklch(0.95 0.02 260), oklch(1 0 0));
+  }
+  :root:not(.dark) .noise-overlay::before,
+  :root:not(.dark) .dot-grid {
+    display: none;
+  }
+
   /* Touch-friendly minimum tap target */
   .touch-target {
     min-height: 44px;

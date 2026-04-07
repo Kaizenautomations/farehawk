@@ -113,6 +113,7 @@ export function FlightCard({ flight, onWatch, style }: Props) {
                 </div>
               </div>
             </div>
+            <p className="text-[10px] text-slate-600 mt-1 text-center">Times shown in local airport time</p>
           </div>
 
           {/* Center: Airline, duration, stops */}
@@ -175,6 +176,9 @@ export function FlightCard({ flight, onWatch, style }: Props) {
                 </span>
               </div>
               <DealScoreBadge price={flight.price} />
+              <p className="text-[10px] text-slate-600 leading-tight">
+                Prices shown in USD from Google Flights. Your local price may differ. Click &quot;Book&quot; to see final pricing.
+              </p>
             </div>
             <div className="flex gap-2">
               {onWatch && (
