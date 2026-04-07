@@ -21,6 +21,10 @@ import {
 } from "@/components/ui/dialog";
 import { useSubscription } from "@/hooks/useSubscription";
 import { SUPPORTED_CURRENCIES, getCurrencyPreference, setCurrencyPreference, type CurrencyCode } from "@/lib/currency";
+import {
+  requestNotificationPermission,
+  getNotificationStatus,
+} from "@/lib/notifications";
 import type { Profile } from "@/types/database";
 
 export default function SettingsPage() {
@@ -36,6 +40,10 @@ export default function SettingsPage() {
   const [selectedCurrency, setSelectedCurrency] = useState<CurrencyCode>("USD");
   const [weeklyDigest, setWeeklyDigest] = useState(false);
   const [priceDropFrequency, setPriceDropFrequency] = useState("immediately");
+  const [pushStatus, setPushStatus] = useState<
+    "granted" | "denied" | "default" | "unsupported"
+  >("default");
+  const [pushRequesting, setPushRequesting] = useState(false);
   const sub = useSubscription();
   const supabase = createClient();
   const router = useRouter();
@@ -44,6 +52,7 @@ export default function SettingsPage() {
     setSelectedCurrency(getCurrencyPreference());
     setWeeklyDigest(localStorage.getItem("fareflight_weekly_digest") === "true");
     setPriceDropFrequency(localStorage.getItem("fareflight_pricedrop_freq") || "immediately");
+    setPushStatus(getNotificationStatus());
   }, []);
 
   useEffect(() => {
@@ -215,6 +224,57 @@ export default function SettingsPage() {
               ) : null}
             </div>
             <Switch checked={false} disabled={!isPremium || !profile?.phone} />
+          </div>
+          {/* Push notifications toggle */}
+          <div className="flex items-center justify-between rounded-lg px-1 py-4">
+            <div className="flex flex-col gap-1">
+              <p className="text-sm font-medium text-white">Push notifications</p>
+              {pushStatus === "granted" && (
+                <p className="text-xs text-emerald-400">
+                  You will receive browser notifications for price drops
+                </p>
+              )}
+              {pushStatus === "denied" && (
+                <p className="text-xs text-amber-400">
+                  Notifications are blocked. Enable them in your browser settings.
+                </p>
+              )}
+              {pushStatus === "default" && (
+                <p className="text-xs text-zinc-500">
+                  Get browser notifications when prices drop on your watched routes
+                </p>
+              )}
+              {pushStatus === "unsupported" && (
+                <p className="text-xs text-zinc-500">
+                  Push notifications are not supported in this browser
+                </p>
+              )}
+            </div>
+            {pushStatus === "default" && (
+              <Button
+                variant="outline"
+                size="sm"
+                disabled={pushRequesting}
+                onClick={async () => {
+                  setPushRequesting(true);
+                  const granted = await requestNotificationPermission();
+                  setPushStatus(granted ? "granted" : "denied");
+                  setPushRequesting(false);
+                }}
+                className="border-zinc-700 text-zinc-300 hover:bg-zinc-800 hover:text-white min-h-[44px] shrink-0"
+              >
+                {pushRequesting ? "Requesting..." : "Enable"}
+              </Button>
+            )}
+            {pushStatus === "granted" && (
+              <Switch checked={true} disabled />
+            )}
+            {pushStatus === "denied" && (
+              <Switch checked={false} disabled />
+            )}
+            {pushStatus === "unsupported" && (
+              <Switch checked={false} disabled />
+            )}
           </div>
         </CardContent>
       </Card>

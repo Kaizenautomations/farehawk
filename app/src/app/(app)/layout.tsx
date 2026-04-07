@@ -14,11 +14,13 @@ import {
   Sun,
   Gift,
   Shield,
+  Route,
 } from "lucide-react";
 import { useSubscription } from "@/hooks/useSubscription";
 
 const sidebarLinks = [
   { href: "/search", label: "Search", icon: Search },
+  { href: "/multi-city", label: "Multi-City", icon: Route },
   { href: "/explore", label: "Explore", icon: Globe },
   { href: "/calendar", label: "Calendar", icon: CalendarDays },
   { href: "/advisor", label: "AI Advisor", icon: Sparkles },

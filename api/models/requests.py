@@ -53,3 +53,17 @@ class WeekendGetawayRequest(BaseModel):
     max_budget: float | None = None
     weeks_ahead: int = 8
     cabin_class: str = "economy"
+
+
+class MultiCitySegment(BaseModel):
+    origin: str
+    destination: str
+    date: str
+
+
+class MultiCitySearchRequest(BaseModel):
+    segments: list[MultiCitySegment]  # 2-4 segments
+    cabin_class: str = "economy"
+    max_stops: int | None = None
+    adults: int = 1
+    top_n: int = 5

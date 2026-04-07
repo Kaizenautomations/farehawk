@@ -10,7 +10,7 @@ from fli.models import (
     TripType,
 )
 from fli.search import SearchFlights, SearchDates
-from models.requests import FlightSearchRequest, DateSearchRequest
+from models.requests import FlightSearchRequest, DateSearchRequest, MultiCitySearchRequest
 from models.responses import FlightResultResponse, FlightLegResponse, DatePriceResponse
 
 
@@ -127,6 +127,24 @@ def search_flights(req: FlightSearchRequest) -> list[FlightResultResponse]:
         )
 
     return output
+
+
+def search_multi_city(req: MultiCitySearchRequest) -> list[list[FlightResultResponse]]:
+    """Search each segment independently and return grouped results."""
+    all_results = []
+    for seg in req.segments:
+        single_req = FlightSearchRequest(
+            origin=seg.origin,
+            destination=seg.destination,
+            departure_date=seg.date,
+            cabin_class=req.cabin_class,
+            max_stops=req.max_stops,
+            adults=req.adults,
+            top_n=req.top_n,
+        )
+        results = search_flights(single_req)
+        all_results.append(results)
+    return all_results
 
 
 def search_dates(req: DateSearchRequest) -> list[DatePriceResponse]:

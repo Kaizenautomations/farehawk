@@ -1,9 +1,9 @@
 import asyncio
 import time
 from fastapi import APIRouter, HTTPException
-from models.requests import FlightSearchRequest, DateSearchRequest
+from models.requests import FlightSearchRequest, DateSearchRequest, MultiCitySearchRequest
 from models.responses import FlightResultResponse, DatePriceResponse
-from services.flight_search import search_flights, search_dates
+from services.flight_search import search_flights, search_dates, search_multi_city
 
 router = APIRouter()
 
@@ -32,6 +32,24 @@ def retry_with_backoff(fn, *args):
 async def search_flights_endpoint(req: FlightSearchRequest):
     try:
         return await asyncio.to_thread(retry_with_backoff, search_flights, req)
+    except KeyError as e:
+        raise HTTPException(status_code=400, detail=f"Invalid airport code: {e}")
+    except Exception as e:
+        error_str = str(e)
+        if "429" in error_str:
+            raise HTTPException(
+                status_code=429,
+                detail="Google Flights is temporarily rate limiting requests. Please wait a moment and try again."
+            )
+        raise HTTPException(status_code=500, detail=error_str)
+
+
+@router.post("/multi-city", response_model=list[list[FlightResultResponse]])
+async def search_multi_city_endpoint(req: MultiCitySearchRequest):
+    if len(req.segments) < 2 or len(req.segments) > 4:
+        raise HTTPException(status_code=400, detail="Multi-city requires 2-4 segments")
+    try:
+        return await asyncio.to_thread(retry_with_backoff, search_multi_city, req)
     except KeyError as e:
         raise HTTPException(status_code=400, detail=f"Invalid airport code: {e}")
     except Exception as e:

@@ -164,3 +164,22 @@ export function searchWeekends(params: {
 }) {
   return sidecarFetch<WeekendGetawayResponse>("/insights/weekends", params);
 }
+
+// Multi-city search
+export interface MultiCitySegment {
+  origin: string;
+  destination: string;
+  date: string;
+}
+
+export interface MultiCitySearchParams {
+  segments: MultiCitySegment[];
+  cabin_class?: string;
+  max_stops?: number | null;
+  adults?: number;
+  top_n?: number;
+}
+
+export function searchMultiCity(params: MultiCitySearchParams) {
+  return sidecarFetch<FlightResult[][]>("/search/multi-city", params);
+}
