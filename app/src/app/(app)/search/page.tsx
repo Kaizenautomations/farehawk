@@ -574,9 +574,9 @@ function SearchPageInner() {
               </svg>
             </div>
             <div>
-              <p className="text-sm font-medium text-emerald-400">Save with US-market pricing</p>
+              <p className="text-sm font-medium text-emerald-400">About these prices</p>
               <p className="text-xs text-slate-400 mt-1 leading-relaxed">
-                These prices are sourced from the US market, which is often significantly cheaper than Canadian or European pricing for the same flights. To book at these rates, use a VPN set to a US location when clicking &quot;Book.&quot; Most flights can be booked at the US price this way.
+                Prices shown are estimated base fares from Google Flights. Final prices including taxes and fees may be higher. Click &quot;Book&quot; to see the exact all-in price on Google Flights. Prices may also vary by your location — using a US-based VPN when booking can sometimes unlock lower rates.
               </p>
             </div>
           </div>

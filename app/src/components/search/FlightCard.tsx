@@ -176,8 +176,8 @@ export function FlightCard({ flight, onWatch, style }: Props) {
                 </span>
               </div>
               <DealScoreBadge price={flight.price} />
-              <p className="text-[10px] text-emerald-600/80 leading-tight font-medium">
-                US-market price — often cheaper than local pricing. Use a US VPN to book at this rate.
+              <p className="text-[10px] text-slate-500 leading-tight">
+                Estimated base fare. Final price with taxes may differ. Click Book to confirm.
               </p>
             </div>
             <div className="flex gap-2">
