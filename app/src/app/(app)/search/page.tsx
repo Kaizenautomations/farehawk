@@ -5,9 +5,12 @@ import { useSearchParams } from "next/navigation";
 import { SearchForm } from "@/components/search/SearchForm";
 import { FlightResultsList } from "@/components/search/FlightResultsList";
 import { NearbyAirportComparison } from "@/components/search/NearbyAirportComparison";
+import { TripSummary } from "@/components/search/TripSummary";
 import { LoadingBar } from "@/components/ui/loading-bar";
 import { useSubscription } from "@/hooks/useSubscription";
+import { useTripBuilder } from "@/hooks/useTripBuilder";
 import type { FlightResult } from "@/types/flight";
+import type { SelectedFlight } from "@/lib/trip-builder";
 import {
   getSearchHistory,
   addSearchHistory,
@@ -49,6 +52,14 @@ function SearchPageInner() {
   const [historyTab, setHistoryTab] = useState<"recent" | "saved">("recent");
   const [flexibleInfo, setFlexibleInfo] = useState<string | null>(null);
   const sub = useSubscription();
+  const tripBuilder = useTripBuilder();
+
+  // Trip builder state
+  const [tripPhase, setTripPhase] = useState<"idle" | "select-outbound" | "select-return">("idle");
+  const [returnResults, setReturnResults] = useState<FlightResult[]>([]);
+  const [returnLoading, setReturnLoading] = useState(false);
+  // Track whether current search is a round-trip (has return date)
+  const [isRoundTrip, setIsRoundTrip] = useState(false);
 
   // Load search history on mount
   useEffect(() => {
@@ -77,6 +88,12 @@ function SearchPageInner() {
     setRetryable(false);
     setSearched(true);
     setFlexibleInfo(null);
+    // Reset trip builder on new search
+    tripBuilder.clearTrip();
+    setReturnResults([]);
+    setReturnLoading(false);
+    setIsRoundTrip(!!params.return_date);
+    setTripPhase(params.return_date ? "select-outbound" : "idle");
 
     let searchDate = params.departure_date;
 
@@ -187,7 +204,7 @@ function SearchPageInner() {
       setLoading(false);
       sub.refresh();
     }
-  }, [sub]);
+  }, [sub, tripBuilder]);
 
   async function handleWatch(flight: FlightResult) {
     const firstLeg = flight.legs[0];
@@ -213,6 +230,54 @@ function SearchPageInner() {
       const data = await res.json();
       setToast({ type: "error", message: data.error || "Failed to create watch" });
     }
+  }
+
+  // Handle selecting an outbound flight in trip builder mode
+  const handleSelectOutbound = useCallback(async (flight: SelectedFlight) => {
+    tripBuilder.selectOutbound(flight);
+    setTripPhase("select-return");
+
+    // Auto-search return flights (swap origin/destination, use return date)
+    if (!lastParams) return;
+    const returnDate = (lastParams as Record<string, unknown>).return_date as string | undefined;
+    if (!returnDate) return;
+
+    setReturnLoading(true);
+    const returnParams = {
+      origin: flight.destination,
+      destination: flight.origin,
+      departure_date: returnDate,
+      cabin_class: (lastParams as Record<string, unknown>).cabin_class as string,
+      max_stops: (lastParams as Record<string, unknown>).max_stops as number | null,
+    };
+    try {
+      const res = await fetch("/api/search/flights", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(returnParams),
+      });
+      const data = await res.json();
+      if (res.ok && Array.isArray(data)) {
+        setReturnResults(data);
+      } else {
+        setReturnResults([]);
+      }
+    } catch {
+      setReturnResults([]);
+    } finally {
+      setReturnLoading(false);
+      sub.refresh();
+    }
+  }, [lastParams, tripBuilder, sub]);
+
+  const handleSelectReturn = useCallback((flight: SelectedFlight) => {
+    tripBuilder.selectReturn(flight);
+  }, [tripBuilder]);
+
+  // Build a key to identify selected flights
+  function getFlightKey(flight: SelectedFlight | null): string | null {
+    if (!flight) return null;
+    return `${flight.origin}-${flight.destination}-${flight.departure_time}-${flight.price}`;
   }
 
   return (
@@ -555,13 +620,60 @@ function SearchPageInner() {
         </div>
       )}
 
-      {/* Results */}
+      {/* Results — Outbound flights */}
       {searched && (
-        <FlightResultsList
-          results={results}
-          loading={loading}
-          onWatch={handleWatch}
-        />
+        <>
+          {isRoundTrip && tripPhase === "select-outbound" && !loading && results.length > 0 && (
+            <div className="rounded-xl border border-blue-500/30 bg-blue-500/10 backdrop-blur-sm p-4 flex items-center gap-3">
+              <div className="flex items-center justify-center h-8 w-8 rounded-lg bg-blue-500/20 shrink-0">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" className="text-blue-400 rotate-45">
+                  <path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 00-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z" />
+                </svg>
+              </div>
+              <div>
+                <p className="text-sm font-medium text-blue-300">Select your outbound flight</p>
+                <p className="text-xs text-blue-400/70 mt-0.5">Click &quot;Select&quot; on a flight to add it to your trip, then choose a return flight.</p>
+              </div>
+            </div>
+          )}
+          <FlightResultsList
+            results={results}
+            loading={loading}
+            onWatch={handleWatch}
+            onSelectFlight={isRoundTrip ? handleSelectOutbound : undefined}
+            selectedFlightKey={isRoundTrip ? getFlightKey(tripBuilder.trip.outbound) : null}
+          />
+        </>
+      )}
+
+      {/* Return flights section */}
+      {tripPhase === "select-return" && (
+        <>
+          <div className="rounded-xl border border-indigo-500/30 bg-indigo-500/10 backdrop-blur-sm p-4 flex items-center gap-3">
+            <div className="flex items-center justify-center h-8 w-8 rounded-lg bg-indigo-500/20 shrink-0">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" className="text-indigo-400 -rotate-[135deg]">
+                <path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 00-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z" />
+              </svg>
+            </div>
+            <div>
+              <p className="text-sm font-medium text-indigo-300">Now select your return flight</p>
+              <p className="text-xs text-indigo-400/70 mt-0.5">
+                {tripBuilder.trip.outbound?.destination} &rarr; {tripBuilder.trip.outbound?.origin} on {
+                  lastParams?.return_date
+                    ? new Date((lastParams.return_date as string) + "T12:00:00").toLocaleDateString("en-US", { month: "short", day: "numeric" })
+                    : ""
+                }
+              </p>
+            </div>
+          </div>
+          <FlightResultsList
+            results={returnResults}
+            loading={returnLoading}
+            onWatch={handleWatch}
+            onSelectFlight={handleSelectReturn}
+            selectedFlightKey={getFlightKey(tripBuilder.trip.return_flight)}
+          />
+        </>
       )}
 
       {/* Pricing tip */}
@@ -595,6 +707,21 @@ function SearchPageInner() {
           currentPrice={results[0].price}
         />
       )}
+
+      {/* Bottom spacer when trip summary is visible */}
+      {tripBuilder.trip.outbound && <div className="h-[180px]" />}
+
+      {/* Trip Summary sticky bar */}
+      <TripSummary
+        trip={tripBuilder.trip}
+        totalPrice={tripBuilder.totalPrice}
+        bookingUrl={tripBuilder.bookingUrl}
+        onClear={() => {
+          tripBuilder.clearTrip();
+          setTripPhase(isRoundTrip ? "select-outbound" : "idle");
+          setReturnResults([]);
+        }}
+      />
     </div>
   );
 }

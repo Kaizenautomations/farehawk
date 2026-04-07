@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from "react";
 import type { FlightResult } from "@/types/flight";
+import type { SelectedFlight } from "@/lib/trip-builder";
 import { FlightCard } from "./FlightCard";
 import { Skeleton } from "@/components/ui/skeleton";
 import { getDealScore } from "@/components/search/DealScoreBadge";
@@ -69,9 +70,11 @@ interface Props {
   results: FlightResult[];
   loading?: boolean;
   onWatch?: (flight: FlightResult) => void;
+  onSelectFlight?: (flight: SelectedFlight) => void;
+  selectedFlightKey?: string | null;
 }
 
-export function FlightResultsList({ results, loading, onWatch }: Props) {
+export function FlightResultsList({ results, loading, onWatch, onSelectFlight, selectedFlightKey }: Props) {
   const [sortBy, setSortBy] = useState<SortOption>("price-asc");
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [activeAirlines, setActiveAirlines] = useState<Set<string>>(new Set());
@@ -378,16 +381,21 @@ export function FlightResultsList({ results, loading, onWatch }: Props) {
         </select>
       </div>
       <div className="space-y-3">
-        {sortedResults.map((flight, i) => (
-          <FlightCard
-            key={i}
-            flight={flight}
-            onWatch={onWatch ? () => onWatch(flight) : undefined}
-            style={{
-              animation: `fadeUp 0.5s ease-out ${i * 0.06}s both`,
-            }}
-          />
-        ))}
+        {sortedResults.map((flight, i) => {
+          const flightKey = `${flight.legs[0]?.departure_airport}-${flight.legs[flight.legs.length - 1]?.arrival_airport}-${flight.legs[0]?.departure_time}-${flight.price}`;
+          return (
+            <FlightCard
+              key={i}
+              flight={flight}
+              onWatch={onWatch ? () => onWatch(flight) : undefined}
+              onSelect={onSelectFlight}
+              isSelected={selectedFlightKey === flightKey}
+              style={{
+                animation: `fadeUp 0.5s ease-out ${i * 0.06}s both`,
+              }}
+            />
+          );
+        })}
       </div>
     </div>
   );

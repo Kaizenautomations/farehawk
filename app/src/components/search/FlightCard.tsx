@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import type { FlightResult } from "@/types/flight";
+import type { SelectedFlight } from "@/lib/trip-builder";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -12,6 +13,8 @@ import { useCurrency } from "@/hooks/useCurrency";
 interface Props {
   flight: FlightResult;
   onWatch?: () => void;
+  onSelect?: (flight: SelectedFlight) => void;
+  isSelected?: boolean;
   style?: React.CSSProperties;
 }
 
@@ -31,11 +34,39 @@ function formatTime(iso: string): string {
   });
 }
 
-export function FlightCard({ flight, onWatch, style }: Props) {
+export function FlightCard({ flight, onWatch, onSelect, isSelected, style }: Props) {
   const [copied, setCopied] = useState(false);
   const { format, currency } = useCurrency();
   const firstLeg = flight.legs[0];
   const lastLeg = flight.legs[flight.legs.length - 1];
+
+  function handleSelect() {
+    if (!onSelect) return;
+    const firstLeg = flight.legs[0];
+    const lastLeg = flight.legs[flight.legs.length - 1];
+    const selected: SelectedFlight = {
+      origin: firstLeg?.departure_airport || "",
+      destination: lastLeg?.arrival_airport || "",
+      date: firstLeg?.departure_time ? firstLeg.departure_time.split("T")[0] : "",
+      airline: getAirlineName(firstLeg?.airline_code || firstLeg?.airline || ""),
+      airline_code: firstLeg?.airline_code || firstLeg?.airline || "",
+      departure_time: firstLeg?.departure_time || "",
+      arrival_time: lastLeg?.arrival_time || "",
+      duration_minutes: flight.duration_minutes,
+      stops: flight.stops,
+      price: flight.price,
+      currency: flight.currency,
+      booking_url: flight.booking_url,
+      legs: flight.legs.map((leg) => ({
+        departure_airport: leg.departure_airport,
+        arrival_airport: leg.arrival_airport,
+        departure_time: leg.departure_time,
+        arrival_time: leg.arrival_time,
+        airline: leg.airline,
+      })),
+    };
+    onSelect(selected);
+  }
 
   async function handleShare() {
     const depDate = firstLeg?.departure_time
@@ -64,7 +95,9 @@ export function FlightCard({ flight, onWatch, style }: Props) {
 
   return (
     <Card
-      className="group border-slate-800 bg-slate-900/60 backdrop-blur-sm hover:border-slate-700 hover:bg-slate-900/80 transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/5 hover:-translate-y-0.5 gradient-border-hover"
+      className={`group border-slate-800 bg-slate-900/60 backdrop-blur-sm hover:border-slate-700 hover:bg-slate-900/80 transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/5 hover:-translate-y-0.5 gradient-border-hover ${
+        isSelected ? "ring-2 ring-blue-500 border-blue-500/50 bg-blue-500/5" : ""
+      }`}
       style={style}
     >
       <CardContent className="relative z-10 p-4 md:p-5">
@@ -236,6 +269,39 @@ export function FlightCard({ flight, onWatch, style }: Props) {
                   </svg>
                 )}
               </Button>
+              {onSelect && (
+                <Button
+                  size="sm"
+                  onClick={handleSelect}
+                  className={`text-xs h-9 min-h-[44px] min-w-[44px] shadow-md ${
+                    isSelected
+                      ? "bg-blue-600 text-white shadow-blue-500/20 cursor-default"
+                      : "bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white shadow-blue-500/15"
+                  }`}
+                >
+                  {isSelected ? (
+                    <>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="14"
+                        height="14"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="mr-1"
+                      >
+                        <polyline points="20 6 9 17 4 12" />
+                      </svg>
+                      Selected
+                    </>
+                  ) : (
+                    "Select"
+                  )}
+                </Button>
+              )}
               <a
                 href={flight.booking_url}
                 target="_blank"
@@ -243,7 +309,11 @@ export function FlightCard({ flight, onWatch, style }: Props) {
               >
                 <Button
                   size="sm"
-                  className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs h-9 min-h-[44px] min-w-[44px] shadow-md shadow-blue-500/15"
+                  className={`text-xs h-9 min-h-[44px] min-w-[44px] shadow-md ${
+                    onSelect
+                      ? "border-slate-700 text-slate-300 hover:bg-slate-800 hover:text-white hover:border-slate-600 bg-transparent border shadow-none"
+                      : "bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white shadow-blue-500/15"
+                  }`}
                 >
                   Book
                   <svg
