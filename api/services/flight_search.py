@@ -106,7 +106,12 @@ def search_flights(req: FlightSearchRequest) -> list[FlightResultResponse]:
                     )
                 )
 
-        total_price = sum(f.price for f in flights if f.price)
+        # For round-trip tuples, fli returns the total round-trip price on each element.
+        # Use the first element's price (the total), don't sum them (that would double it).
+        if isinstance(result, tuple) and len(flights) > 1:
+            total_price = first.price or 0
+        else:
+            total_price = sum(f.price for f in flights if f.price)
         total_duration = sum(f.duration for f in flights if f.duration)
         total_stops = sum(f.stops for f in flights if f.stops is not None)
 
