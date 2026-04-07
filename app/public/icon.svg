@@ -5,8 +5,12 @@
       <stop offset="100%" stop-color="#6366f1"/>
     </linearGradient>
   </defs>
-  <circle cx="256" cy="256" r="256" fill="url(#bg)"/>
-  <g transform="translate(256,256) rotate(-45) translate(-256,-256)">
-    <path d="M377 208v-16l-64-40V108a12 12 0 00-24 0v44l-64 40v16l64-20v44l-16 12v12l28-8 28 8v-12l-16-12v-44l64 20z" fill="white"/>
+  <!-- Background circle -->
+  <rect width="512" height="512" rx="108" fill="url(#bg)"/>
+  <!-- Plane icon - clean, centered -->
+  <g transform="translate(256, 248) scale(4.5)">
+    <path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 00-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z" fill="white" transform="translate(-12,-12) rotate(-45, 12, 12)"/>
   </g>
+  <!-- FF text -->
+  <text x="256" y="430" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-weight="700" font-size="80" fill="white" opacity="0.9">FF</text>
 </svg>

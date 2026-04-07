@@ -177,7 +177,7 @@ export function FlightCard({ flight, onWatch, style }: Props) {
               </div>
               <DealScoreBadge price={flight.price} />
               <p className="text-[10px] text-slate-600 leading-tight">
-                Prices shown in USD from Google Flights. Your local price may differ. Click &quot;Book&quot; to see final pricing.
+                US-market pricing. Canadian and other regional prices may differ. Click &quot;Book&quot; for your local price.
               </p>
             </div>
             <div className="flex gap-2">
