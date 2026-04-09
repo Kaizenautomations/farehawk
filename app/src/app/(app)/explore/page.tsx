@@ -74,7 +74,7 @@ export default function ExplorePage() {
   const [fromDate, setFromDate] = useState(getDefaultFromDate());
   const [toDate, setToDate] = useState(getDefaultToDate());
   const [budget, setBudget] = useState("");
-  const [tripType, setTripType] = useState<"one_way" | "round_trip">("round_trip");
+  const [tripType, setTripType] = useState<"one_way" | "round_trip">("one_way");
   const [duration, setDuration] = useState("7");
   const [cabinClass, setCabinClass] = useState("economy");
   const [maxStops, setMaxStops] = useState("");

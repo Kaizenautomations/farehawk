@@ -68,6 +68,26 @@ export async function POST(request: Request) {
   }
 
   const body = await request.json();
+
+  // Validate input
+  const iataRegex = /^[A-Z]{3}$/;
+  const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+  const origin = String(body.origin || "").toUpperCase();
+  const destination = String(body.destination || "").toUpperCase();
+
+  if (!iataRegex.test(origin)) {
+    return NextResponse.json({ error: "Invalid origin airport code" }, { status: 400 });
+  }
+  if (!iataRegex.test(destination)) {
+    return NextResponse.json({ error: "Invalid destination airport code" }, { status: 400 });
+  }
+  if (!body.departure_date || !dateRegex.test(body.departure_date)) {
+    return NextResponse.json({ error: "Invalid departure date (YYYY-MM-DD)" }, { status: 400 });
+  }
+  if (new Date(body.departure_date) < new Date(new Date().toISOString().split("T")[0])) {
+    return NextResponse.json({ error: "Departure date cannot be in the past" }, { status: 400 });
+  }
+
   const { data: watch, error } = await supabase
     .from("watches")
     .insert({

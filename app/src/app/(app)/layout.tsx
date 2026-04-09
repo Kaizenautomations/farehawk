@@ -137,27 +137,7 @@ export default function AppLayout({
           {/* Spacer */}
           <div className="flex-1" />
 
-          {/* Theme toggle at bottom */}
-          <button
-            type="button"
-            onClick={toggleTheme}
-            className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors whitespace-nowrap text-muted-foreground hover:text-foreground hover:bg-white/5 mb-2 min-h-[44px]"
-            title={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
-            aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
-          >
-            {theme === "dark" ? (
-              <Sun className="size-5 shrink-0" />
-            ) : (
-              <Moon className="size-5 shrink-0" />
-            )}
-            <span
-              className={`transition-opacity duration-200 ${
-                sidebarExpanded ? "opacity-100" : "opacity-0"
-              }`}
-            >
-              {theme === "dark" ? "Light Mode" : "Dark Mode"}
-            </span>
-          </button>
+          {/* Theme toggle disabled until light mode is properly themed */}
         </aside>
 
         {/* Main content */}

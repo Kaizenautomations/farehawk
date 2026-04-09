@@ -186,54 +186,7 @@ export default function SettingsPage() {
         </CardContent>
       </Card>
 
-      {/* Theme Section */}
-      <Card className="border-zinc-800 bg-zinc-900/80">
-        <CardHeader className="border-b border-zinc-800 pb-4">
-          <div className="flex items-center gap-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-yellow-500 to-orange-600">
-              <svg className="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
-                <circle cx="12" cy="12" r="5" />
-                <line x1="12" y1="1" x2="12" y2="3" />
-                <line x1="12" y1="21" x2="12" y2="23" />
-                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
-                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
-                <line x1="1" y1="12" x2="3" y2="12" />
-                <line x1="21" y1="12" x2="23" y2="12" />
-                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
-                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
-              </svg>
-            </div>
-            <CardTitle className="text-base font-semibold text-white">Theme</CardTitle>
-          </div>
-        </CardHeader>
-        <CardContent className="pt-5">
-          <div className="flex gap-3">
-            <button
-              type="button"
-              onClick={() => setTheme("dark")}
-              className={`min-h-[44px] flex-1 rounded-lg border px-4 py-2.5 text-sm font-medium transition-colors ${
-                theme === "dark"
-                  ? "border-blue-500/50 bg-blue-500/15 text-blue-400"
-                  : "border-zinc-700 bg-zinc-800/50 text-zinc-400 hover:border-zinc-600 hover:text-zinc-300"
-              }`}
-            >
-              Dark
-            </button>
-            <button
-              type="button"
-              onClick={() => setTheme("light")}
-              className={`min-h-[44px] flex-1 rounded-lg border px-4 py-2.5 text-sm font-medium transition-colors ${
-                theme === "light"
-                  ? "border-blue-500/50 bg-blue-500/15 text-blue-400"
-                  : "border-zinc-700 bg-zinc-800/50 text-zinc-400 hover:border-zinc-600 hover:text-zinc-300"
-              }`}
-            >
-              Light
-            </button>
-          </div>
-          <p className="text-xs text-zinc-600 mt-2">Light mode is experimental — some pages may look rough</p>
-        </CardContent>
-      </Card>
+      {/* Theme Section — disabled until light mode is properly themed */}
 
       {/* Notifications Section */}
       <Card className="border-zinc-800 bg-zinc-900/80">
