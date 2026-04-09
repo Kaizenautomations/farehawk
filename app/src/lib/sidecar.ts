@@ -183,3 +183,32 @@ export interface MultiCitySearchParams {
 export function searchMultiCity(params: MultiCitySearchParams) {
   return sidecarFetch<FlightResult[][]>("/search/multi-city", params);
 }
+
+// Date Matrix
+export interface DateMatrixCell {
+  departure_date: string;
+  return_date: string;
+  price: number;
+  currency: string;
+}
+
+export interface DateMatrixResponse {
+  origin: string;
+  destination: string;
+  cells: DateMatrixCell[];
+}
+
+export interface DateMatrixParams {
+  origin: string;
+  destination: string;
+  departure_from: string;
+  departure_to: string;
+  return_from: string;
+  return_to: string;
+  cabin_class?: string;
+  max_stops?: number | null;
+}
+
+export function searchDateMatrix(params: DateMatrixParams) {
+  return sidecarFetch<DateMatrixResponse>("/search/date-matrix", params);
+}

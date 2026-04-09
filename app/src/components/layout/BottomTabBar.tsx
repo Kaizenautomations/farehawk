@@ -12,6 +12,7 @@ import {
   Eye,
   Sun,
   Route,
+  Briefcase,
   LayoutDashboard,
   Gift,
   Settings,
@@ -33,6 +34,7 @@ const tabs = [
 ];
 
 const moreFeatureLinks = [
+  { href: "/trips", label: "Trips", icon: Briefcase },
   { href: "/watches", label: "Watches", icon: Eye },
   { href: "/weekends", label: "Weekends", icon: Sun },
   { href: "/multi-city", label: "Multi-City", icon: Route },

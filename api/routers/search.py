@@ -1,9 +1,9 @@
 import asyncio
 import time
 from fastapi import APIRouter, HTTPException
-from models.requests import FlightSearchRequest, DateSearchRequest, MultiCitySearchRequest
-from models.responses import FlightResultResponse, DatePriceResponse
-from services.flight_search import search_flights, search_dates, search_multi_city
+from models.requests import FlightSearchRequest, DateSearchRequest, MultiCitySearchRequest, DateMatrixRequest
+from models.responses import FlightResultResponse, DatePriceResponse, DateMatrixResponse
+from services.flight_search import search_flights, search_dates, search_multi_city, search_date_matrix
 
 router = APIRouter()
 
@@ -50,6 +50,22 @@ async def search_multi_city_endpoint(req: MultiCitySearchRequest):
         raise HTTPException(status_code=400, detail="Multi-city requires 2-4 segments")
     try:
         return await asyncio.to_thread(retry_with_backoff, search_multi_city, req)
+    except KeyError as e:
+        raise HTTPException(status_code=400, detail=f"Invalid airport code: {e}")
+    except Exception as e:
+        error_str = str(e)
+        if "429" in error_str:
+            raise HTTPException(
+                status_code=429,
+                detail="Google Flights is temporarily rate limiting requests. Please wait a moment and try again."
+            )
+        raise HTTPException(status_code=500, detail=error_str)
+
+
+@router.post("/date-matrix", response_model=DateMatrixResponse)
+async def search_date_matrix_endpoint(req: DateMatrixRequest):
+    try:
+        return await asyncio.to_thread(retry_with_backoff, search_date_matrix, req)
     except KeyError as e:
         raise HTTPException(status_code=400, detail=f"Invalid airport code: {e}")
     except Exception as e:

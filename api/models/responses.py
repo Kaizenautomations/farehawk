@@ -83,3 +83,16 @@ class WeekendGetawayResponse(BaseModel):
     origin: str
     getaways: list[WeekendGetaway]
     weeks_searched: int
+
+
+class DateMatrixCell(BaseModel):
+    departure_date: str
+    return_date: str
+    price: float
+    currency: str
+
+
+class DateMatrixResponse(BaseModel):
+    origin: str
+    destination: str
+    cells: list[DateMatrixCell]

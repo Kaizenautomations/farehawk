@@ -17,6 +17,7 @@ import {
   Gift,
   Shield,
   Route,
+  Briefcase,
   ChevronLeft,
   ChevronRight,
   Moon,
@@ -26,6 +27,7 @@ import { useTheme } from "@/hooks/useTheme";
 
 const sidebarLinks = [
   { href: "/search", label: "Search", icon: Search },
+  { href: "/trips", label: "Trips", icon: Briefcase },
   { href: "/multi-city", label: "Multi-City", icon: Route },
   { href: "/explore", label: "Explore", icon: Globe },
   { href: "/calendar", label: "Calendar", icon: CalendarDays },

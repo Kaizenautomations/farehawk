@@ -67,3 +67,14 @@ class MultiCitySearchRequest(BaseModel):
     max_stops: int | None = None
     adults: int = 1
     top_n: int = 5
+
+
+class DateMatrixRequest(BaseModel):
+    origin: str
+    destination: str
+    departure_from: str
+    departure_to: str
+    return_from: str
+    return_to: str
+    cabin_class: str = "economy"
+    max_stops: int | None = None

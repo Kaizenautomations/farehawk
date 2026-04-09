@@ -31,7 +31,7 @@ export default function LandingPage() {
             variant="secondary"
             className="animate-fade-up mb-6 border-primary/20 bg-primary/10 px-4 py-1.5 text-sm text-primary"
           >
-            Now in Early Access
+            Free to Use — No Credit Card Required
           </Badge>
 
           <h1 className="animate-fade-up-delay-1 mx-auto max-w-4xl text-3xl font-bold leading-[1.1] tracking-tight sm:text-5xl lg:text-7xl">
@@ -40,18 +40,18 @@ export default function LandingPage() {
           </h1>
 
           <p className="animate-fade-up-delay-2 mx-auto mt-6 sm:mt-8 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg lg:text-xl">
-            The smart flight tracker that finds deals Google can&apos;t. AI-powered
-            search, budget-based destination discovery, nearby airport savings,
-            and automated price alerts — all in one place.
+            Find flights your airline doesn&apos;t want you to see. US-market pricing,
+            AI-powered recommendations, and deal scores that tell you exactly when
+            to book — helping Canadians save up to 40% vs Google Flights.
           </p>
 
           <div className="animate-fade-up-delay-3 mt-8 sm:mt-10 flex flex-col items-center justify-center gap-3 sm:gap-4 sm:flex-row w-full sm:w-auto">
-            <Link href="/waitlist">
+            <Link href="/signup">
               <Button
                 size="lg"
                 className="bg-gradient-brand px-8 text-base font-semibold text-white shadow-lg shadow-primary/25 transition-all hover:shadow-xl hover:shadow-primary/30 hover:brightness-110 min-h-[44px] w-full sm:w-auto"
               >
-                Join the Waitlist
+                Get Started Free
               </Button>
             </Link>
             <Link href="/pricing" className="w-full sm:w-auto">
@@ -611,19 +611,19 @@ export default function LandingPage() {
             <div className="pointer-events-none absolute inset-0 dot-grid opacity-30" />
             <div className="relative z-10">
               <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
-                Be the first to know when we launch
+                Start saving on flights today
               </h2>
               <p className="mx-auto mt-4 max-w-xl text-lg text-muted-foreground">
-                Join the waitlist and get early access to FareFlight. Free to
-                start, no credit card required.
+                Create your free account and search your first flight in under
+                30 seconds. No credit card required.
               </p>
               <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:gap-4 sm:flex-row w-full sm:w-auto">
-                <Link href="/waitlist" className="w-full sm:w-auto">
+                <Link href="/signup" className="w-full sm:w-auto">
                   <Button
                     size="lg"
                     className="bg-gradient-brand px-8 text-base font-semibold text-white shadow-lg shadow-primary/25 transition-all hover:shadow-xl hover:shadow-primary/30 hover:brightness-110 min-h-[44px] w-full sm:w-auto"
                   >
-                    Join the Waitlist
+                    Create Free Account
                   </Button>
                 </Link>
                 <Link href="/search" className="w-full sm:w-auto">

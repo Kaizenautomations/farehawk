@@ -139,40 +139,7 @@ export default function AdvisorPage() {
     sendMessage(input);
   }
 
-  // Free tier gate
-  if (isFree) {
-    return (
-      <div className="flex flex-col items-center justify-center h-[calc(100vh-12rem)] text-center px-4">
-        <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-500/20 to-indigo-600/20 mb-6">
-          <Lock className="size-8 text-blue-400" />
-        </div>
-        <h1 className="text-2xl font-bold text-white mb-2">
-          AI Travel Advisor
-        </h1>
-        <p className="text-muted-foreground max-w-md mb-8">
-          Chat with AI to find the perfect trip. Get personalized flight
-          recommendations, destination ideas, and booking tips.
-        </p>
-        <div className="flex flex-col sm:flex-row gap-3">
-          <Link href="/pricing">
-            <Button className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white min-h-[44px] px-6">
-              Upgrade to Pro — 15 messages/day
-            </Button>
-          </Link>
-        </div>
-        <div className="mt-6 text-xs text-muted-foreground space-y-1">
-          <p>
-            <strong className="text-slate-400">Pro:</strong> 15 messages/day
-            (GPT-4o mini — fast responses)
-          </p>
-          <p>
-            <strong className="text-amber-400">Premium:</strong> 50
-            messages/day (GPT-4o — smarter, more detailed)
-          </p>
-        </div>
-      </div>
-    );
-  }
+  // Free tier gets 3 messages — no more lock screen
 
   return (
     <div className="flex flex-col h-[calc(100vh-8rem)]">
@@ -208,7 +175,7 @@ export default function AdvisorPage() {
                   : "bg-blue-500/15 text-blue-400 border border-blue-500/30"
               }
             >
-              {isPremium ? "GPT-4o" : "GPT-4o mini"}
+              {isPremium ? "Advanced AI" : "Quick AI"}
             </Badge>
           </div>
         </div>

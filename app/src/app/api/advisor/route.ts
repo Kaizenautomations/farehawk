@@ -38,11 +38,11 @@ export async function POST(request: Request) {
   const userIsAdmin = await isAdmin(user.id);
   const limits = userIsAdmin ? ADMIN_LIMITS : TIER_LIMITS[tier];
 
-  // Check if tier has AI access (admins always have access)
-  if (!userIsAdmin && (!limits.ai_model || tier === "free")) {
+  // Check if tier has AI access (admins always have access, free gets 3 msgs)
+  if (!userIsAdmin && !limits.ai_model) {
     return NextResponse.json(
       {
-        error: "AI Travel Advisor requires a Pro or Premium plan.",
+        error: "AI Travel Advisor is currently unavailable.",
         upgrade: true,
       },
       { status: 403 }

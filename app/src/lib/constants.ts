@@ -5,8 +5,8 @@ export const TIER_LIMITS = {
     email_alerts: false,
     sms_alerts: false,
     business_cabin: false,
-    ai_messages_per_day: 0,
-    ai_model: null,
+    ai_messages_per_day: 3,
+    ai_model: "gpt-4o-mini",
   },
   pro: {
     searches_per_day: 50,

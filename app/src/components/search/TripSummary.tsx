@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import type { TripPlan } from "@/lib/trip-builder";
 import { useCurrency } from "@/hooks/useCurrency";
 import { getAirlineName } from "@/lib/airlines";
+import { saveTrip, isTripSaved } from "@/lib/saved-trips";
 
 function formatTime(iso: string): string {
   if (!iso) return "";
@@ -36,6 +37,7 @@ interface Props {
 export function TripSummary({ trip, totalPrice, bookingUrl, onClear }: Props) {
   const { format, currency } = useCurrency();
   const [visible, setVisible] = useState(false);
+  const [saved, setSaved] = useState(false);
 
   const hasSelection = trip.outbound !== null;
 
@@ -48,6 +50,15 @@ export function TripSummary({ trip, totalPrice, bookingUrl, onClear }: Props) {
       setVisible(false);
     }
   }, [hasSelection]);
+
+  // Check if already saved when selections change
+  useEffect(() => {
+    if (trip.outbound) {
+      setSaved(isTripSaved(trip.outbound, trip.return_flight));
+    } else {
+      setSaved(false);
+    }
+  }, [trip.outbound, trip.return_flight]);
 
   if (!hasSelection) return null;
 
@@ -230,33 +241,75 @@ export function TripSummary({ trip, totalPrice, bookingUrl, onClear }: Props) {
                 )}
               </div>
             </div>
-            <a
-              href={bookingUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={`inline-flex items-center gap-2 rounded-xl px-5 py-2.5 min-h-[44px] text-sm font-semibold transition-all shadow-lg ${
-                returnFlight
-                  ? "bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white shadow-blue-500/20"
-                  : "bg-slate-800 text-slate-400 border border-slate-700 hover:bg-slate-700 hover:text-slate-300"
-              }`}
-            >
-              {returnFlight ? "Book on Google" : "Book Outbound"}
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="14"
-                height="14"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => {
+                  if (saved) return;
+                  const depDate = outbound.date
+                    ? new Date(outbound.date + "T12:00:00").toLocaleDateString("en-US", { month: "short", day: "numeric" })
+                    : "";
+                  const retDate = returnFlight?.date
+                    ? new Date(returnFlight.date + "T12:00:00").toLocaleDateString("en-US", { month: "short", day: "numeric" })
+                    : "";
+                  const defaultName = `${outbound.origin} → ${outbound.destination}${depDate ? `, ${depDate}` : ""}${retDate ? `-${retDate}` : ""}`;
+                  const name = window.prompt("Name this trip:", defaultName);
+                  if (!name) return;
+                  saveTrip({
+                    name,
+                    outbound,
+                    return_flight: returnFlight ?? null,
+                    total_price: totalPrice,
+                    currency,
+                  });
+                  setSaved(true);
+                }}
+                className={`inline-flex items-center gap-1.5 rounded-xl px-4 py-2.5 min-h-[44px] text-sm font-semibold transition-all ${
+                  saved
+                    ? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 cursor-default"
+                    : "bg-slate-800 text-slate-300 border border-slate-700 hover:bg-slate-700 hover:text-white"
+                }`}
               >
-                <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6" />
-                <polyline points="15 3 21 3 21 9" />
-                <line x1="10" y1="14" x2="21" y2="3" />
-              </svg>
-            </a>
+                {saved ? (
+                  <>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
+                    Saved
+                  </>
+                ) : (
+                  <>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" /><polyline points="17 21 17 13 7 13 7 21" /><polyline points="7 3 7 8 15 8" /></svg>
+                    Save
+                  </>
+                )}
+              </button>
+              <a
+                href={bookingUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`inline-flex items-center gap-2 rounded-xl px-5 py-2.5 min-h-[44px] text-sm font-semibold transition-all shadow-lg ${
+                  returnFlight
+                    ? "bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white shadow-blue-500/20"
+                    : "bg-slate-800 text-slate-400 border border-slate-700 hover:bg-slate-700 hover:text-slate-300"
+                }`}
+              >
+                {returnFlight ? "Book on Google" : "Book Outbound"}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6" />
+                  <polyline points="15 3 21 3 21 9" />
+                  <line x1="10" y1="14" x2="21" y2="3" />
+                </svg>
+              </a>
+            </div>
           </div>
         </div>
       </div>

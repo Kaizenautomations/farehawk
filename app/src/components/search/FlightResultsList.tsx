@@ -4,6 +4,7 @@ import { useState, useMemo } from "react";
 import type { FlightResult } from "@/types/flight";
 import type { SelectedFlight } from "@/lib/trip-builder";
 import { FlightCard } from "./FlightCard";
+import { CompareModal } from "./CompareModal";
 import { Skeleton } from "@/components/ui/skeleton";
 import { getDealScore } from "@/components/search/DealScoreBadge";
 import { getAirlineName } from "@/lib/airlines";
@@ -80,6 +81,32 @@ export function FlightResultsList({ results, loading, onWatch, onSelectFlight, s
   const [activeAirlines, setActiveAirlines] = useState<Set<string>>(new Set());
   const [activeStops, setActiveStops] = useState<Set<StopsFilter>>(new Set());
   const [activeTimeOfDay, setActiveTimeOfDay] = useState<Set<TimeOfDayFilter>>(new Set());
+
+  // Compare mode state
+  const [compareMode, setCompareMode] = useState(false);
+  const [compareSet, setCompareSet] = useState<Set<number>>(new Set());
+  const [compareModalOpen, setCompareModalOpen] = useState(false);
+
+  function toggleCompare(index: number) {
+    setCompareSet((prev) => {
+      const next = new Set(prev);
+      if (next.has(index)) {
+        next.delete(index);
+      } else if (next.size < 3) {
+        next.add(index);
+      }
+      return next;
+    });
+  }
+
+  function handleCancelCompare() {
+    setCompareMode(false);
+    setCompareSet(new Set());
+  }
+
+  function handleOpenCompare() {
+    setCompareModalOpen(true);
+  }
 
   // Extract unique airlines from results
   const uniqueAirlines = useMemo(() => {
@@ -368,17 +395,30 @@ export function FlightResultsList({ results, loading, onWatch, onSelectFlight, s
           )}{" "}
           flight{filteredResults.length !== 1 ? "s" : ""} found
         </p>
-        <select
-          value={sortBy}
-          onChange={(e) => setSortBy(e.target.value as SortOption)}
-          className="rounded-lg border border-slate-700 bg-slate-900/80 text-sm text-slate-300 px-3 py-1.5 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/20 hover:border-slate-600 transition-colors cursor-pointer"
-        >
-          {SORT_OPTIONS.map((opt) => (
-            <option key={opt.value} value={opt.value}>
-              {opt.label}
-            </option>
-          ))}
-        </select>
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={compareMode ? handleCancelCompare : () => setCompareMode(true)}
+            className={`rounded-lg border px-3 py-1.5 text-sm font-medium min-h-[44px] transition-colors ${
+              compareMode
+                ? "border-blue-500/40 bg-blue-500/10 text-blue-400 hover:bg-blue-500/20"
+                : "border-slate-700 bg-transparent text-slate-400 hover:border-slate-600 hover:text-slate-300"
+            }`}
+          >
+            {compareMode ? "Cancel Compare" : "Compare"}
+          </button>
+          <select
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value as SortOption)}
+            className="rounded-lg border border-slate-700 bg-slate-900/80 text-sm text-slate-300 px-3 py-1.5 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/20 hover:border-slate-600 transition-colors cursor-pointer"
+          >
+            {SORT_OPTIONS.map((opt) => (
+              <option key={opt.value} value={opt.value}>
+                {opt.label}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
       <div className="space-y-3">
         {sortedResults.map((flight, i) => {
@@ -390,6 +430,9 @@ export function FlightResultsList({ results, loading, onWatch, onSelectFlight, s
               onWatch={onWatch ? () => onWatch(flight) : undefined}
               onSelect={onSelectFlight}
               isSelected={selectedFlightKey === flightKey}
+              showCompareCheckbox={compareMode}
+              isInCompare={compareSet.has(i)}
+              onToggleCompare={() => toggleCompare(i)}
               style={{
                 animation: `fadeUp 0.5s ease-out ${i * 0.06}s both`,
               }}
@@ -397,6 +440,29 @@ export function FlightResultsList({ results, loading, onWatch, onSelectFlight, s
           );
         })}
       </div>
+
+      {/* Sticky compare bar */}
+      {compareMode && compareSet.size >= 2 && (
+        <div className="sticky bottom-4 z-40 flex justify-center">
+          <button
+            type="button"
+            onClick={handleOpenCompare}
+            className="min-h-[44px] rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-sm font-semibold px-6 py-3 shadow-lg shadow-blue-500/25 transition-all duration-200 flex items-center gap-2"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <rect x="3" y="3" width="7" height="7" /><rect x="14" y="3" width="7" height="7" /><rect x="3" y="14" width="7" height="7" /><rect x="14" y="14" width="7" height="7" />
+            </svg>
+            Compare {compareSet.size} flight{compareSet.size !== 1 ? "s" : ""}
+          </button>
+        </div>
+      )}
+
+      {/* Compare modal */}
+      <CompareModal
+        flights={Array.from(compareSet).map((idx) => sortedResults[idx]).filter(Boolean)}
+        open={compareModalOpen}
+        onClose={() => setCompareModalOpen(false)}
+      />
     </div>
   );
 }

@@ -1,3 +1,8 @@
+import time
+import logging
+from datetime import datetime, timedelta
+from concurrent.futures import ThreadPoolExecutor, as_completed
+
 from fli.models import (
     Airport,
     FlightSearchFilters,
@@ -10,8 +15,10 @@ from fli.models import (
     TripType,
 )
 from fli.search import SearchFlights, SearchDates
-from models.requests import FlightSearchRequest, DateSearchRequest, MultiCitySearchRequest
-from models.responses import FlightResultResponse, FlightLegResponse, DatePriceResponse
+from models.requests import FlightSearchRequest, DateSearchRequest, MultiCitySearchRequest, DateMatrixRequest
+from models.responses import FlightResultResponse, FlightLegResponse, DatePriceResponse, DateMatrixCell, DateMatrixResponse
+
+logger = logging.getLogger(__name__)
 
 
 CABIN_MAP = {
@@ -150,6 +157,81 @@ def search_multi_city(req: MultiCitySearchRequest) -> list[list[FlightResultResp
         results = search_flights(single_req)
         all_results.append(results)
     return all_results
+
+
+def search_date_matrix(req: DateMatrixRequest) -> DateMatrixResponse:
+    """Search a matrix of departure x return dates and return cheapest price per cell."""
+    dep_start = datetime.strptime(req.departure_from, "%Y-%m-%d")
+    dep_end = datetime.strptime(req.departure_to, "%Y-%m-%d")
+    ret_start = datetime.strptime(req.return_from, "%Y-%m-%d")
+    ret_end = datetime.strptime(req.return_to, "%Y-%m-%d")
+
+    # Limit departure dates to max 7
+    dep_dates: list[str] = []
+    current = dep_start
+    while current <= dep_end and len(dep_dates) < 7:
+        dep_dates.append(current.strftime("%Y-%m-%d"))
+        current += timedelta(days=1)
+
+    # Build return dates list
+    ret_dates: list[str] = []
+    current = ret_start
+    while current <= ret_end and len(ret_dates) < 7:
+        ret_dates.append(current.strftime("%Y-%m-%d"))
+        current += timedelta(days=1)
+
+    cells: list[DateMatrixCell] = []
+
+    def search_single_dep(dep_date: str) -> list[DateMatrixCell]:
+        """Search round-trip date prices for a single departure date across the return window."""
+        try:
+            date_req = DateSearchRequest(
+                origin=req.origin,
+                destination=req.destination,
+                from_date=dep_date,
+                to_date=dep_date,
+                cabin_class=req.cabin_class,
+                max_stops=req.max_stops,
+                trip_type="round_trip",
+                duration=None,
+            )
+            results = search_dates(date_req)
+            found: list[DateMatrixCell] = []
+            for dp in results:
+                if dp.return_date and dp.return_date in ret_dates:
+                    found.append(
+                        DateMatrixCell(
+                            departure_date=dp.date,
+                            return_date=dp.return_date,
+                            price=dp.price,
+                            currency=dp.currency,
+                        )
+                    )
+            return found
+        except Exception as e:
+            logger.warning(f"Date matrix search failed for {dep_date}: {e}")
+            return []
+
+    # Use ThreadPoolExecutor with max 3 workers and stagger requests
+    with ThreadPoolExecutor(max_workers=3) as executor:
+        futures = {}
+        for i, dep_date in enumerate(dep_dates):
+            if i > 0 and i % 3 == 0:
+                time.sleep(0.3)  # 300ms delay between batches
+            futures[executor.submit(search_single_dep, dep_date)] = dep_date
+
+        for future in as_completed(futures):
+            try:
+                result = future.result()
+                cells.extend(result)
+            except Exception as e:
+                logger.warning(f"Date matrix future failed: {e}")
+
+    return DateMatrixResponse(
+        origin=req.origin.upper(),
+        destination=req.destination.upper(),
+        cells=cells,
+    )
 
 
 def search_dates(req: DateSearchRequest) -> list[DatePriceResponse]:
